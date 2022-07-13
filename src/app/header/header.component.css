@@ -1,0 +1,36 @@
+h1.title
+{
+  text-align: center;
+  color: white;
+  text-shadow: 0 0 18px black;
+}
+
+.header
+{
+  background-color: darkred;
+  padding-top: 3rem;
+  position: relative;
+  padding-bottom: 4rem;
+}
+
+a
+{
+  color: white;
+  font-weight: bold;
+}
+
+a:hover
+{
+  color: white;
+  font-weight: bold;
+}
+
+.navbar-centering
+{
+  width: fit-content;
+  position: absolute;
+  margin: auto;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}

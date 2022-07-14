@@ -1,5 +1,6 @@
 import {Injectable} from '@angular/core';
 import {LoginService} from "./login.service";
+import {Router} from "@angular/router";
 
 @Injectable({
   providedIn: 'root'
@@ -9,7 +10,9 @@ export class AuthenticationService {
   accessToken: string = '';
   refreshToken: string = '';
 
-  constructor(private loginService: LoginService) { }
+  isLoggedIn: boolean = false;
+
+  constructor(private loginService: LoginService, private router: Router) { }
 
   login(username: string, password: string): void {
     this.loginService.login(username, password).subscribe(response => {
@@ -18,9 +21,29 @@ export class AuthenticationService {
       this.accessToken = 'Bearer ' + tokensJson.access_token;
       this.refreshToken = 'Bearer ' + tokensJson.refresh_token;
 
-      localStorage.setItem('access_token', this.accessToken);
-      localStorage.setItem('refresh_token', this.refreshToken);
+      localStorage.setItem('access_token', JSON.stringify({ "token": this.accessToken }));
+      localStorage.setItem('refresh_token', JSON.stringify({"token": this.refreshToken }));
+
+      this.router.navigate(['/home']);
     });
+  }
+
+  setIsLoggedIn() {
+    this.isLoggedIn = true;
+  }
+
+  getIsLoggedIn(): boolean {
+    return this.isLoggedIn;
+  }
+
+  getRolesOfAccessToken(): any {
+    let accessToken = JSON.parse(localStorage.getItem('access_token') || '{}').token.substring("Bearer ".length);
+
+    let jwtData = accessToken.split('.')[1];
+    let decodedJwtJsonData = window.atob(jwtData);
+    let decodedJwtData = JSON.parse(decodedJwtJsonData);
+
+    return decodedJwtData.roles;
   }
 
 }

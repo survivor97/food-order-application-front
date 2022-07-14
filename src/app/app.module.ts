@@ -11,8 +11,10 @@ import { FooterComponent } from './footer/footer.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import {AuthenticationService} from "./service/authentication.service";
 import {FormsModule} from "@angular/forms";
-import {HttpClientModule} from "@angular/common/http";
+import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {LoginService} from "./service/login.service";
+import {InterceptorService} from "./service/interceptor.service";
+import {RestaurantService} from "./service/restaurant.service";
 
 @NgModule({
   declarations: [
@@ -30,7 +32,15 @@ import {LoginService} from "./service/login.service";
     FormsModule,
     HttpClientModule
   ],
-  providers: [AuthenticationService, LoginService],
+  providers: [
+    AuthenticationService,
+    LoginService,
+    RestaurantService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: InterceptorService,
+      multi: true
+    }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

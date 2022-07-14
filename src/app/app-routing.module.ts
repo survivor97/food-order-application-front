@@ -8,6 +8,7 @@ import {RegisterComponent} from "./content/register/register.component";
 import {ManagerComponent} from "./content/manager/manager.component";
 import {DeliveryComponent} from "./content/delivery/delivery.component";
 import {ProfileComponent} from "./content/profile/profile.component";
+import {StaffComponent} from "./content/staff/staff.component";
 
 const routes: Routes = [
   {
@@ -27,7 +28,8 @@ const routes: Routes = [
   },
   {
     path: 'register',
-    component: RegisterComponent
+    component: RegisterComponent,
+    canActivate: [AuthGuardService]
   },
   {
     path: 'admin',
@@ -44,7 +46,12 @@ const routes: Routes = [
   },
   {
     path: 'profile',
-    component: ProfileComponent
+    component: ProfileComponent,
+    canActivate: [AuthGuardService]
+  },
+  {
+    path: 'staff',
+    component: StaffComponent
   }
 ];
 

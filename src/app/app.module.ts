@@ -20,6 +20,7 @@ import { RegisterComponent } from './content/register/register.component';
 import { ManagerComponent } from './content/manager/manager.component';
 import { DeliveryComponent } from './content/delivery/delivery.component';
 import { ProfileComponent } from './content/profile/profile.component';
+import { StaffComponent } from './content/staff/staff.component';
 
 @NgModule({
   declarations: [
@@ -33,7 +34,8 @@ import { ProfileComponent } from './content/profile/profile.component';
     RegisterComponent,
     ManagerComponent,
     DeliveryComponent,
-    ProfileComponent
+    ProfileComponent,
+    StaffComponent
   ],
   imports: [
     BrowserModule,

@@ -48,6 +48,11 @@ export class AuthGuardService implements CanActivate {
         }
       }
 
+      //ALL LOGGED IN ACCOUNTS
+      if (route.routeConfig?.path === 'profile') {
+        return true;
+      }
+
       return false;
     }
 
@@ -65,6 +70,11 @@ export class AuthGuardService implements CanActivate {
 
       //Allowed access - login
       if (route.routeConfig?.path === 'login') {
+        return true;
+      }
+
+      //Allowed access - register
+      if (route.routeConfig?.path === 'register') {
         return true;
       }
 

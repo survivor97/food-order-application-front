@@ -13,10 +13,6 @@ export class InterceptorService implements HttpInterceptor {
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     console.warn("INTERCEPTOR CALL");
 
-    if(localStorage.getItem('access_token') != null) {
-      this.authenticationService.setIsLoggedIn();
-    }
-
     if (this.authenticationService.getIsLoggedIn()) {
       let parsedToken = JSON.parse(localStorage.getItem('access_token') || '{}');
 
@@ -27,6 +23,7 @@ export class InterceptorService implements HttpInterceptor {
           'Authorization': parsedToken.token
         }
       });
+
       return next.handle(reqWithAuthToken);
     }
     return next.handle(req);

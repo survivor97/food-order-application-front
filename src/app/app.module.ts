@@ -15,6 +15,11 @@ import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {LoginService} from "./service/login.service";
 import {InterceptorService} from "./service/interceptor.service";
 import {RestaurantService} from "./service/restaurant.service";
+import { AdminComponent } from './content/admin/admin.component';
+import { RegisterComponent } from './content/register/register.component';
+import { ManagerComponent } from './content/manager/manager.component';
+import { DeliveryComponent } from './content/delivery/delivery.component';
+import { ProfileComponent } from './content/profile/profile.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +28,12 @@ import {RestaurantService} from "./service/restaurant.service";
     LoginComponent,
     HomeComponent,
     HeaderComponent,
-    FooterComponent
+    FooterComponent,
+    AdminComponent,
+    RegisterComponent,
+    ManagerComponent,
+    DeliveryComponent,
+    ProfileComponent
   ],
   imports: [
     BrowserModule,

@@ -10,8 +10,6 @@ export class AuthenticationService {
   accessToken: string = '';
   refreshToken: string = '';
 
-  isLoggedIn: boolean = false;
-
   constructor(private loginService: LoginService, private router: Router) { }
 
   login(username: string, password: string): void {
@@ -28,15 +26,15 @@ export class AuthenticationService {
     });
   }
 
-  setIsLoggedIn() {
-    this.isLoggedIn = true;
-  }
-
   getIsLoggedIn(): boolean {
-    return this.isLoggedIn;
+    return localStorage.getItem('access_token') != null;
   }
 
   getRolesOfAccessToken(): any {
+    if (!this.getIsLoggedIn()) {
+      return [{}];
+    }
+
     let accessToken = JSON.parse(localStorage.getItem('access_token') || '{}').token.substring("Bearer ".length);
 
     let jwtData = accessToken.split('.')[1];

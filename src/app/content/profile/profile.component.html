@@ -5,9 +5,46 @@
       <h3 class="mb-4">Profile</h3>
       <input type="text" id="inputFirstName" class="form-control" placeholder="First name" required autofocus name="firstName">
       <input type="text" id="inputLastName" class="form-control" placeholder="Last name" required autofocus name="lastName">
+      <input type="text" id="phoneNumber" class="form-control" placeholder="Phone Number" required autofocus name="phoneNumber">
       <input type="email" id="inputEmail" class="form-control" placeholder="Email" required autofocus name="email">
       <input type="text" id="inputUsername" class="form-control" placeholder="Username" required autofocus name="username">
       <input type="password" id="inputPassword" class="form-control" placeholder="Password" required autofocus name="password">
+
+      <!--#region Favourite Food-->
+      <table class="table table-striped mt-4">
+        <thead>
+        <tr class="table-danger">
+          <th class="text-center" scope="col" colspan="4">Favourite Food List</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <th scope="row">1</th>
+          <td>Mark</td>
+          <td>Otto</td>
+          <td class="text-center">
+            <button class="btn-in-table btn-lg btn-primary btn-block pl-5 pr-5 pt-0 pb-0">Remove</button>
+          </td>
+        </tr>
+        <tr>
+          <th scope="row">2</th>
+          <td>Jacob</td>
+          <td>Thornton</td>
+          <td class="text-center">
+            <button class="btn-in-table btn-lg btn-primary btn-block pl-5 pr-5 pt-0 pb-0">Remove</button>
+          </td>
+        </tr>
+        <tr>
+          <th scope="row">3</th>
+          <td>Larry</td>
+          <td>the Bird</td>
+          <td class="text-center">
+            <button class="btn-in-table btn-lg btn-primary btn-block pl-5 pr-5 pt-0 pb-0">Remove</button>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+      <!--#endregion-->
     </div>
     <div class="col-4"></div>
   </div>
@@ -15,7 +52,10 @@
     <div class="col-4"></div>
     <div class="col-4 text-center">
       <div class="pt-2"></div>
-      <button class="btn btn-lg btn-primary btn-block pl-5 pr-5">Save</button></div>
+      <button class="btn btn-lg btn-primary btn-block pl-5 pr-5">Save</button>
+      <div class="pt-2"></div>
+      <button class="btn btn-lg btn-primary btn-block pl-5 pr-5">Logout</button>
+      <div class="pt-5"></div>
     <div class="col-4"></div>
   </div>
 </div>

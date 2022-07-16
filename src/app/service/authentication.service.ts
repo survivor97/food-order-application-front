@@ -22,8 +22,14 @@ export class AuthenticationService {
       localStorage.setItem('access_token', JSON.stringify({ "token": this.accessToken }));
       localStorage.setItem('refresh_token', JSON.stringify({"token": this.refreshToken }));
 
-      this.router.navigate(['/home']);
+      this.router.navigate(['']);
     });
+  }
+
+  logout(): void {
+    localStorage.removeItem('access_token');
+    localStorage.removeItem('refresh_token');
+    this.router.navigate(['/home']);
   }
 
   getIsLoggedIn(): boolean {

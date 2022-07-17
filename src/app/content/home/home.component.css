@@ -35,3 +35,30 @@
   border-color:#810d0d;
   box-shadow:0 0 0 .2rem rgba(188,53,53,0.5)
 }
+
+input.ng-valid.ng-touched {
+  border-left: 5px solid green;
+}
+
+input.ng-invalid.ng-touched {
+  border-left: 5px solid red;
+}
+
+.page-link {
+  color: #b01111;
+}
+
+li>a {
+  user-select: none;
+  cursor:pointer;
+}
+
+.page-item.active > .page-link {
+  background-color: #8d0e0e;
+  border-color: #8d0e0e;
+}
+
+.page-item.disabled > .page-link {
+  background-color: lightgray;
+  color: #363636;
+}

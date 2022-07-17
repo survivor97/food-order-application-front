@@ -65,84 +65,12 @@
     <!--#region Menu-->
     <div class="container">
       <div class="row">
-        <div class="col-md-4 p-3">
+        <div class="col-md-4 p-3" *ngFor="let food of foodList">
           <div class="card">
             <img class="card-img-top" src="../../../assets/user_icon.png" alt="Card image cap">
             <div class="card-body">
-              <h5 class="card-title">Card title</h5>
-              <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-              <div class="pt-4"></div>
-              <div class="row">
-                <div class="col-2 text-center col-centering">
-                  <button type="button" class="btn btn-primary rounded-button btn-color">-</button>
-                </div>
-                <div class="col-2 text-center col-centering">
-                  <p class="pt-1">Nr.</p>
-                </div>
-                <div class="col-2 text-center col-centering">
-                  <button type="button" class="btn btn-primary rounded-button btn-color">+</button>
-                </div>
-                <div class="col-6 text-center col-centering" style="padding-right: 0.5rem">
-                  <button type="button" class="btn btn-primary add-to-cart-btn float-end btn-color">Add</button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-4 p-3">
-          <div class="card">
-            <img class="card-img-top" src="../../../assets/user_icon.png" alt="Card image cap">
-            <div class="card-body">
-              <h5 class="card-title">Card title</h5>
-              <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-              <div class="pt-4"></div>
-              <div class="row">
-                <div class="col-2 text-center col-centering">
-                  <button type="button" class="btn btn-primary rounded-button btn-color">-</button>
-                </div>
-                <div class="col-2 text-center col-centering">
-                  <p class="pt-1">Nr.</p>
-                </div>
-                <div class="col-2 text-center col-centering">
-                  <button type="button" class="btn btn-primary rounded-button btn-color">+</button>
-                </div>
-                <div class="col-6 text-center col-centering" style="padding-right: 0.5rem">
-                  <button type="button" class="btn btn-primary add-to-cart-btn float-end btn-color">Add</button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-4 p-3">
-          <div class="card">
-            <img class="card-img-top" src="../../../assets/user_icon.png" alt="Card image cap">
-            <div class="card-body">
-              <h5 class="card-title">Card title</h5>
-              <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-              <div class="pt-4"></div>
-              <div class="row">
-                <div class="col-2 text-center col-centering">
-                  <button type="button" class="btn btn-primary rounded-button btn-color">-</button>
-                </div>
-                <div class="col-2 text-center col-centering">
-                  <p class="pt-1">Nr.</p>
-                </div>
-                <div class="col-2 text-center col-centering">
-                  <button type="button" class="btn btn-primary rounded-button btn-color">+</button>
-                </div>
-                <div class="col-6 text-center col-centering" style="padding-right: 0.5rem">
-                  <button type="button" class="btn btn-primary add-to-cart-btn float-end btn-color">Add</button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-4 p-3">
-          <div class="card">
-            <img class="card-img-top" src="../../../assets/user_icon.png" alt="Card image cap">
-            <div class="card-body">
-              <h5 class="card-title">Card title</h5>
-              <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+              <h5 class="card-title">{{food.name}}</h5>
+              <p class="card-text">{{food.description}}</p>
               <div class="pt-4"></div>
               <div class="row">
                 <div class="col-2 text-center col-centering">
@@ -163,6 +91,24 @@
         </div>
       </div>
     </div>
+    <!--#endregion-->
+    <!--#region Pagination-->
+    <nav aria-label="page-navigation">
+        <ul class="pagination justify-content-end p-5">
+
+          <li class="page-item" [ngClass]="{'disabled': currentFoodPage === 0}">
+            <a class="page-link" (click)="decreasePage()">Previous</a>
+          </li>
+
+          <li *ngFor="let page of foodPages" class="page-item" [ngClass]="{'active': page === currentFoodPage}">
+            <a class="page-link">{{page+1}}</a>
+          </li>
+
+          <li class="page-item" [ngClass]="{'disabled': currentFoodPage === nrOfFoodPages - 1}">
+            <a class="page-link" (click)="increasePage()">Next</a>
+          </li>
+        </ul>
+      </nav>
     <!--#endregion-->
   </div>
 </div>

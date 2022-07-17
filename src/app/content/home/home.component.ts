@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import {RestaurantService} from "../../service/restaurant.service";
+import {Component, OnInit} from '@angular/core';
 import {AuthenticationService} from "../../service/authentication.service";
 import {Properties} from "../../properties";
+import {FoodService} from "../../service/food.service";
 
 @Component({
   selector: 'app-home',
@@ -10,10 +10,19 @@ import {Properties} from "../../properties";
 })
 export class HomeComponent implements OnInit {
 
-  constructor(private restaurantService: RestaurantService,
+  foodList: any;
+  nrOfFoodPages: number = 0;
+  currentFoodPage: number = 0;
+  foodPages: Array<number> = [];
+
+  constructor(private foodService: FoodService,
               private authenticationService: AuthenticationService) {
-    this.restaurantService.getRestaurants().subscribe(data => {
-      console.warn(data.constructor);
+    this.foodService.getFoodList(0).subscribe(data => {
+      this.foodList = data.content;
+      this.nrOfFoodPages = data.totalPages;
+      for(let i=0; i<this.nrOfFoodPages; i++) {
+        this.foodPages.push(i);
+      }
     });
   }
 
@@ -30,6 +39,26 @@ export class HomeComponent implements OnInit {
 
   getAvatarPath(): string {
     return Properties.avatar_path;
+  }
+
+  increasePage(): void {
+    if(this.currentFoodPage < this.nrOfFoodPages - 1) {
+      this.currentFoodPage++;
+      this.updateFoodPage();
+    }
+  }
+
+  decreasePage(): void {
+    if(this.currentFoodPage > 0) {
+      this.currentFoodPage--;
+      this.updateFoodPage();
+    }
+  }
+
+  updateFoodPage(): void {
+    this.foodService.getFoodList(this.currentFoodPage).subscribe(data => {
+      this.foodList = data.content;
+    });
   }
 
 }

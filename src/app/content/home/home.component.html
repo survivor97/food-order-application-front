@@ -1,54 +1,169 @@
-<div class="d-flex flex-column flex-shrink-0 p-3 bg-light" style="width: 240px;">
-  <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none">
-    <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>
-    <span class="fs-4">Sidebar</span>
-  </a>
-  <hr>
-  <ul class="nav nav-pills flex-column mb-auto">
-    <li class="nav-item">
-      <a href="#" class="nav-link active" aria-current="page">
-        <svg class="bi me-2" width="16" height="16"><use xlink:href="#home"></use></svg>
-        Home
+<div class="row">
+  <div class="col-xl-2">
+    <!--#region Sidebar-->
+    <div class="d-flex flex-column flex-shrink-0 p-3 bg-light" style="width: 240px;">
+      <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none">
+        <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>
+        <span class="fs-4">Menu</span>
       </a>
-    </li>
-    <li>
-      <a href="#" class="nav-link link-dark">
-        <svg class="bi me-2" width="16" height="16"><use xlink:href="#speedometer2"></use></svg>
-        Dashboard
-      </a>
-    </li>
-    <li>
-      <a href="#" class="nav-link link-dark">
-        <svg class="bi me-2" width="16" height="16"><use xlink:href="#table"></use></svg>
-        Orders
-      </a>
-    </li>
-    <li>
-      <a href="#" class="nav-link link-dark">
-        <svg class="bi me-2" width="16" height="16"><use xlink:href="#grid"></use></svg>
-        Products
-      </a>
-    </li>
-    <li>
-      <a href="#" class="nav-link link-dark">
-        <svg class="bi me-2" width="16" height="16"><use xlink:href="#people-circle"></use></svg>
-        Customers
-      </a>
-    </li>
-  </ul>
-  <div class="pt-5 pb-5"></div>
-  <hr>
-  <div class="dropdown" ngbDropdown>
-    <a href="#" class="d-flex align-items-center link-dark text-decoration-none dropdown-toggle" id="dropdownUser2" data-bs-toggle="dropdown" aria-expanded="false" ngbDropdownToggle>
-      <img src="https://github.com/mdo.png" alt="" width="32" height="32" class="rounded-circle me-2">
-      <strong>mdo</strong>
-    </a>
-    <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownUser2" ngbDropdownMenu>
-      <li><a class="dropdown-item" href="#" ngbDropdownItem>New project...</a></li>
-      <li><a class="dropdown-item" href="#" ngbDropdownItem>Settings</a></li>
-      <li><a class="dropdown-item" href="#" ngbDropdownItem>Profile</a></li>
-      <li><hr class="dropdown-divider"></li>
-      <li><a class="dropdown-item" href="#" ngbDropdownItem>Sign out</a></li>
-    </ul>
+      <hr>
+      <ul class="nav nav-pills flex-column mb-auto">
+        <li class="nav-item pill-custom">
+          <a href="#" class="nav-link active" aria-current="page">
+            <svg class="bi me-2" width="16" height="16"><use xlink:href="#home"></use></svg>
+            Pizza
+          </a>
+        </li>
+        <li>
+          <a href="#" class="nav-link link-dark">
+            <svg class="bi me-2" width="16" height="16"><use xlink:href="#speedometer2"></use></svg>
+            Burger
+          </a>
+        </li>
+        <li>
+          <a href="#" class="nav-link link-dark">
+            <svg class="bi me-2" width="16" height="16"><use xlink:href="#table"></use></svg>
+            Grill
+          </a>
+        </li>
+        <li>
+          <a href="#" class="nav-link link-dark">
+            <svg class="bi me-2" width="16" height="16"><use xlink:href="#grid"></use></svg>
+            Fast Food
+          </a>
+        </li>
+        <li>
+          <a href="#" class="nav-link link-dark">
+            <svg class="bi me-2" width="16" height="16"><use xlink:href="#people-circle"></use></svg>
+            Dessert
+          </a>
+        </li>
+        <li>
+          <a href="#" class="nav-link link-dark">
+            <svg class="bi me-2" width="16" height="16"><use xlink:href="#people-circle"></use></svg>
+            Drinks
+          </a>
+        </li>
+      </ul>
+      <div class="pt-5 pb-5"></div>
+      <hr *ngIf="isLoggedIn()">
+      <div class="dropdown" ngbDropdown *ngIf="isLoggedIn()">
+        <a href="#" class="d-flex align-items-center link-dark text-decoration-none dropdown-toggle" id="dropdownUser2" data-bs-toggle="dropdown" aria-expanded="false" ngbDropdownToggle>
+          <img [src]="getAvatarPath()" alt="" width="32" height="32" class="rounded-circle me-2">
+          <strong>mdo</strong>
+        </a>
+        <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownUser2" ngbDropdownMenu>
+          <li><a class="dropdown-item" href="#" ngbDropdownItem>Profile</a></li>
+          <li><hr class="dropdown-divider"></li>
+          <li><a class="dropdown-item" href="#" (click)="logout()" ngbDropdownItem>Sign out</a></li>
+        </ul>
+      </div>
+    </div>
+    <!--endregion-->
+  </div>
+  <div class="col-xl-10">
+    <!--#region Menu-->
+    <div class="container">
+      <div class="row">
+        <div class="col-md-4 p-3">
+          <div class="card">
+            <img class="card-img-top" src="../../../assets/user_icon.png" alt="Card image cap">
+            <div class="card-body">
+              <h5 class="card-title">Card title</h5>
+              <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+              <div class="pt-4"></div>
+              <div class="row">
+                <div class="col-2 text-center col-centering">
+                  <button type="button" class="btn btn-primary rounded-button btn-color">-</button>
+                </div>
+                <div class="col-2 text-center col-centering">
+                  <p class="pt-1">Nr.</p>
+                </div>
+                <div class="col-2 text-center col-centering">
+                  <button type="button" class="btn btn-primary rounded-button btn-color">+</button>
+                </div>
+                <div class="col-6 text-center col-centering" style="padding-right: 0.5rem">
+                  <button type="button" class="btn btn-primary add-to-cart-btn float-end btn-color">Add</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 p-3">
+          <div class="card">
+            <img class="card-img-top" src="../../../assets/user_icon.png" alt="Card image cap">
+            <div class="card-body">
+              <h5 class="card-title">Card title</h5>
+              <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+              <div class="pt-4"></div>
+              <div class="row">
+                <div class="col-2 text-center col-centering">
+                  <button type="button" class="btn btn-primary rounded-button btn-color">-</button>
+                </div>
+                <div class="col-2 text-center col-centering">
+                  <p class="pt-1">Nr.</p>
+                </div>
+                <div class="col-2 text-center col-centering">
+                  <button type="button" class="btn btn-primary rounded-button btn-color">+</button>
+                </div>
+                <div class="col-6 text-center col-centering" style="padding-right: 0.5rem">
+                  <button type="button" class="btn btn-primary add-to-cart-btn float-end btn-color">Add</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 p-3">
+          <div class="card">
+            <img class="card-img-top" src="../../../assets/user_icon.png" alt="Card image cap">
+            <div class="card-body">
+              <h5 class="card-title">Card title</h5>
+              <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+              <div class="pt-4"></div>
+              <div class="row">
+                <div class="col-2 text-center col-centering">
+                  <button type="button" class="btn btn-primary rounded-button btn-color">-</button>
+                </div>
+                <div class="col-2 text-center col-centering">
+                  <p class="pt-1">Nr.</p>
+                </div>
+                <div class="col-2 text-center col-centering">
+                  <button type="button" class="btn btn-primary rounded-button btn-color">+</button>
+                </div>
+                <div class="col-6 text-center col-centering" style="padding-right: 0.5rem">
+                  <button type="button" class="btn btn-primary add-to-cart-btn float-end btn-color">Add</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 p-3">
+          <div class="card">
+            <img class="card-img-top" src="../../../assets/user_icon.png" alt="Card image cap">
+            <div class="card-body">
+              <h5 class="card-title">Card title</h5>
+              <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+              <div class="pt-4"></div>
+              <div class="row">
+                <div class="col-2 text-center col-centering">
+                  <button type="button" class="btn btn-primary rounded-button btn-color">-</button>
+                </div>
+                <div class="col-2 text-center col-centering">
+                  <p class="pt-1">Nr.</p>
+                </div>
+                <div class="col-2 text-center col-centering">
+                  <button type="button" class="btn btn-primary rounded-button btn-color">+</button>
+                </div>
+                <div class="col-6 text-center col-centering" style="padding-right: 0.5rem">
+                  <button type="button" class="btn btn-primary add-to-cart-btn float-end btn-color">Add</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--#endregion-->
   </div>
 </div>
+

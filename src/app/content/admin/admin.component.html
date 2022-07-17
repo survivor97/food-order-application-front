@@ -1,143 +1,189 @@
 <div class="main-div pt-5">
   <div class="row mt-4">
-    <div class="col-3"></div>
+    <div class="col-3">
+      <!--#region Sidebar-->
+      <div class="d-flex flex-column flex-shrink-0 p-3 bg-light" style="width: 240px;">
+        <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none">
+          <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>
+          <span class="fs-4">Sidebar</span>
+        </a>
+        <hr>
+        <ul class="nav nav-pills flex-column mb-auto">
+          <li class="nav-item pill-custom">
+            <a href="#" class="nav-link active" aria-current="page">
+              <svg class="bi me-2" width="16" height="16"><use xlink:href="#home"></use></svg>
+              Restaurants
+            </a>
+          </li>
+          <li>
+            <a href="#" class="nav-link link-dark">
+              <svg class="bi me-2" width="16" height="16"><use xlink:href="#speedometer2"></use></svg>
+              Managers
+            </a>
+          </li>
+          <li>
+            <a href="#" class="nav-link link-dark">
+              <svg class="bi me-2" width="16" height="16"><use xlink:href="#table"></use></svg>
+              Staff
+            </a>
+          </li>
+          <li>
+            <a href="#" class="nav-link link-dark">
+              <svg class="bi me-2" width="16" height="16"><use xlink:href="#grid"></use></svg>
+              Delivery Users
+            </a>
+          </li>
+          <li>
+            <a href="#" class="nav-link link-dark">
+              <svg class="bi me-2" width="16" height="16"><use xlink:href="#people-circle"></use></svg>
+              Users
+            </a>
+          </li>
+        </ul>
+        <div class="pt-5 pb-5"></div>
+        <hr *ngIf="isLoggedIn()">
+        <div class="dropdown" ngbDropdown *ngIf="isLoggedIn()">
+          <a href="#" class="d-flex align-items-center link-dark text-decoration-none dropdown-toggle" id="dropdownUser2" data-bs-toggle="dropdown" aria-expanded="false" ngbDropdownToggle>
+            <img [src]="getAvatarPath()" alt="" width="32" height="32" class="rounded-circle me-2">
+            <strong>mdo</strong>
+          </a>
+          <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownUser2" ngbDropdownMenu>
+            <li><a class="dropdown-item" href="#" ngbDropdownItem>Profile</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="#" (click)="logout()" ngbDropdownItem>Sign out</a></li>
+          </ul>
+        </div>
+      </div>
+      <!--endregion-->
+    </div>
     <div class="col-6 table-responsive">
 
-<!--      &lt;!&ndash;#region Add Restaurants&ndash;&gt;-->
-<!--      <table>-->
-<!--        <tbody>-->
-<!--          <tr>-->
-<!--            <td>-->
-<!--              <input type="text" id="inputFirstName" class="form-control" placeholder="First name" required autofocus name="firstName">-->
-<!--            </td>-->
-<!--            <td class="text-center">-->
-<!--              <button class="btn-in-table btn-lg btn-primary btn-block pl-5 pr-5 pt-0 pb-0 text-center">Add</button>-->
-<!--            </td>-->
-<!--          </tr>-->
-<!--        <tr>-->
-<!--        </tr>-->
-<!--        </tbody>-->
-<!--    </table>-->
-<!--    &lt;!&ndash;#endregion&ndash;&gt;-->
-
     <!--#region Active Restaurants-->
-    <h3 class="mb-4">Restaurants</h3>
+      <div *ngIf="menuOption === getAdminMenu().RESTAURANTS">
+        <h3 class="mb-4">Restaurants</h3>
 
-    <table class="table table-striped mt-4">
-      <thead>
-      <tr class="table-danger">
-        <th class="text-center" scope="col" colspan="5">Active Restaurants</th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr>
-        <th scope="row">1</th>
-        <td>Mark</td>
-        <td>Otto</td>
-        <td style="white-space: nowrap; width: 1%;">
-          <button class="btn-in-table btn-lg btn-primary btn-block pl-5 pr-5 pt-0 pb-0 float-end" style="margin-right: 1rem">Update</button>
-        </td>
-        <td style="white-space: nowrap; width: 1%;">
-          <button class="btn-in-table btn-lg btn-primary btn-block pl-5 pr-5 pt-0 pb-0 float-end" style="margin-right: 1rem">Remove</button>
-        </td>
-      </tr>
-      <tr>
-        <td class="text-center" colspan="5">
-          <button class="btn-in-table btn-lg btn-primary btn-block pl-5 pr-5 pt-0 pb-0">+</button>
-        </td>
-      </tr>
-      </tbody>
-    </table>
+        <table class="table table-striped mt-4">
+          <thead>
+          <tr class="table-danger">
+            <th class="text-center" scope="col" colspan="5">Active Restaurants</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <th scope="row">1</th>
+            <td>Mark</td>
+            <td>Otto</td>
+            <td style="white-space: nowrap; width: 1%;">
+              <button class="btn-in-table btn-lg btn-primary btn-block pl-5 pr-5 pt-0 pb-0 float-end" style="margin-right: 1rem">Update</button>
+            </td>
+            <td style="white-space: nowrap; width: 1%;">
+              <button class="btn-in-table btn-lg btn-primary btn-block pl-5 pr-5 pt-0 pb-0 float-end" style="margin-right: 1rem">Remove</button>
+            </td>
+          </tr>
+          <tr>
+            <td class="text-center" colspan="5">
+              <button class="btn-in-table btn-lg btn-primary btn-block pl-5 pr-5 pt-0 pb-0">+</button>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
     <!--#endregion Restaurants-->
 
     <!--#region Managers-->
-      <h3 class="mb-4 mt-5">Managers</h3>
+      <div *ngIf="menuOption === getAdminMenu().MANAGERS">
+        <h3 class="mb-4 mt-5">Managers</h3>
 
-      <table class="table table-striped mt-4">
-        <thead>
-        <tr class="table-danger">
-          <th class="text-center" scope="col" colspan="5">Manager List</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr>
-          <th scope="row">1</th>
-          <td>Mark</td>
-          <td>Otto</td>
-          <td style="white-space: nowrap; width: 1%;">
-            <button class="btn-in-table btn-lg btn-primary btn-block pl-5 pr-5 pt-0 pb-0 float-end" style="margin-right: 1rem">Update</button>
-          </td>
-          <td style="white-space: nowrap; width: 1%;">
-            <button class="btn-in-table btn-lg btn-primary btn-block pl-5 pr-5 pt-0 pb-0 float-end" style="margin-right: 1rem">Remove</button>
-          </td>
-        </tr>
-        <tr>
-          <td class="text-center" colspan="5">
-            <button class="btn-in-table btn-lg btn-primary btn-block pl-5 pr-5 pt-0 pb-0">+</button>
-          </td>
-        </tr>
-        </tbody>
-      </table>
+        <table class="table table-striped mt-4">
+          <thead>
+          <tr class="table-danger">
+            <th class="text-center" scope="col" colspan="5">Manager List</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <th scope="row">1</th>
+            <td>Mark</td>
+            <td>Otto</td>
+            <td style="white-space: nowrap; width: 1%;">
+              <button class="btn-in-table btn-lg btn-primary btn-block pl-5 pr-5 pt-0 pb-0 float-end" style="margin-right: 1rem">Update</button>
+            </td>
+            <td style="white-space: nowrap; width: 1%;">
+              <button class="btn-in-table btn-lg btn-primary btn-block pl-5 pr-5 pt-0 pb-0 float-end" style="margin-right: 1rem">Remove</button>
+            </td>
+          </tr>
+          <tr>
+            <td class="text-center" colspan="5">
+              <button class="btn-in-table btn-lg btn-primary btn-block pl-5 pr-5 pt-0 pb-0">+</button>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
       <!--#endregion Restaurants-->
 
     <!--#region Staff-->
-      <h3 class="mb-4 mt-5">Staff</h3>
+      <div *ngIf="menuOption === getAdminMenu().STAFF">
+        <h3 class="mb-4 mt-5">Staff</h3>
 
-      <table class="table table-striped mt-4">
-        <thead>
-        <tr class="table-danger">
-          <th class="text-center" scope="col" colspan="5">Staff List</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr>
-          <th scope="row">1</th>
-          <td>Mark</td>
-          <td>Otto</td>
-          <td style="white-space: nowrap; width: 1%;">
-            <button class="btn-in-table btn-lg btn-primary btn-block pl-5 pr-5 pt-0 pb-0 float-end" style="margin-right: 1rem">Update</button>
-          </td>
-          <td style="white-space: nowrap; width: 1%;">
-            <button class="btn-in-table btn-lg btn-primary btn-block pl-5 pr-5 pt-0 pb-0 float-end" style="margin-right: 1rem">Remove</button>
-          </td>
-        </tr>
-        <tr>
-          <td class="text-center" colspan="5">
-            <button class="btn-in-table btn-lg btn-primary btn-block pl-5 pr-5 pt-0 pb-0">+</button>
-          </td>
-        </tr>
-        </tbody>
-      </table>
+        <table class="table table-striped mt-4">
+          <thead>
+          <tr class="table-danger">
+            <th class="text-center" scope="col" colspan="5">Staff List</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <th scope="row">1</th>
+            <td>Mark</td>
+            <td>Otto</td>
+            <td style="white-space: nowrap; width: 1%;">
+              <button class="btn-in-table btn-lg btn-primary btn-block pl-5 pr-5 pt-0 pb-0 float-end" style="margin-right: 1rem">Update</button>
+            </td>
+            <td style="white-space: nowrap; width: 1%;">
+              <button class="btn-in-table btn-lg btn-primary btn-block pl-5 pr-5 pt-0 pb-0 float-end" style="margin-right: 1rem">Remove</button>
+            </td>
+          </tr>
+          <tr>
+            <td class="text-center" colspan="5">
+              <button class="btn-in-table btn-lg btn-primary btn-block pl-5 pr-5 pt-0 pb-0">+</button>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
       <!--#endregion Restaurants-->
 
     <!--#region Delivery User-->
-      <h3 class="mb-4 mt-5">Delivery User</h3>
+      <div *ngIf="menuOption === getAdminMenu().DELIVERY_USERS">
+        <h3 class="mb-4 mt-5">Delivery User</h3>
 
-      <table class="table table-striped mt-4">
-        <thead>
-        <tr class="table-danger">
-          <th class="text-center" scope="col" colspan="5">Delivery User List</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr>
-          <th scope="row">1</th>
-          <td>Mark</td>
-          <td>Otto</td>
-          <td style="white-space: nowrap; width: 1%;">
-            <button class="btn-in-table btn-lg btn-primary btn-block pl-5 pr-5 pt-0 pb-0 float-end" style="margin-right: 1rem">Update</button>
-          </td>
-          <td style="white-space: nowrap; width: 1%;">
-            <button class="btn-in-table btn-lg btn-primary btn-block pl-5 pr-5 pt-0 pb-0 float-end" style="margin-right: 1rem">Remove</button>
-          </td>
-        </tr>
-        <tr>
-          <td class="text-center" colspan="5">
-            <button class="btn-in-table btn-lg btn-primary btn-block pl-5 pr-5 pt-0 pb-0">+</button>
-          </td>
-        </tr>
-        </tbody>
-      </table>
+        <table class="table table-striped mt-4">
+          <thead>
+          <tr class="table-danger">
+            <th class="text-center" scope="col" colspan="5">Delivery User List</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <th scope="row">1</th>
+            <td>Mark</td>
+            <td>Otto</td>
+            <td style="white-space: nowrap; width: 1%;">
+              <button class="btn-in-table btn-lg btn-primary btn-block pl-5 pr-5 pt-0 pb-0 float-end" style="margin-right: 1rem">Update</button>
+            </td>
+            <td style="white-space: nowrap; width: 1%;">
+              <button class="btn-in-table btn-lg btn-primary btn-block pl-5 pr-5 pt-0 pb-0 float-end" style="margin-right: 1rem">Remove</button>
+            </td>
+          </tr>
+          <tr>
+            <td class="text-center" colspan="5">
+              <button class="btn-in-table btn-lg btn-primary btn-block pl-5 pr-5 pt-0 pb-0">+</button>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
       <!--#endregion Restaurants-->
 
     </div>

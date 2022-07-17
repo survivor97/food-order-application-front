@@ -8,38 +8,38 @@
       </a>
       <hr>
       <ul class="nav nav-pills flex-column mb-auto">
-        <li class="nav-item pill-custom">
-          <a href="#" class="nav-link active" aria-current="page">
+        <li class="nav-item">
+          <a class="nav-link link-dark" (click)="changeOption(getFoodMenu().PIZZA)" [class.active]="menuOption === getFoodMenu().PIZZA" aria-current="page">
             <svg class="bi me-2" width="16" height="16"><use xlink:href="#home"></use></svg>
             Pizza
           </a>
         </li>
         <li>
-          <a href="#" class="nav-link link-dark">
+          <a class="nav-link link-dark" (click)="changeOption(getFoodMenu().BURGER)" [class.active]="menuOption === getFoodMenu().BURGER">
             <svg class="bi me-2" width="16" height="16"><use xlink:href="#speedometer2"></use></svg>
             Burger
           </a>
         </li>
         <li>
-          <a href="#" class="nav-link link-dark">
+          <a class="nav-link link-dark" (click)="changeOption(getFoodMenu().GRILL)" [class.active]="menuOption === getFoodMenu().GRILL">
             <svg class="bi me-2" width="16" height="16"><use xlink:href="#table"></use></svg>
             Grill
           </a>
         </li>
         <li>
-          <a href="#" class="nav-link link-dark">
+          <a class="nav-link link-dark" (click)="changeOption(getFoodMenu().FAST_FOOD)" [class.active]="menuOption === getFoodMenu().FAST_FOOD">
             <svg class="bi me-2" width="16" height="16"><use xlink:href="#grid"></use></svg>
             Fast Food
           </a>
         </li>
         <li>
-          <a href="#" class="nav-link link-dark">
+          <a class="nav-link link-dark" (click)="changeOption(getFoodMenu().DESSERT)" [class.active]="menuOption === getFoodMenu().DESSERT">
             <svg class="bi me-2" width="16" height="16"><use xlink:href="#people-circle"></use></svg>
             Dessert
           </a>
         </li>
         <li>
-          <a href="#" class="nav-link link-dark">
+          <a class="nav-link link-dark" (click)="changeOption(getFoodMenu().DRINK)" [class.active]="menuOption === getFoodMenu().DRINK">
             <svg class="bi me-2" width="16" height="16"><use xlink:href="#people-circle"></use></svg>
             Drinks
           </a>
@@ -50,7 +50,7 @@
       <div class="dropdown" ngbDropdown *ngIf="isLoggedIn()">
         <a href="#" class="d-flex align-items-center link-dark text-decoration-none dropdown-toggle" id="dropdownUser2" data-bs-toggle="dropdown" aria-expanded="false" ngbDropdownToggle>
           <img [src]="getAvatarPath()" alt="" width="32" height="32" class="rounded-circle me-2">
-          <strong>mdo</strong>
+          <strong>{{getUsername()}}</strong>
         </a>
         <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownUser2" ngbDropdownMenu>
           <li><a class="dropdown-item" href="#" ngbDropdownItem>Profile</a></li>
@@ -101,7 +101,7 @@
           </li>
 
           <li *ngFor="let page of foodPages" class="page-item" [ngClass]="{'active': page === currentFoodPage}">
-            <a class="page-link">{{page+1}}</a>
+            <a class="page-link" (click)="setPage(page)">{{page+1}}</a>
           </li>
 
           <li class="page-item" [ngClass]="{'disabled': currentFoodPage === nrOfFoodPages - 1}">

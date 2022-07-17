@@ -62,3 +62,8 @@ li>a {
   background-color: lightgray;
   color: #363636;
 }
+
+a.nav-link.active {
+  background-color: #8d0e0e;
+  color: white;
+}

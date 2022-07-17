@@ -40,4 +40,8 @@ export class AdminComponent implements OnInit {
     return Properties.avatar_path;
   }
 
+  getUsername(): string {
+    return this.authenticationService.getUsernameOfAccessToken();
+  }
+
 }

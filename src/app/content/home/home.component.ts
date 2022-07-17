@@ -3,6 +3,15 @@ import {AuthenticationService} from "../../service/authentication.service";
 import {Properties} from "../../properties";
 import {FoodService} from "../../service/food.service";
 
+enum FoodMenu {
+  PIZZA,
+  BURGER,
+  GRILL,
+  FAST_FOOD,
+  DESSERT,
+  DRINK
+}
+
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -15,15 +24,11 @@ export class HomeComponent implements OnInit {
   currentFoodPage: number = 0;
   foodPages: Array<number> = [];
 
+  menuOption: FoodMenu = FoodMenu.PIZZA;
+
   constructor(private foodService: FoodService,
               private authenticationService: AuthenticationService) {
-    this.foodService.getFoodList(0).subscribe(data => {
-      this.foodList = data.content;
-      this.nrOfFoodPages = data.totalPages;
-      for(let i=0; i<this.nrOfFoodPages; i++) {
-        this.foodPages.push(i);
-      }
-    });
+    this.updateFoodPage();
   }
 
   ngOnInit(): void {
@@ -46,6 +51,7 @@ export class HomeComponent implements OnInit {
       this.currentFoodPage++;
       this.updateFoodPage();
     }
+    window.scrollTo(0, 0);
   }
 
   decreasePage(): void {
@@ -53,12 +59,39 @@ export class HomeComponent implements OnInit {
       this.currentFoodPage--;
       this.updateFoodPage();
     }
+    window.scrollTo(0, 0);
   }
 
   updateFoodPage(): void {
-    this.foodService.getFoodList(this.currentFoodPage).subscribe(data => {
+    this.foodService.getFoodListOfCategory(FoodMenu[this.menuOption], this.currentFoodPage).subscribe(data => {
       this.foodList = data.content;
+      this.nrOfFoodPages = data.totalPages;
+      this.foodPages = [];
+      for(let i=0; i<this.nrOfFoodPages; i++) {
+        this.foodPages.push(i);
+      }
     });
+  }
+
+  setPage(page: number) {
+    this.currentFoodPage = page;
+    this.updateFoodPage();
+    window.scrollTo(0, 0);
+  }
+
+  getFoodMenu(): typeof FoodMenu {
+    return FoodMenu;
+  }
+
+  changeOption(option: FoodMenu): void {
+    this.menuOption = option;
+    this.currentFoodPage = 0;
+    this.updateFoodPage();
+    window.scrollTo(0, 0);
+  }
+
+  getUsername(): string {
+    return this.authenticationService.getUsernameOfAccessToken();
   }
 
 }

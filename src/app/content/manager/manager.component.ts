@@ -26,4 +26,8 @@ export class ManagerComponent implements OnInit {
     return Properties.avatar_path;
   }
 
+  getUsername(): string {
+    return this.authenticationService.getUsernameOfAccessToken();
+  }
+
 }

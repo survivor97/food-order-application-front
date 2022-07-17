@@ -50,4 +50,18 @@ export class AuthenticationService {
     return decodedJwtData.roles;
   }
 
+  getUsernameOfAccessToken(): any {
+    if (!this.getIsLoggedIn()) {
+      return [{}];
+    }
+
+    let accessToken = JSON.parse(localStorage.getItem('access_token') || '{}').token.substring("Bearer ".length);
+
+    let jwtData = accessToken.split('.')[1];
+    let decodedJwtJsonData = window.atob(jwtData);
+    let decodedJwtData = JSON.parse(decodedJwtJsonData);
+
+    return decodedJwtData.sub;
+  }
+
 }

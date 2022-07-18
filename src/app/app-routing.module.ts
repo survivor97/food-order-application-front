@@ -9,6 +9,7 @@ import {ManagerComponent} from "./content/manager/manager.component";
 import {DeliveryComponent} from "./content/delivery/delivery.component";
 import {ProfileComponent} from "./content/profile/profile.component";
 import {StaffComponent} from "./content/staff/staff.component";
+import {CartComponent} from "./content/cart/cart.component";
 
 const routes: Routes = [
   {
@@ -52,6 +53,10 @@ const routes: Routes = [
   {
     path: 'staff',
     component: StaffComponent
+  },
+  {
+    path: 'cart',
+    component: CartComponent
   }
 ];
 

@@ -94,4 +94,8 @@ export class HomeComponent implements OnInit {
     return this.authenticationService.getUsernameOfAccessToken();
   }
 
+  increaseQuantity(food: any) {
+    food.quantity += 1;
+  }
+
 }

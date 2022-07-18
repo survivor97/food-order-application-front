@@ -64,4 +64,28 @@ export class AuthenticationService {
     return decodedJwtData.sub;
   }
 
+  useRefreshToken(): void {
+    let originalRefreshToken = JSON.parse(localStorage.getItem('refresh_token') || '{}').token;
+    let refreshToken = originalRefreshToken.substring("Bearer ".length);
+
+    let jwtData = refreshToken.split('.')[1];
+    let decodedJwtJsonData = window.atob(jwtData);
+    let decodedJwtData = JSON.parse(decodedJwtJsonData);
+
+    if(Math.floor(new Date().getTime() / 1000) >= decodedJwtData.exp) { //timestamp in seconds
+      this.logout();
+      this.router.navigate(['/login']);
+      return;
+    }
+
+    localStorage.removeItem('access_token');
+
+    this.loginService.askForRefreshToken(originalRefreshToken).subscribe(response => {
+      this.accessToken = 'Bearer ' + response.body.access_token;
+
+      localStorage.setItem('access_token', JSON.stringify({ "token": this.accessToken }));
+
+      window.location.reload();
+    });
+  }
 }

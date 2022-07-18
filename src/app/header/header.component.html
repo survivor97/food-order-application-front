@@ -3,28 +3,31 @@
   <div class="navbar-centering">
     <ul class="nav nav-tabs">
       <li class="nav-item">
-        <a class="nav-link" routerLink="home" routerLinkActive="active">Home</a>
+        <a class="nav-link" routerLink="/home" routerLinkActive="active">Home</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" routerLink="admin" *ngIf="isLoggedIn()" routerLinkActive="active">Administration</a>
+        <a class="nav-link" routerLink="/admin" *ngIf="isLoggedIn()" routerLinkActive="active">Administration</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" routerLink="manager" *ngIf="isLoggedIn()" routerLinkActive="active">Manage</a>
+        <a class="nav-link" routerLink="/manager" *ngIf="isLoggedIn()" routerLinkActive="active">Manage</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" routerLink="staff" *ngIf="isLoggedIn()" routerLinkActive="active">Incoming Orders</a>
+        <a class="nav-link" routerLink="/staff" *ngIf="isLoggedIn()" routerLinkActive="active">Incoming Orders</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" routerLink="delivery" *ngIf="isLoggedIn()" routerLinkActive="active">Delivery</a>
+        <a class="nav-link" routerLink="/delivery" *ngIf="isLoggedIn()" routerLinkActive="active">Delivery</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" routerLink="login" *ngIf="!isLoggedIn()" routerLinkActive="active">Login</a>
+        <a class="nav-link" routerLink="/login" *ngIf="!isLoggedIn()" routerLinkActive="active">Login</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" routerLink="register" *ngIf="!isLoggedIn()" routerLinkActive="active">Register</a>
+        <a class="nav-link" routerLink="/register" *ngIf="!isLoggedIn()" routerLinkActive="active">Register</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" routerLink="profile" *ngIf="isLoggedIn()" routerLinkActive="active">Profile</a>
+        <a class="nav-link" routerLink="/profile" *ngIf="isLoggedIn()" routerLinkActive="active">Profile</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/cart" *ngIf="isLoggedIn()" routerLinkActive="active">Cart</a>
       </li>
     </ul>
   </div>

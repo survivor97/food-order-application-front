@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {HttpEvent, HttpHandler, HttpInterceptor, HttpRequest} from "@angular/common/http";
-import {Observable} from "rxjs";
+import {catchError, Observable, throwError} from "rxjs";
 import {AuthenticationService} from "./authentication.service";
 
 @Injectable({
@@ -11,7 +11,9 @@ export class InterceptorService implements HttpInterceptor {
   constructor(private authenticationService: AuthenticationService) { }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    console.warn("INTERCEPTOR CALL");
+    console.warn("INTERCEPTOR CALL; next: " + req.url);
+
+    // if(req.url='')
 
     if (this.authenticationService.getIsLoggedIn()) {
       let parsedToken = JSON.parse(localStorage.getItem('access_token') || '{}');
@@ -24,7 +26,14 @@ export class InterceptorService implements HttpInterceptor {
         }
       });
 
-      return next.handle(reqWithAuthToken);
+      return next.handle(reqWithAuthToken).pipe(
+        catchError((error) => {
+          if(error.status === 403) {
+            this.authenticationService.useRefreshToken();
+          }
+          return throwError(error.message);
+        })
+      );
     }
     return next.handle(req);
   }

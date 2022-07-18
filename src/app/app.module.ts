@@ -22,6 +22,7 @@ import { DeliveryComponent } from './content/delivery/delivery.component';
 import { ProfileComponent } from './content/profile/profile.component';
 import { StaffComponent } from './content/staff/staff.component';
 import {FoodService} from "./service/food.service";
+import { CartComponent } from './content/cart/cart.component';
 
 @NgModule({
   declarations: [
@@ -36,7 +37,8 @@ import {FoodService} from "./service/food.service";
     ManagerComponent,
     DeliveryComponent,
     ProfileComponent,
-    StaffComponent
+    StaffComponent,
+    CartComponent
   ],
   imports: [
     BrowserModule,

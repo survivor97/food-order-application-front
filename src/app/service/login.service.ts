@@ -19,4 +19,13 @@ export class LoginService {
     });
   }
 
+  public askForRefreshToken(refreshToken: string): Observable<any> {
+    return this.http.get<any>('http://localhost:8080/token/refresh', {
+      headers: {
+        'Authorization': refreshToken
+      },
+      observe: 'response'
+    });
+  }
+
 }

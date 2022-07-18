@@ -1,1 +1,109 @@
-<p>cart works!</p>
+<div class="main-div pt-5">
+  <div class="row mt-4">
+    <div class="col-3">
+      <!--#region Sidebar-->
+      <div class="d-flex flex-column flex-shrink-0 p-3 bg-light" style="width: 240px;">
+        <a class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none">
+          <svg class="bi me-2" width="40" height="32"></svg>
+          <span class="fs-4 no-select">Checkout</span>
+        </a>
+        <hr>
+        <ul class="nav nav-pills flex-column mb-auto">
+          <li class="nav-item link-dark pill-custom">
+            <a class="nav-link active" aria-current="page">
+              <svg class="bi me-2" width="16" height="16"></svg>
+              Summary
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link link-dark" aria-current="page">
+              <svg class="bi me-2" width="16" height="16"></svg>
+              Address
+            </a>
+          </li>
+        </ul>
+        <div class="pt-5 pb-5"></div>
+        <hr *ngIf="isLoggedIn()">
+        <div class="dropdown" ngbDropdown *ngIf="isLoggedIn()">
+          <a href="#" class="d-flex align-items-center link-dark text-decoration-none dropdown-toggle" id="dropdownUser2" data-bs-toggle="dropdown" aria-expanded="false" ngbDropdownToggle>
+            <img [src]="getAvatarPath()" alt="" width="32" height="32" class="rounded-circle me-2">
+            <strong>{{getUsername()}}</strong>
+          </a>
+          <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownUser2" ngbDropdownMenu>
+            <li><a class="dropdown-item" href="#" ngbDropdownItem>Profile</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="#" (click)="logout()" ngbDropdownItem>Sign out</a></li>
+          </ul>
+        </div>
+      </div>
+      <!--endregion-->
+    </div>
+    <div class="col-8 table-responsive">
+      <!--#region Order Summary-->
+      <h3 class="mb-4 mt-2">Order summary</h3>
+
+      <table class="table table-striped mt-4">
+        <thead>
+        <tr class="table-danger">
+          <th class="text-center" scope="col" colspan="4">Food List</th>
+        </tr>
+        </thead>
+        <tbody>
+
+<!--        <tr>-->
+<!--          <th class="pt-3" scope="row" style="padding-left: 2rem; width: 1%;">1</th>-->
+<!--          <td class="pt-3" style="width: 50%; padding-left: 2rem;">Pizza PLM</td>-->
+<!--          <td class="pt-3">-->
+<!--            <div class="row text-center">-->
+<!--              <div class="col-3">-->
+<!--                <button class="btn btn-primary rounded-button btn-color"><div class="in-rounded-button">-</div></button>-->
+<!--              </div>-->
+<!--              <div class="col-3">-->
+<!--                <p>3</p>-->
+<!--              </div>-->
+<!--              <div class="col-3">-->
+<!--                <button class="btn btn-primary rounded-button btn-color"><div class="in-rounded-button">+</div></button>-->
+<!--              </div>-->
+<!--              <div class="col-3"></div>-->
+<!--            </div>-->
+<!--          </td>-->
+<!--          <td class="pt-3" style="white-space: nowrap; width: 1%">-->
+<!--            <button class="btn-in-table btn-lg btn-primary btn-block pl-5 pr-5 pt-0 pb-0 float-end" style="margin-right: 1rem">Remove</button>-->
+<!--          </td>-->
+<!--        </tr>-->
+
+        <tr *ngFor="let cartItem of cartItems | keyvalue; let rowNr = index">
+          <th class="pt-3" scope="row" style="padding-left: 2rem; width: 1%;">{{rowNr + 1}}</th>
+          <td class="pt-3" style="width: 50%; padding-left: 2rem;">{{cartItem.value.name}}</td>
+          <td class="pt-3">
+            <div class="row text-center">
+              <div class="col-3">
+                <button class="btn btn-primary rounded-button btn-color"><div class="in-rounded-button">-</div></button>
+              </div>
+              <div class="col-3">{{cartItem.value.cartQuantity}}</div>
+              <div class="col-3">
+                <button class="btn btn-primary rounded-button btn-color">
+                  <div class="in-rounded-button">+</div>
+                </button>
+              </div>
+              <div class="col-3"></div>
+            </div>
+          </td>
+          <td class="pt-3" style="white-space: nowrap; width: 1%">
+            <button class="btn-in-table btn-lg btn-primary btn-block pl-5 pr-5 pt-0 pb-0 float-end" (click)="removeItem(cartItem.value)" style="margin-right: 1rem">Remove</button>
+          </td>
+        </tr>
+        <tr *ngIf="cartItems.size === 0">
+          <td colspan="4" class="text-center">Empty</td>
+        </tr>
+        </tbody>
+      </table>
+      <!--#endregion Restaurants-->
+      <div class="pt-5">
+        <button class="btn-in-table btn-lg btn-primary btn-block pl-5 pr-5 pt-0 pb-0 float-end" [disabled]="cartItems.size === 0" style="margin-right: 1rem">Next</button>
+      </div>
+    </div>
+    <div class="col-1"></div>
+  </div>
+  <div class="pt-5"></div>
+</div>

@@ -23,6 +23,7 @@ import { ProfileComponent } from './content/profile/profile.component';
 import { StaffComponent } from './content/staff/staff.component';
 import {FoodService} from "./service/food.service";
 import { CartComponent } from './content/cart/cart.component';
+import {OrderService} from "./service/order.service";
 
 @NgModule({
   declarations: [
@@ -52,6 +53,7 @@ import { CartComponent } from './content/cart/cart.component';
     LoginService,
     RestaurantService,
     FoodService,
+    OrderService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: InterceptorService,

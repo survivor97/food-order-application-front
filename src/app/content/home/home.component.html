@@ -71,19 +71,21 @@
             <div class="card-body">
               <h5 class="card-title">{{food.name}}</h5>
               <p class="card-text">{{food.description}}</p>
-              <div class="pt-4"></div>
+              <div class="pt-4 pb-3">
+                <h5>Price: {{food.price}} lei</h5>
+              </div>
               <div class="row">
                 <div class="col-2 text-center col-centering">
-                  <button type="button" class="btn btn-primary rounded-button btn-color">-</button>
+                  <button type="button" class="btn btn-primary rounded-button btn-color" (click)="decreaseQuantity(food)">-</button>
                 </div>
                 <div class="col-2 text-center col-centering">
-                  <p class="pt-1">Nr.</p>
+                  <p class="pt-1">{{food.quantity}}</p>
                 </div>
                 <div class="col-2 text-center col-centering">
-                  <button type="button" class="btn btn-primary rounded-button btn-color">+</button>
+                  <button type="button" class="btn btn-primary rounded-button btn-color" (click)="increaseQuantity(food)">+</button>
                 </div>
                 <div class="col-6 text-center col-centering" style="padding-right: 0.5rem">
-                  <button type="button" class="btn btn-primary add-to-cart-btn float-end btn-color">Add</button>
+                  <button type="button" class="btn btn-primary add-to-cart-btn float-end btn-color" (click)="addButton(food)">Add</button>
                 </div>
               </div>
             </div>

@@ -2,6 +2,8 @@ import {Component, OnInit} from '@angular/core';
 import {AuthenticationService} from "../../service/authentication.service";
 import {Properties} from "../../properties";
 import {FoodService} from "../../service/food.service";
+import {Router} from "@angular/router";
+import {OrderService} from "../../service/order.service";
 
 enum FoodMenu {
   PIZZA,
@@ -27,7 +29,9 @@ export class HomeComponent implements OnInit {
   menuOption: FoodMenu = FoodMenu.PIZZA;
 
   constructor(private foodService: FoodService,
-              private authenticationService: AuthenticationService) {
+              private authenticationService: AuthenticationService,
+              private orderService: OrderService,
+              private router: Router) {
     this.updateFoodPage();
   }
 
@@ -70,6 +74,7 @@ export class HomeComponent implements OnInit {
       for(let i=0; i<this.nrOfFoodPages; i++) {
         this.foodPages.push(i);
       }
+      this.resetFoodQuantity();
     });
   }
 
@@ -96,6 +101,31 @@ export class HomeComponent implements OnInit {
 
   increaseQuantity(food: any) {
     food.quantity += 1;
+  }
+
+  decreaseQuantity(food: any) {
+    if(food.quantity > 0) {
+      food.quantity -= 1;
+    }
+  }
+
+  resetFoodQuantity(): void {
+    for(let i=0; i<this.foodList.length; i++) {
+      this.foodList[i].quantity = 0;
+    }
+  }
+
+  addButton(food: any): void {
+    if(!this.authenticationService.getIsLoggedIn()) {
+      this.router.navigate(['/login']);
+    }
+    else {
+      this.addToCart(food);
+    }
+  }
+
+  addToCart(food: any) {
+    this.orderService.addToCart(food);
   }
 
 }

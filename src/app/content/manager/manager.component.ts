@@ -2,12 +2,19 @@ import { Component, OnInit } from '@angular/core';
 import {AuthenticationService} from "../../service/authentication.service";
 import {Properties} from "../../properties";
 
+enum ManagerMenu {
+  STAFF,
+  DELIVERY_USERS
+}
+
 @Component({
   selector: 'app-manager',
   templateUrl: './manager.component.html',
   styleUrls: ['./manager.component.css']
 })
 export class ManagerComponent implements OnInit {
+
+  menuOption: ManagerMenu = ManagerMenu.STAFF;
 
   constructor(private authenticationService: AuthenticationService) { }
 
@@ -30,4 +37,12 @@ export class ManagerComponent implements OnInit {
     return this.authenticationService.getUsernameOfAccessToken();
   }
 
+  getManagerMenu(): typeof ManagerMenu {
+    return ManagerMenu;
+  }
+
+  changeOption(option: ManagerMenu): void {
+    this.menuOption = option;
+    window.scrollTo(0, 0);
+  }
 }

@@ -5,37 +5,37 @@
       <div class="d-flex flex-column flex-shrink-0 p-3 bg-light" style="width: 240px;">
         <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none">
           <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>
-          <span class="fs-4">Sidebar</span>
+          <span class="fs-4">Admin</span>
         </a>
         <hr>
         <ul class="nav nav-pills flex-column mb-auto">
-          <li class="nav-item pill-custom">
-            <a href="#" class="nav-link active" aria-current="page">
-              <svg class="bi me-2" width="16" height="16"><use xlink:href="#home"></use></svg>
+          <li class="nav-item">
+            <a class="nav-link link-dark" (click)="changeOption(getAdminMenu().RESTAURANTS)" [class.active]="menuOption === getAdminMenu().RESTAURANTS">
+              <svg class="bi me-2" width="16" height="16"></svg>
               Restaurants
             </a>
           </li>
           <li>
-            <a href="#" class="nav-link link-dark">
-              <svg class="bi me-2" width="16" height="16"><use xlink:href="#speedometer2"></use></svg>
+            <a class="nav-link link-dark" (click)="changeOption(getAdminMenu().MANAGERS)" [class.active]="menuOption === getAdminMenu().MANAGERS">
+              <svg class="bi me-2" width="16" height="16"></svg>
               Managers
             </a>
           </li>
           <li>
-            <a href="#" class="nav-link link-dark">
-              <svg class="bi me-2" width="16" height="16"><use xlink:href="#table"></use></svg>
+            <a class="nav-link link-dark" (click)="changeOption(getAdminMenu().STAFF)" [class.active]="menuOption === getAdminMenu().STAFF">
+              <svg class="bi me-2" width="16" height="16"></svg>
               Staff
             </a>
           </li>
           <li>
-            <a href="#" class="nav-link link-dark">
-              <svg class="bi me-2" width="16" height="16"><use xlink:href="#grid"></use></svg>
+            <a class="nav-link link-dark" (click)="changeOption(getAdminMenu().DELIVERY_USERS)" [class.active]="menuOption === getAdminMenu().DELIVERY_USERS">
+              <svg class="bi me-2" width="16" height="16"></svg>
               Delivery Users
             </a>
           </li>
           <li>
-            <a href="#" class="nav-link link-dark">
-              <svg class="bi me-2" width="16" height="16"><use xlink:href="#people-circle"></use></svg>
+            <a class="nav-link link-dark" (click)="changeOption(getAdminMenu().USERS)" [class.active]="menuOption === getAdminMenu().USERS">
+              <svg class="bi me-2" width="16" height="16"></svg>
               Users
             </a>
           </li>
@@ -92,7 +92,7 @@
 
     <!--#region Managers-->
       <div *ngIf="menuOption === getAdminMenu().MANAGERS">
-        <h3 class="mb-4 mt-5">Managers</h3>
+        <h3 class="mb-4">Managers</h3>
 
         <table class="table table-striped mt-4">
           <thead>
@@ -124,7 +124,7 @@
 
     <!--#region Staff-->
       <div *ngIf="menuOption === getAdminMenu().STAFF">
-        <h3 class="mb-4 mt-5">Staff</h3>
+        <h3 class="mb-4">Staff</h3>
 
         <table class="table table-striped mt-4">
           <thead>
@@ -156,7 +156,7 @@
 
     <!--#region Delivery User-->
       <div *ngIf="menuOption === getAdminMenu().DELIVERY_USERS">
-        <h3 class="mb-4 mt-5">Delivery User</h3>
+        <h3 class="mb-4">Delivery User</h3>
 
         <table class="table table-striped mt-4">
           <thead>
@@ -185,6 +185,12 @@
         </table>
       </div>
       <!--#endregion Restaurants-->
+
+    <!--#region Users-->
+      <div *ngIf="menuOption === getAdminMenu().USERS">
+        <h3 class="mb-4">Users</h3>
+      </div>
+    <!--#endregion-->
 
     </div>
     <div class="col-3"></div>

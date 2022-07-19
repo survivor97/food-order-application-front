@@ -99,3 +99,13 @@ a.btn.disabled,fieldset:disabled a.btn{
 .nav-pills .pill-custom .nav-link {
   background-color:#b01111;
 }
+
+a.nav-link.active {
+  background-color: #8d0e0e;
+  color: white;
+}
+
+li>a {
+  user-select: none;
+  cursor:pointer;
+}

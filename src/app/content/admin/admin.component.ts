@@ -44,4 +44,9 @@ export class AdminComponent implements OnInit {
     return this.authenticationService.getUsernameOfAccessToken();
   }
 
+  changeOption(option: AdminMenu): void {
+    this.menuOption = option;
+    window.scrollTo(0, 0);
+  }
+
 }

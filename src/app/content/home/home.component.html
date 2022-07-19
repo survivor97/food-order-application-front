@@ -85,7 +85,7 @@
                   <button type="button" class="btn btn-primary rounded-button btn-color" (click)="increaseQuantity(food)">+</button>
                 </div>
                 <div class="col-6 text-center col-centering" style="padding-right: 0.5rem">
-                  <button type="button" class="btn btn-primary add-to-cart-btn float-end btn-color" (click)="addButton(food)">Add</button>
+                  <button type="button" class="btn btn-primary add-to-cart-btn float-end btn-color" (click)="openAddedToCartModal(addedToCartModal, food, food.quantity); addButton(food);">Add</button>
                 </div>
               </div>
             </div>
@@ -115,3 +115,26 @@
   </div>
 </div>
 
+<!--#region Added to cart modal-->
+<ng-template #addedToCartModal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title-email">New cart items</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+  </div>
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-12 text-center">
+        <h5>Added to cart:</h5>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12 text-center">
+        <span style="font-size: 22px">{{lastAddedFood.name}}</span><span style="font-size: 18px; padding-left: 0.8rem">x {{lastAddedToCartQuantity}}</span>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark" (click)="modal.close('Close click')">Close</button>
+  </div>
+</ng-template>
+<!--#endregion Added to cart modal-->

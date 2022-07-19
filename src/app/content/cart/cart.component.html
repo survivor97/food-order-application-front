@@ -10,15 +10,21 @@
         <hr>
         <ul class="nav nav-pills flex-column mb-auto">
           <li class="nav-item">
-            <a class="nav-link link-dark" (click)="changeOption(getCartMenu().SUMMARY)" [class.active]="menuOption === getCartMenu().SUMMARY">
+            <a class="nav-link link-dark" (click)="changeOption(getCartMenu().LIST)" [class.active]="menuOption === getCartMenu().LIST">
               <svg class="bi me-2" width="16" height="16"></svg>
-              Summary
+              List
             </a>
           </li>
           <li class="nav-item">
             <a class="nav-link link-dark" (click)="changeOption(getCartMenu().ADDRESS)" [class.active]="menuOption === getCartMenu().ADDRESS">
               <svg class="bi me-2" width="16" height="16"></svg>
               Address
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link link-dark" (click)="changeOption(getCartMenu().SUMMARY)" [class.active]="menuOption === getCartMenu().SUMMARY">
+              <svg class="bi me-2" width="16" height="16"></svg>
+              Summary
             </a>
           </li>
         </ul>
@@ -38,9 +44,9 @@
       </div>
       <!--endregion-->
     </div>
-    <!--#region Order Summary-->
-    <div *ngIf="menuOption === getCartMenu().SUMMARY" class="col-8 table-responsive">
-      <h3 class="mb-4 mt-2">Order summary</h3>
+    <!--#region Order List-->
+    <div *ngIf="menuOption === getCartMenu().LIST" class="col-8 table-responsive">
+      <h3 class="mb-4 mt-2">Order List</h3>
 
       <table class="table table-striped mt-4">
         <thead>
@@ -95,6 +101,13 @@
             <button class="btn-in-table btn-lg btn-primary btn-block pl-5 pr-5 pt-0 pb-0 float-end" (click)="removeItem(cartItem.value)" style="margin-right: 1rem">Remove</button>
           </td>
         </tr>
+
+        <!--#region Total Row-->
+        <tr *ngIf="cartItems.size !== 0">
+          <td colspan="4" class="text-center">Total: {{getCartTotal()}} lei</td>
+        </tr>
+        <!--#region Total Row-->
+
         <tr *ngIf="cartItems.size === 0">
           <td colspan="4" class="text-center">Empty</td>
         </tr>
@@ -105,6 +118,8 @@
       </div>
     </div>
     <!--#endregion-->
+
+    <!--#region Address-->
     <div *ngIf="menuOption === getCartMenu().ADDRESS" class="col-8">
       <h3 class="mb-4 mt-2 pb-5">Shipping details</h3>
 
@@ -123,12 +138,38 @@
         <div class="col-2"></div>
         <div class="col-8">
           <div class="pt-5">
+            <button class="btn-in-table btn-lg btn-primary btn-block pl-5 pr-5 pt-0 pb-0 float-end" [disabled]="cartItems.size === 0" style="margin-right: 1rem">Next</button>
+          </div>
+        </div>
+        <div class="col-2"></div>
+      </div>
+    </div>
+    <!--#endregion Address-->
+
+    <!--#region Summary-->
+    <div *ngIf="menuOption === getCartMenu().SUMMARY" class="col-8">
+      <h3 class="mb-4 mt-2 pb-5">Summary</h3>
+
+      <div class="row">
+        <div class="col-2"></div>
+        <div class="col-8">
+
+        </div>
+        <div class="col-2">
+        </div>
+      </div>
+      <div class="row pb-3">
+        <div class="col-2"></div>
+        <div class="col-8">
+          <div class="pt-5">
             <button class="btn-place-order btn-lg btn-primary btn-block pl-5 pr-5 pt-0 pb-0 float-end" [disabled]="cartItems.size === 0" style="margin-right: 1rem">Place Order</button>
           </div>
         </div>
         <div class="col-2"></div>
       </div>
     </div>
+    <!--#endregion Summary-->
+
     <div class="col-1"></div>
   </div>
   <div class="pt-5"></div>

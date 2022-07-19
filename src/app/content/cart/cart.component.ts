@@ -4,8 +4,9 @@ import {Properties} from "../../properties";
 import {OrderService} from "../../service/order.service";
 
 enum CartMenu {
-  SUMMARY,
-  ADDRESS
+  LIST,
+  ADDRESS,
+  SUMMARY
 }
 
 @Component({
@@ -17,7 +18,7 @@ export class CartComponent implements OnInit {
 
   cartItems = new Map<number, any>();
 
-  menuOption: CartMenu = CartMenu.SUMMARY;
+  menuOption: CartMenu = CartMenu.LIST;
 
   constructor(private authenticationService: AuthenticationService,
               private orderService: OrderService) {
@@ -64,6 +65,16 @@ export class CartComponent implements OnInit {
 
   getCartMenu(): typeof CartMenu {
     return CartMenu;
+  }
+
+  getCartTotal(): number {
+    let total = 0;
+
+    this.cartItems.forEach((value: any, key: number) => {
+      total += value.cartQuantity * value.price;
+    });
+
+    return total;
   }
 
 }

@@ -4,6 +4,7 @@ import {Properties} from "../../properties";
 import {FoodService} from "../../service/food.service";
 import {Router} from "@angular/router";
 import {OrderService} from "../../service/order.service";
+import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 
 enum FoodMenu {
   PIZZA,
@@ -25,13 +26,16 @@ export class HomeComponent implements OnInit {
   nrOfFoodPages: number = 0;
   currentFoodPage: number = 0;
   foodPages: Array<number> = [];
+  lastAddedFood: any;
+  lastAddedToCartQuantity: number = 0;
 
   menuOption: FoodMenu = FoodMenu.PIZZA;
 
   constructor(private foodService: FoodService,
               private authenticationService: AuthenticationService,
               private orderService: OrderService,
-              private router: Router) {
+              private router: Router,
+              private modalService: NgbModal) {
     this.updateFoodPage();
   }
 
@@ -126,6 +130,12 @@ export class HomeComponent implements OnInit {
 
   addToCart(food: any) {
     this.orderService.addToCart(food);
+  }
+
+  openAddedToCartModal(content: any, food:any, quantity: number): void {
+    this.lastAddedFood = food;
+    this.lastAddedToCartQuantity = quantity;
+    this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title-email', centered: true, size: 'md'});
   }
 
 }

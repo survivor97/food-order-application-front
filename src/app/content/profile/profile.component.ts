@@ -46,4 +46,8 @@ export class ProfileComponent implements OnInit {
     this.menuOption = option;
     window.scrollTo(0, 0);
   }
+
+  hasUserRole(): boolean {
+    return this.authenticationService.getRolesOfAccessToken().includes("ROLE_USER");
+  }
 }

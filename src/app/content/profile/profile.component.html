@@ -15,7 +15,7 @@
               Info
             </a>
           </li>
-          <li>
+          <li *ngIf="hasUserRole()">
             <a class="nav-link link-dark" (click)="changeOption(getProfileMenu().FAVOURITE_FOOD)" [class.active]="menuOption === getProfileMenu().FAVOURITE_FOOD">
               <svg class="bi me-2" width="16" height="16"></svg>
               Favourite Food

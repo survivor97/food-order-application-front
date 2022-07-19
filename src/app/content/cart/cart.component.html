@@ -50,7 +50,7 @@
 
       <table class="table table-striped mt-4">
         <thead>
-        <tr class="table-danger">
+        <tr>
           <th class="text-center" scope="col" colspan="4">Food List</th>
         </tr>
         </thead>
@@ -126,10 +126,11 @@
       <div class="row">
         <div class="col-2"></div>
         <div class="col-8">
-          <input type="text" id="inputFirstName" class="form-control" placeholder="Address" required autofocus name="firstName">
-          <input type="text" id="inputFirstName" class="form-control" placeholder="City" required autofocus name="firstName">
-          <input type="text" id="inputFirstName" class="form-control" placeholder="County" required autofocus name="firstName">
-          <input type="number" id="inputFirstName" class="form-control" placeholder="ZIP Code" required autofocus name="firstName">
+          <input type="text" id="streetAddress" [(ngModel)]="streetAddress" class="form-control" placeholder="Street Address" required>
+          <input type="text" id="city" [(ngModel)]="city" class="form-control" placeholder="City" required>
+          <input type="text"
+                 oninput="this.value=this.value.replace(/[^\d]/,'')"
+                 id="zipCode" [(ngModel)]="zipCode" class="form-control" placeholder="ZIP Code" required>
         </div>
         <div class="col-2">
         </div>
@@ -138,7 +139,7 @@
         <div class="col-2"></div>
         <div class="col-8">
           <div class="pt-5">
-            <button class="btn-in-table btn-lg btn-primary btn-block pl-5 pr-5 pt-0 pb-0 float-end" [disabled]="cartItems.size === 0" style="margin-right: 1rem">Next</button>
+            <button class="btn-in-table btn-lg btn-primary btn-block pl-5 pr-5 pt-0 pb-0 float-end" (click)="changeOption(getCartMenu().SUMMARY)" [disabled]="cartItems.size === 0" style="margin-right: 1rem">Next</button>
           </div>
         </div>
         <div class="col-2"></div>
@@ -153,6 +154,56 @@
       <div class="row">
         <div class="col-2"></div>
         <div class="col-8">
+          <!--#region Items-->
+          <table class="table">
+            <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Item</th>
+              <th scope="col">Quantity</th>
+              <th scope="col">Price/Item (lei)</th>
+              <th scope="col">Price (lei)</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let cartItem of cartItems | keyvalue; let rowNr = index">
+              <th scope="row" class="text-center">{{rowNr + 1}}</th>
+              <td>{{cartItem.value.name}}</td>
+              <td class="text-center">{{cartItem.value.cartQuantity}}</td>
+              <td class="text-center">{{cartItem.value.price}}</td>
+              <td class="text-center">{{cartItem.value.cartQuantity * cartItem.value.price}}</td>
+            </tr>
+
+            <tr>
+              <td colspan="5">Total: {{getCartTotal()}} lei</td>
+            </tr>
+            </tbody>
+          </table>
+          <!--#endregion Items-->
+
+          <!--#region Shipping-->
+          <table class="table" *ngIf="isShippingAddressComplete()">
+            <thead>
+            <tr>
+              <th scope="col" colspan="2" class="text-center">Shipping</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <th scope="row" style="width: 30%">Street Address:</th>
+              <td>{{streetAddress}}</td>
+            </tr>
+            <tr>
+              <th scope="row">City:</th>
+              <td>{{city}}</td>
+            </tr>
+            <tr>
+              <th scope="row">ZIP Code:</th>
+              <td>{{zipCode}}</td>
+            </tr>
+            </tbody>
+          </table>
+          <!--#endregion Shipping-->
 
         </div>
         <div class="col-2">
@@ -162,7 +213,7 @@
         <div class="col-2"></div>
         <div class="col-8">
           <div class="pt-5">
-            <button class="btn-place-order btn-lg btn-primary btn-block pl-5 pr-5 pt-0 pb-0 float-end" [disabled]="cartItems.size === 0" style="margin-right: 1rem">Place Order</button>
+            <button class="btn-place-order btn-lg btn-primary btn-block pl-5 pr-5 pt-0 pb-0 float-end" [disabled]="cartItems.size === 0 || !isShippingAddressComplete()" style="margin-right: 1rem">Place Order</button>
           </div>
         </div>
         <div class="col-2"></div>

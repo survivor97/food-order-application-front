@@ -20,6 +20,10 @@ export class CartComponent implements OnInit {
 
   menuOption: CartMenu = CartMenu.LIST;
 
+  streetAddress: string = '';
+  city: string = '';
+  zipCode: string = '';
+
   constructor(private authenticationService: AuthenticationService,
               private orderService: OrderService) {
     this.cartItems = this.orderService.cartItems;
@@ -75,6 +79,17 @@ export class CartComponent implements OnInit {
     });
 
     return total;
+  }
+
+  isShippingAddressComplete(): boolean {
+    if(
+      this.streetAddress.length > 0 &&
+      this.city.length > 0 &&
+      this.zipCode.length > 0
+    ) {
+      return  true;
+    }
+    return false;
   }
 
 }

@@ -91,3 +91,13 @@ a.btn.disabled,fieldset:disabled a.btn{
   line-height:1.5;
   border-radius:.2rem
 }
+
+a.nav-link.active {
+  background-color: #8d0e0e;
+  color: white;
+}
+
+li>a {
+  user-select: none;
+  cursor:pointer;
+}

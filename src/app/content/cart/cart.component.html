@@ -9,14 +9,14 @@
         </a>
         <hr>
         <ul class="nav nav-pills flex-column mb-auto">
-          <li class="nav-item link-dark pill-custom">
-            <a class="nav-link active" aria-current="page">
+          <li class="nav-item">
+            <a class="nav-link link-dark" (click)="changeOption(getCartMenu().SUMMARY)" [class.active]="menuOption === getCartMenu().SUMMARY">
               <svg class="bi me-2" width="16" height="16"></svg>
               Summary
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link link-dark" aria-current="page">
+            <a class="nav-link link-dark" (click)="changeOption(getCartMenu().ADDRESS)" [class.active]="menuOption === getCartMenu().ADDRESS">
               <svg class="bi me-2" width="16" height="16"></svg>
               Address
             </a>
@@ -38,8 +38,8 @@
       </div>
       <!--endregion-->
     </div>
-    <div class="col-8 table-responsive">
-      <!--#region Order Summary-->
+    <!--#region Order Summary-->
+    <div *ngIf="menuOption === getCartMenu().SUMMARY" class="col-8 table-responsive">
       <h3 class="mb-4 mt-2">Order summary</h3>
 
       <table class="table table-striped mt-4">
@@ -78,11 +78,13 @@
           <td class="pt-3">
             <div class="row text-center">
               <div class="col-3">
-                <button class="btn btn-primary rounded-button btn-color"><div class="in-rounded-button">-</div></button>
+                <button class="btn btn-primary rounded-button btn-color" (click)="decreaseCartQuantity(cartItem.value)">
+                  <div class="in-rounded-button">-</div>
+                </button>
               </div>
               <div class="col-3">{{cartItem.value.cartQuantity}}</div>
               <div class="col-3">
-                <button class="btn btn-primary rounded-button btn-color">
+                <button class="btn btn-primary rounded-button btn-color" (click)="increaseCartQuantity(cartItem.value)">
                   <div class="in-rounded-button">+</div>
                 </button>
               </div>
@@ -98,9 +100,33 @@
         </tr>
         </tbody>
       </table>
-      <!--#endregion Restaurants-->
       <div class="pt-5">
-        <button class="btn-in-table btn-lg btn-primary btn-block pl-5 pr-5 pt-0 pb-0 float-end" [disabled]="cartItems.size === 0" style="margin-right: 1rem">Next</button>
+        <button class="btn-in-table btn-lg btn-primary btn-block pl-5 pr-5 pt-0 pb-1 float-end" (click)="changeOption(getCartMenu().ADDRESS)" [disabled]="cartItems.size === 0" style="margin-right: 1rem">Next</button>
+      </div>
+    </div>
+    <!--#endregion-->
+    <div *ngIf="menuOption === getCartMenu().ADDRESS" class="col-8">
+      <h3 class="mb-4 mt-2 pb-5">Shipping details</h3>
+
+      <div class="row">
+        <div class="col-2"></div>
+        <div class="col-8">
+          <input type="text" id="inputFirstName" class="form-control" placeholder="Address" required autofocus name="firstName">
+          <input type="text" id="inputFirstName" class="form-control" placeholder="City" required autofocus name="firstName">
+          <input type="text" id="inputFirstName" class="form-control" placeholder="County" required autofocus name="firstName">
+          <input type="number" id="inputFirstName" class="form-control" placeholder="ZIP Code" required autofocus name="firstName">
+        </div>
+        <div class="col-2">
+        </div>
+      </div>
+      <div class="row pb-3">
+        <div class="col-2"></div>
+        <div class="col-8">
+          <div class="pt-5">
+            <button class="btn-place-order btn-lg btn-primary btn-block pl-5 pr-5 pt-0 pb-0 float-end" [disabled]="cartItems.size === 0" style="margin-right: 1rem">Place Order</button>
+          </div>
+        </div>
+        <div class="col-2"></div>
       </div>
     </div>
     <div class="col-1"></div>

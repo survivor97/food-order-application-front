@@ -23,6 +23,23 @@ table {
   transition:color 0.15s ease-in-out,background-color 0.15s ease-in-out,border-color 0.15s ease-in-out,box-shadow 0.15s ease-in-out
 }
 
+.btn-place-order{
+  font-weight:400;
+  color:#212529;
+  text-align:center;
+  vertical-align:middle;
+  user-select:none;
+  background-color:transparent;
+  border:1px solid transparent;
+  height: 2rem;
+  width: 8rem;
+  font-size:1rem;
+  line-height:1.5;
+  border-radius:.25rem;
+  transition:color 0.15s ease-in-out,background-color 0.15s ease-in-out,border-color 0.15s ease-in-out,box-shadow 0.15s ease-in-out
+
+}
+
 .btn{
   font-weight:400;
   color:#212529;
@@ -113,4 +130,14 @@ a.btn.disabled,fieldset:disabled a.btn{
 .in-rounded-button {
   position: relative;
   top: -0.2rem;
+}
+
+a.nav-link.active {
+  background-color: #8d0e0e;
+  color: white;
+}
+
+li>a {
+  user-select: none;
+  cursor:pointer;
 }

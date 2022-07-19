@@ -1,8 +1,50 @@
 <div class="main-div pt-5">
   <div class="row mt-4">
-    <div class="col-4"></div>
-    <div class="col-4">
-      <h3 class="mb-4">Profile</h3>
+    <div class="col-3">
+      <!--#region Sidebar-->
+      <div class="d-flex flex-column flex-shrink-0 p-3 bg-light" style="width: 240px;">
+        <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none">
+          <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>
+          <span class="fs-4">Profile</span>
+        </a>
+        <hr>
+        <ul class="nav nav-pills flex-column mb-auto">
+          <li class="nav-item">
+            <a class="nav-link link-dark" (click)="changeOption(getProfileMenu().INFO)" [class.active]="menuOption === getProfileMenu().INFO">
+              <svg class="bi me-2" width="16" height="16"></svg>
+              Info
+            </a>
+          </li>
+          <li>
+            <a class="nav-link link-dark" (click)="changeOption(getProfileMenu().FAVOURITE_FOOD)" [class.active]="menuOption === getProfileMenu().FAVOURITE_FOOD">
+              <svg class="bi me-2" width="16" height="16"></svg>
+              Favourite Food
+            </a>
+          </li>
+        </ul>
+        <div class="pt-5 pb-5"></div>
+        <hr *ngIf="isLoggedIn()">
+        <div class="dropdown" ngbDropdown *ngIf="isLoggedIn()">
+          <a href="#" class="d-flex align-items-center link-dark text-decoration-none dropdown-toggle" id="dropdownUser2" data-bs-toggle="dropdown" aria-expanded="false" ngbDropdownToggle>
+            <img [src]="getAvatarPath()" alt="" width="32" height="32" class="rounded-circle me-2">
+            <strong>{{getUsername()}}</strong>
+          </a>
+          <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownUser2" ngbDropdownMenu>
+            <li><a class="dropdown-item" href="#" ngbDropdownItem>Profile</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="#" (click)="logout()" ngbDropdownItem>Sign out</a></li>
+          </ul>
+        </div>
+      </div>
+      <!--endregion-->
+    </div>
+    <div class="col-1"></div>
+<!--#region Account Info-->
+    <div class="col-4" *ngIf="menuOption === getProfileMenu().INFO">
+      <h3 class="mb-4">Account Info</h3>
+
+      <div class="pt-4"></div>
+
       <input type="text" id="inputFirstName" class="form-control" placeholder="First name" required autofocus name="firstName">
       <input type="text" id="inputLastName" class="form-control" placeholder="Last name" required autofocus name="lastName">
       <input type="text" id="phoneNumber" class="form-control" placeholder="Phone Number" required autofocus name="phoneNumber">
@@ -10,7 +52,29 @@
       <input type="text" id="inputUsername" class="form-control" placeholder="Username" required autofocus name="username">
       <input type="password" id="inputPassword" class="form-control" placeholder="Password" required autofocus name="password">
 
-      <!--#region Favourite Food-->
+      <div class="pt-3"></div>
+
+      <div class="row mt-4">
+        <div class="col-4"></div>
+        <div class="col-4 text-center">
+          <div class="pt-2"></div>
+          <button class="btn btn-lg btn-primary btn-block pl-5 pr-5">Save</button>
+          <div class="pt-2"></div>
+          <button class="btn btn-lg btn-primary btn-block pl-5 pr-5" (click)="logout()">Logout</button>
+          <div class="pt-5"></div>
+          <div class="col-4"></div>
+        </div>
+      </div>
+    </div>
+    <div class="col-4" *ngIf="menuOption === getProfileMenu().INFO"></div>
+<!--#endregion Account Info-->
+
+    <!--#region Favourite Food-->
+    <div class="col-5" *ngIf="menuOption === getProfileMenu().FAVOURITE_FOOD">
+      <h3 class="mb-4">Favourite Food</h3>
+
+      <div class="pt-3"></div>
+
       <table class="table table-striped mt-4">
         <thead>
         <tr class="table-danger">
@@ -22,40 +86,34 @@
           <th scope="row">1</th>
           <td>Mark</td>
           <td>Otto</td>
-          <td class="text-center">
-            <button class="btn-in-table btn-lg btn-primary btn-block pl-5 pr-5 pt-0 pb-0">Remove</button>
+          <td>
+            <button class="btn-in-table btn-lg btn-primary btn-block pl-5 pr-5 pt-0 pb-0 float-end">Remove</button>
           </td>
         </tr>
         <tr>
           <th scope="row">2</th>
           <td>Jacob</td>
           <td>Thornton</td>
-          <td class="text-center">
-            <button class="btn-in-table btn-lg btn-primary btn-block pl-5 pr-5 pt-0 pb-0">Remove</button>
+          <td>
+            <button class="btn-in-table btn-lg btn-primary btn-block pl-5 pr-5 pt-0 pb-0 float-end">Remove</button>
           </td>
         </tr>
         <tr>
           <th scope="row">3</th>
           <td>Larry</td>
           <td>the Bird</td>
-          <td class="text-center">
-            <button class="btn-in-table btn-lg btn-primary btn-block pl-5 pr-5 pt-0 pb-0">Remove</button>
+          <td>
+            <button class="btn-in-table btn-lg btn-primary btn-block pl-5 pr-5 pt-0 pb-0 float-end">Remove</button>
           </td>
         </tr>
         </tbody>
       </table>
-      <!--#endregion-->
     </div>
-    <div class="col-4"></div>
-  </div>
-  <div class="row mt-4">
-    <div class="col-4"></div>
-    <div class="col-4 text-center">
-      <div class="pt-2"></div>
-      <button class="btn btn-lg btn-primary btn-block pl-5 pr-5">Save</button>
-      <div class="pt-2"></div>
-      <button class="btn btn-lg btn-primary btn-block pl-5 pr-5" (click)="logout()">Logout</button>
-      <div class="pt-5"></div>
-    <div class="col-4"></div>
+    <div class="col-3" *ngIf="menuOption === getProfileMenu().FAVOURITE_FOOD"></div>
+    <!--#endregion Favourite Food-->
+
+
+
+
   </div>
 </div>

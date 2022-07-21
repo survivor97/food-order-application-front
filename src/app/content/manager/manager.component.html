@@ -18,7 +18,7 @@
           <li>
             <a class="nav-link link-dark" (click)="changeOption(getManagerMenu().DELIVERY_USERS)" [class.active]="menuOption === getManagerMenu().DELIVERY_USERS">
               <svg class="bi me-2" width="16" height="16"></svg>
-              DeliveryUsers
+              Delivery Users
             </a>
           </li>
         </ul>
@@ -38,74 +38,22 @@
       </div>
       <!--endregion-->
     </div>
-    <div class="col-6 table-responsive">
+    <div class="col-8 table-responsive">
 
       <!--#region Staff-->
       <div *ngIf="menuOption === getManagerMenu().STAFF">
-        <h3 class="mb-4">Staff</h3>
-
-        <table class="table table-striped mt-4">
-          <thead>
-          <tr class="table-danger">
-            <th class="text-center" scope="col" colspan="5">Staff List</th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr>
-            <th scope="row">1</th>
-            <td>Mark</td>
-            <td>Otto</td>
-            <td style="white-space: nowrap; width: 1%;">
-              <button class="btn-in-table btn-lg btn-primary btn-block pl-5 pr-5 pt-0 pb-0 float-end" style="margin-right: 1rem">Update</button>
-            </td>
-            <td style="white-space: nowrap; width: 1%;">
-              <button class="btn-in-table btn-lg btn-primary btn-block pl-5 pr-5 pt-0 pb-0 float-end" style="margin-right: 1rem">Remove</button>
-            </td>
-          </tr>
-          <tr>
-            <td class="text-center" colspan="5">
-              <button class="btn-in-table btn-lg btn-primary btn-block pl-5 pr-5 pt-0 pb-0">+</button>
-            </td>
-          </tr>
-          </tbody>
-        </table>
+        <app-staff-section></app-staff-section>
       </div>
       <!--#endregion Staff-->
 
       <!--#region Delivery User-->
       <div *ngIf="menuOption === getManagerMenu().DELIVERY_USERS">
-        <h3 class="mb-4">Delivery User</h3>
-
-        <table class="table table-striped mt-4">
-          <thead>
-          <tr class="table-danger">
-            <th class="text-center" scope="col" colspan="5">Delivery User List</th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr>
-            <th scope="row">1</th>
-            <td>Mark</td>
-            <td>Otto</td>
-            <td style="white-space: nowrap; width: 1%;">
-              <button class="btn-in-table btn-lg btn-primary btn-block pl-5 pr-5 pt-0 pb-0 float-end" style="margin-right: 1rem">Update</button>
-            </td>
-            <td style="white-space: nowrap; width: 1%;">
-              <button class="btn-in-table btn-lg btn-primary btn-block pl-5 pr-5 pt-0 pb-0 float-end" style="margin-right: 1rem">Remove</button>
-            </td>
-          </tr>
-          <tr>
-            <td class="text-center" colspan="5">
-              <button class="btn-in-table btn-lg btn-primary btn-block pl-5 pr-5 pt-0 pb-0">+</button>
-            </td>
-          </tr>
-          </tbody>
-        </table>
+        <app-delivery-user-section></app-delivery-user-section>
       </div>
       <!--#endregion Delivery User-->
 
     </div>
-    <div class="col-3"></div>
+    <div class="col-1"></div>
   </div>
   <div class="pt-5"></div>
 </div>

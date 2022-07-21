@@ -27,6 +27,10 @@ import {OrderService} from "./service/order.service";
 import {ManagerService} from "./service/manager.service";
 import {StaffService} from "./service/staff.service";
 import {DeliveryUserService} from "./service/delivery-user.service";
+import { StaffSectionComponent } from './content/sections/staff-section/staff-section.component';
+import { RestaurantSectionComponent } from './content/sections/restaurant-section/restaurant-section.component';
+import { ManagerSectionComponent } from './content/sections/manager-section/manager-section.component';
+import { DeliveryUserSectionComponent } from './content/sections/delivery-user-section/delivery-user-section.component';
 
 @NgModule({
   declarations: [
@@ -42,7 +46,11 @@ import {DeliveryUserService} from "./service/delivery-user.service";
     DeliveryComponent,
     ProfileComponent,
     StaffComponent,
-    CartComponent
+    CartComponent,
+    StaffSectionComponent,
+    RestaurantSectionComponent,
+    ManagerSectionComponent,
+    DeliveryUserSectionComponent
   ],
   imports: [
     BrowserModule,

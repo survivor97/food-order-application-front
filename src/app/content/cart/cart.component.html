@@ -126,8 +126,13 @@
       <div class="row">
         <div class="col-2"></div>
         <div class="col-8">
+          <label for="streetAddress" class="pb-1">Street Address</label>
           <input type="text" id="streetAddress" [(ngModel)]="streetAddress" class="form-control" placeholder="Street Address" required>
+
+          <label for="city" class="pt-3 pb-1">City</label>
           <input type="text" id="city" [(ngModel)]="city" class="form-control" placeholder="City" required>
+
+          <label for="zipCode" class="pt-3 pb-1">ZIP Code</label>
           <input type="text"
                  oninput="this.value=this.value.replace(/[^\d]/,'')"
                  id="zipCode" [(ngModel)]="zipCode" class="form-control" placeholder="ZIP Code" required>

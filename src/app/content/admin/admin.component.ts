@@ -4,6 +4,8 @@ import {Properties} from "../../properties";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {RestaurantService} from "../../service/restaurant.service";
 import {ManagerService} from "../../service/manager.service";
+import {StaffService} from "../../service/staff.service";
+import {DeliveryUserService} from "../../service/delivery-user.service";
 
 enum AdminMenu {
   RESTAURANTS,
@@ -51,15 +53,56 @@ export class AdminComponent implements OnInit {
   managerModalUpdate: boolean = false;
   //#endregion Managers
 
+  //#region Staff
+  staffList: any;
+
+  staffId: number = 0;
+
+  staffFirstName: string = '';
+  staffLastName: string = '';
+  staffEmail: string = '';
+  staffUsername: string = '';
+  staffPassword: string = '';
+
+  staffModalUpdate = false;
+  //#endregion
+
+  //#region Delivery User
+  deliveryUserList: any;
+
+  deliveryUserId: number = 0;
+
+  deliveryUserFirstName: string = '';
+  deliveryUserLastName: string = '';
+  deliveryUserEmail: string = '';
+  deliveryUserUsername: string = '';
+  deliveryUserPassword: string = '';
+
+  deliveryUserVehicleManufacturer: string = '';
+  deliveryUserVehicleNumber: string = '';
+  deliveryUserVehicleColor: string = '';
+  deliveryUserPhoneNumber: string = '';
+
+  deliveryUserModalUpdate = false;
+  //#endregion Delivery User
+
   constructor(private authenticationService: AuthenticationService,
               private modalService: NgbModal,
               private restaurantService: RestaurantService,
-              private managerService: ManagerService) {
+              private managerService: ManagerService,
+              private staffService: StaffService,
+              private deliveryUserService: DeliveryUserService) {
     this.restaurantService.getRestaurants().subscribe(data => {
       this.restaurantList = data;
     });
     this.managerService.getManagers().subscribe(data => {
       this.managerList = data;
+    });
+    this.staffService.getAllStaff().subscribe(data => {
+      this.staffList = data;
+    });
+    this.deliveryUserService.getAllDeliveryUsers().subscribe(data => {
+      this.deliveryUserList = data;
     });
   }
 
@@ -196,7 +239,6 @@ export class AdminComponent implements OnInit {
     };
 
     this.managerService.insertManager(manager).subscribe(data => {
-      console.warn('Manger password: ' + manager.password);
       if(data.status === 201) {
         this.managerList.push(manager);
       }
@@ -228,4 +270,146 @@ export class AdminComponent implements OnInit {
     });
   }
   //#endregion Manager methods
+
+  //#region Staff methods
+  resetStaffModel() {
+    this.staffFirstName = '';
+    this.staffLastName = '';
+    this.staffEmail = '';
+    this.staffUsername = '';
+    this.staffPassword = '';
+  }
+
+  updateStaffModel(staff: any) {
+    this.staffId = staff.id;
+
+    this.staffFirstName = staff.firstName;
+    this.staffLastName = staff.lastName;
+    this.staffEmail = staff.email;
+    this.staffUsername = staff.username;
+    this.staffPassword = '';
+  }
+
+  insertStaff(): void {
+    const staff = {
+      firstName: this.staffFirstName,
+      lastName: this.staffLastName,
+      email: this.staffEmail,
+      username: this.staffUsername,
+      password: this.staffPassword
+    };
+
+    this.staffService.insertStaff(staff).subscribe(data => {
+      if(data.status === 201) {
+        this.staffList.push(staff);
+      }
+    });
+  }
+
+  updateStaff(): void {
+    const staff = {
+      id: this.staffId,
+      firstName: this.staffFirstName,
+      lastName: this.staffLastName,
+      email: this.staffEmail,
+      username: this.staffUsername,
+      password: this.staffPassword
+    };
+
+    this.staffService.updateStaff(staff).subscribe(data => {
+      if(data.status === 200) {
+        this.staffList[this.staffList.findIndex((i: { id: any; }) => i.id === staff.id)] = staff;
+      }
+    });
+  }
+
+  deleteStaff(staff: any): void {
+    this.staffService.deleteStaff(staff.id).subscribe(data => {
+      if(data.status === 200) {
+        this.staffList.splice(this.staffList.findIndex((i: { id: any; }) => i.id === staff.id), 1);
+      }
+    });
+  }
+  //#endregion
+
+  //#region Delivery User methods
+  resetDeliveryUserModel() {
+    this.deliveryUserFirstName = '';
+    this.deliveryUserLastName = '';
+    this.deliveryUserEmail = '';
+    this.deliveryUserUsername = '';
+    this.deliveryUserPassword = '';
+
+    this.deliveryUserVehicleManufacturer = '';
+    this.deliveryUserVehicleNumber = '';
+    this.deliveryUserVehicleColor = '';
+    this.deliveryUserPhoneNumber = '';
+  }
+
+  updateDeliveryUserModel(deliveryUser: any) {
+    this.deliveryUserId = deliveryUser.id;
+
+    this.deliveryUserFirstName = deliveryUser.firstName;
+    this.deliveryUserLastName = deliveryUser.lastName;
+    this.deliveryUserEmail = deliveryUser.email;
+    this.deliveryUserUsername = deliveryUser.username;
+    this.deliveryUserPassword = '';
+
+    this.deliveryUserVehicleManufacturer = deliveryUser.vehicleManufacturer;
+    this.deliveryUserVehicleNumber = deliveryUser.vehicleNumber;
+    this.deliveryUserVehicleColor = deliveryUser.vehicleColor;
+    this.deliveryUserPhoneNumber = deliveryUser.phoneNumber;
+  }
+
+  insertDeliveryUser(): void {
+    const deliveryUser = {
+      firstName: this.deliveryUserFirstName,
+      lastName: this.deliveryUserLastName,
+      email: this.deliveryUserEmail,
+      username: this.deliveryUserUsername,
+      password: this.deliveryUserPassword,
+
+      vehicleManufacturer: this.deliveryUserVehicleManufacturer,
+      vehicleNumber: this.deliveryUserVehicleNumber,
+      vehicleColor: this.deliveryUserVehicleColor,
+      phoneNumber: this.deliveryUserPhoneNumber
+    };
+
+    this.deliveryUserService.insertDeliveryUser(deliveryUser).subscribe(data => {
+      if(data.status === 201) {
+        this.deliveryUserList.push(deliveryUser);
+      }
+    });
+  }
+
+  updateDeliveryUser(): void {
+    const deliveryUser = {
+      id: this.deliveryUserId,
+      firstName: this.deliveryUserFirstName,
+      lastName: this.deliveryUserLastName,
+      email: this.deliveryUserEmail,
+      username: this.deliveryUserUsername,
+      password: this.deliveryUserPassword,
+
+      vehicleManufacturer: this.deliveryUserVehicleManufacturer,
+      vehicleNumber: this.deliveryUserVehicleNumber,
+      vehicleColor: this.deliveryUserVehicleColor,
+      phoneNumber: this.deliveryUserPhoneNumber
+    };
+
+    this.deliveryUserService.updateDeliveryUser(deliveryUser).subscribe(data => {
+      if(data.status === 200) {
+        this.deliveryUserList[this.deliveryUserList.findIndex((i: { id: any; }) => i.id === deliveryUser.id)] = deliveryUser;
+      }
+    });
+  }
+
+  deleteDeliveryUser(deliveryUser: any): void {
+    this.deliveryUserService.deleteDeliveryUser(deliveryUser.id).subscribe(data => {
+      if(data.status === 200) {
+        this.deliveryUserList.splice(this.deliveryUserList.findIndex((i: { id: any; }) => i.id === deliveryUser.id), 1);
+      }
+    });
+  }
+  //#endregion Delivery User methods
 }

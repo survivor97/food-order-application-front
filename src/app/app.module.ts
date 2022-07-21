@@ -25,6 +25,8 @@ import {FoodService} from "./service/food.service";
 import { CartComponent } from './content/cart/cart.component';
 import {OrderService} from "./service/order.service";
 import {ManagerService} from "./service/manager.service";
+import {StaffService} from "./service/staff.service";
+import {DeliveryUserService} from "./service/delivery-user.service";
 
 @NgModule({
   declarations: [
@@ -56,6 +58,8 @@ import {ManagerService} from "./service/manager.service";
     FoodService,
     OrderService,
     ManagerService,
+    StaffService,
+    DeliveryUserService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: InterceptorService,

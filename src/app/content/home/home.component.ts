@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, TemplateRef, ViewChild} from '@angular/core';
 import {AuthenticationService} from "../../service/authentication.service";
 import {Properties} from "../../properties";
 import {FoodService} from "../../service/food.service";
@@ -6,6 +6,7 @@ import {Router} from "@angular/router";
 import {OrderService} from "../../service/order.service";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {RestaurantService} from "../../service/restaurant.service";
+import {UserService} from "../../service/user.service";
 
 enum FoodMenu {
   PIZZA,
@@ -23,7 +24,10 @@ enum FoodMenu {
 })
 export class HomeComponent implements OnInit {
 
+  @ViewChild('favouritesModal') favouritesModal: any;
+
   pageLoaded: boolean = false;
+  justAddedToFavourites: boolean = false;
 
   foodList: any;
   nrOfFoodPages: number = 0;
@@ -37,16 +41,23 @@ export class HomeComponent implements OnInit {
   selectedRestaurant: any;
   restaurantList: any;
 
+  favouriteFoodList: any;
+
   constructor(private foodService: FoodService,
               private authenticationService: AuthenticationService,
               private restaurantService: RestaurantService,
               private orderService: OrderService,
+              private userService: UserService,
               private router: Router,
               private modalService: NgbModal) {
     this.restaurantList = restaurantService.getRestaurants().subscribe(data => {
       this.restaurantList = data;
       this.selectedRestaurant = this.restaurantList[0];
       this.updateFoodPage();
+    });
+
+    this.favouriteFoodList = userService.getFavouriteFoodList().subscribe(data => {
+      this.favouriteFoodList = data;
     });
   }
 
@@ -150,11 +161,43 @@ export class HomeComponent implements OnInit {
     this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title-email', centered: true, size: 'md'});
   }
 
+  openFavouritesModal(content: any, justAddedToFavourites: boolean) {
+    this.justAddedToFavourites = justAddedToFavourites;
+    const activeModal = this.modalService.open(content, {centered: true, size: 'md'});
+  }
+
   selectRestaurant(restaurant: any) {
     this.pageLoaded = false;
 
     this.selectedRestaurant = restaurant;
     this.updateFoodPage();
+  }
+
+  addFoodToFavourites(food: any): void {
+    this.userService.addFoodToFavourites(food).subscribe(data => {
+      if(data.status === 200) {
+        this.favouriteFoodList.push(food);
+        this.openFavouritesModal(this.favouritesModal, true);
+      }
+    });
+  }
+
+  removeFoodFromFavourites(food: any): void {
+    this.userService.removeFoodFromFavourites(food).subscribe(data => {
+      if(data.status === 200) {
+        this.favouriteFoodList.splice(this.favouriteFoodList.findIndex((i: { id: any; }) => i.id === food.id), 1);
+        this.openFavouritesModal(this.favouritesModal, false);
+      }
+    });
+  }
+
+  hasFoodToFavourites(food: any): boolean {
+    for(let i=0; i<this.favouriteFoodList.length; i++) {
+      if(this.favouriteFoodList[i].id === food.id) {
+        return true;
+      }
+    }
+    return false;
   }
 
 }

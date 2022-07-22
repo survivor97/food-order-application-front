@@ -75,3 +75,21 @@ a.nav-link.active {
 a:hover {
   cursor:pointer;
 }
+
+.btn-favourites-color {
+  background-color: white;
+  border-color:#760b0b;
+  border-width: 2px;
+}
+
+.btn-added-to-favourites-color {
+  background-color: darkgrey;
+  border-color:#760b0b;
+  border-width: 2px;
+}
+
+.img-favourites {
+  position: relative;
+  left: -0.48rem;
+  top: -0.15rem;
+}

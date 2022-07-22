@@ -15,4 +15,21 @@ export class UserService {
     return this.http.get<any>(url);
   }
 
+  getFavouriteFoodList(): Observable<any> {
+    const url = 'http://localhost:8080/user/get-favorite-food';
+    return this.http.get<any>(url);
+  }
+
+  addFoodToFavourites(food: any): Observable<any> {
+    const url = 'http://localhost:8080/user/add-food-to-favorites?foodId=' + food.id;
+    return this.http.put(url, null, { observe: 'response' });
+  }
+
+  removeFoodFromFavourites(food: any): Observable<any> {
+    const url = 'http://localhost:8080/user/remove-food-from-favourites?id=' + food.id;
+    return this.http.delete(url, {
+      observe: 'response'
+    });
+  }
+
 }

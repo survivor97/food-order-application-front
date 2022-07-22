@@ -40,4 +40,10 @@ export class ManagerService {
       observe: 'response'
     });
   }
+
+  getManagerInfo(): Observable<any> {
+    const url = 'http://localhost:8080/manager/get-manager-info';
+    return this.http.get<any>(url);
+  }
+
 }

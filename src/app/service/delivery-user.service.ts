@@ -40,4 +40,9 @@ export class DeliveryUserService {
       observe: 'response'
     });
   }
+
+  getDeliveryUserInfo(): Observable<any> {
+    const url = 'http://localhost:8080/delivery-user/get-delivery-user-info';
+    return this.http.get<any>(url);
+  }
 }

@@ -40,7 +40,7 @@
     </div>
     <div class="col-1"></div>
 
-    <div class="col-5">
+    <div class="col-6">
 
       <!--#region loading-->
       <div *ngIf="pageLoaded === false">
@@ -52,40 +52,63 @@
 
         <!--#region Account Info-->
         <div *ngIf="menuOption === getProfileMenu().INFO">
-          <h3 class="mb-4">Account Info</h3>
+          <div class="row">
 
-          <div class="pt-4"></div>
+            <div class="col-1"></div>
 
-          <label for="inputFirstName" class="pb-1">First Name</label>
-          <input type="text" id="inputFirstName" [ngModel]="accountDetails?.firstName" (ngModelChange)="accountDetails.firstName = $event" class="form-control" placeholder="First name" required autofocus name="firstName">
+            <div class="col-8">
 
-          <label for="inputLastName" class="pt-3 pb-1">Last Name</label>
-          <input type="text" id="inputLastName" [ngModel]="accountDetails?.lastNAme" (ngModelChange)="accountDetails.lastName = $event" class="form-control" placeholder="Last name" required autofocus name="lastName">
+              <h3 class="mb-4">Account Info</h3>
 
-          <label for="phoneNumber" class="pt-3 pb-1">Phone Number</label>
-          <input type="text" id="phoneNumber" [ngModel]="accountDetails?.phoneNumber" (ngModelChange)="accountDetails.phoneNumber = $event" class="form-control" placeholder="Phone Number" required autofocus name="phoneNumber">
+              <div class="pt-4"></div>
 
-          <label for="inputEmail" class="pt-3 pb-1">Email</label>
-          <input type="email" id="inputEmail" [ngModel]="accountDetails?.email" (ngModelChange)="accountDetails.email = $event" class="form-control" placeholder="Email" required autofocus name="email">
+              <label for="inputFirstName" class="pb-1">First Name</label>
+              <input type="text" id="inputFirstName" [ngModel]="accountDetails?.firstName" (ngModelChange)="accountDetails.firstName = $event" class="form-control" placeholder="First name" required autofocus name="firstName">
 
-          <label for="inputUsername" class="pt-3 pb-1">Username</label>
-          <input type="text" id="inputUsername" [ngModel]="accountDetails?.username" (ngModelChange)="accountDetails.username = $event" class="form-control" placeholder="Username" required autofocus name="username">
+              <label for="inputLastName" class="pt-3 pb-1">Last Name</label>
+              <input type="text" id="inputLastName" [ngModel]="accountDetails?.lastNAme" (ngModelChange)="accountDetails.lastName = $event" class="form-control" placeholder="Last name" required autofocus name="lastName">
 
-          <label for="inputPassword" class="pt-3 pb-1">Password</label>
-          <input type="password" id="inputPassword" [ngModel]="accountDetails?.password" (ngModelChange)="accountDetails.password = $event" class="form-control" placeholder="Password" required autofocus name="password">
+              <div *ngIf="hasRole('ROLE_USER') || hasRole('ROLE_DELIVERY_USER')" >
+                <label for="phoneNumber" class="pt-3 pb-1">Phone Number</label>
+                <input type="text" id="phoneNumber" [ngModel]="accountDetails?.phoneNumber" (ngModelChange)="accountDetails.phoneNumber = $event" class="form-control" placeholder="Phone Number" required autofocus name="phoneNumber">
+              </div>
 
-          <div class="pt-3"></div>
+              <label for="inputEmail" class="pt-3 pb-1">Email</label>
+              <input type="email" id="inputEmail" [ngModel]="accountDetails?.email" (ngModelChange)="accountDetails.email = $event" class="form-control" placeholder="Email" required autofocus name="email">
 
-          <div class="row mt-4">
-            <div class="col-4"></div>
-            <div class="col-4 text-center">
-              <div class="pt-2"></div>
-              <button class="btn btn-lg btn-primary btn-block pl-5 pr-5">Save</button>
-              <div class="pt-2"></div>
-              <button class="btn btn-lg btn-primary btn-block pl-5 pr-5" (click)="logout()">Logout</button>
-              <div class="pt-5"></div>
-              <div class="col-4"></div>
+              <label for="inputUsername" class="pt-3 pb-1">Username</label>
+              <input type="text" id="inputUsername" [ngModel]="accountDetails?.username" (ngModelChange)="accountDetails.username = $event" class="form-control" placeholder="Username" required autofocus name="username">
+
+              <label for="inputPassword" class="pt-3 pb-1">Password</label>
+              <input type="password" id="inputPassword" [ngModel]="accountDetails?.password" (ngModelChange)="accountDetails.password = $event" class="form-control" placeholder="Password" required autofocus name="password">
+
+              <div *ngIf="hasRole('ROLE_DELIVERY_USER')">
+                <label for="inputVehicleManufacturer" class="pt-3 pb-1">Vehicle Manufacturer</label>
+                <input type="text" id="inputVehicleManufacturer" [(ngModel)]="accountDetails.vehicleManufacturer" class="form-control" placeholder="Vehicle Manufacturer" required autofocus>
+
+                <label for="inputVehicleNumber" class="pt-3 pb-1">Vehicle Number</label>
+                <input type="text" id="inputVehicleNumber" [(ngModel)]="accountDetails.vehicleNumber" class="form-control" placeholder="Vehicle Number" required autofocus>
+
+                <label for="inputVehicleColor" class="pt-3 pb-1">Vehicle Color</label>
+                <input type="text" id="inputVehicleColor" [(ngModel)]="accountDetails.vehicleColor" class="form-control" placeholder="Vehicle Color" required autofocus>
+              </div>
+
+              <div class="pt-3"></div>
+
+              <div class="row mt-4">
+                <div class="col-4"></div>
+                <div class="col-4 text-center">
+                  <div class="pt-2"></div>
+                  <button class="btn btn-lg btn-primary btn-block pl-5 pr-5">Save</button>
+                  <div class="pt-2"></div>
+                  <button class="btn btn-lg btn-primary btn-block pl-5 pr-5" (click)="logout()">Logout</button>
+                  <div class="pt-5"></div>
+                  <div class="col-4"></div>
+                </div>
+              </div>
             </div>
+
+            <div class="col-3"></div>
           </div>
         </div>
         <!--#endregion Account Info-->
@@ -98,34 +121,22 @@
 
           <table class="table table-striped mt-4">
             <thead>
-            <tr class="table-danger">
+            <tr>
               <th class="text-center" scope="col" colspan="4">Favourite Food List</th>
             </tr>
             </thead>
             <tbody>
-            <tr>
-              <th scope="row">1</th>
-              <td>Mark</td>
-              <td>Otto</td>
+            <tr *ngFor="let food of favouriteFoodList; let rowNr = index">
+              <th class="text-center" scope="row">{{rowNr + 1}}</th>
+              <td>{{food.name}}</td>
+              <td>{{food.foodCategory}}</td>
               <td>
-                <button class="btn-in-table btn-lg btn-primary btn-block pl-5 pr-5 pt-0 pb-0 float-end">Remove</button>
+                <button class="btn-in-table btn-lg btn-primary btn-block pl-5 pr-5 pt-0 pb-0 float-end"
+                (click)="removeFoodFromFavourites(food)">Remove</button>
               </td>
             </tr>
-            <tr>
-              <th scope="row">2</th>
-              <td>Jacob</td>
-              <td>Thornton</td>
-              <td>
-                <button class="btn-in-table btn-lg btn-primary btn-block pl-5 pr-5 pt-0 pb-0 float-end">Remove</button>
-              </td>
-            </tr>
-            <tr>
-              <th scope="row">3</th>
-              <td>Larry</td>
-              <td>the Bird</td>
-              <td>
-                <button class="btn-in-table btn-lg btn-primary btn-block pl-5 pr-5 pt-0 pb-0 float-end">Remove</button>
-              </td>
+            <tr *ngIf="favouriteFoodList.length === 0">
+              <td class="text-center" colspan="4">Empty</td>
             </tr>
             </tbody>
           </table>
@@ -135,7 +146,7 @@
       </div>
     </div>
 
-    <div class="col-3"></div>
+    <div class="col-2"></div>
 
   </div>
 </div>

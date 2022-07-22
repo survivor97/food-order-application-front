@@ -41,4 +41,9 @@ export class StaffService {
     });
   }
 
+  getStaffInfo(): Observable<any> {
+    const url = 'http://localhost:8080/staff/get-staff-info';
+    return this.http.get<any>(url);
+  }
+
 }

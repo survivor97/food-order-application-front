@@ -62,6 +62,46 @@
     <!--endregion-->
   </div>
   <div class="col-xl-10">
+
+    <div *ngIf="pageLoaded === false">
+      <app-waiting></app-waiting>
+    </div>
+
+    <div *ngIf="pageLoaded === true">
+    <!--#region Restaurant Selection-->
+    <div class="container">
+
+      <div class="row">
+        <div class="col-12">
+
+          <div class="dropdown">
+            <button class="btn btn-primary btn-color no-shadow" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+              {{selectedRestaurant.name}}
+            </button>
+
+            <button class="btn btn-primary btn-color no-shadow dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+              <a class="dropdown-item hand-cursor" *ngFor="let restaurant of restaurantList"
+                 (click)="selectRestaurant(restaurant)">{{restaurant.name}}</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="collapse" id="collapseExample">
+        <div class="card card-body">
+          <span style="font-weight: bold">{{selectedRestaurant.name}}</span>
+          <span>{{selectedRestaurant.description}}</span>
+          <span class="mt-2" style="font-weight: bold">Address</span>
+          <span>{{selectedRestaurant.address.streetAddress}}</span>
+          <span>{{selectedRestaurant.address.city}}</span>
+          <span>{{selectedRestaurant.address.zipCode}}</span>
+        </div>
+      </div>
+    </div>
+    <!--#endregion Restaurant Selection-->
+
     <!--#region Menu-->
     <div class="container">
       <div class="row">
@@ -112,6 +152,7 @@
         </ul>
       </nav>
     <!--#endregion-->
+    </div>
   </div>
 </div>
 

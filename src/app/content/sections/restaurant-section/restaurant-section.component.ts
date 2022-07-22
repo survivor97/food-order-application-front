@@ -9,6 +9,7 @@ import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 })
 export class RestaurantSectionComponent implements OnInit {
 
+  pageLoaded = false;
   restaurantList: any;
 
   restaurantId: number = 0;
@@ -26,6 +27,7 @@ export class RestaurantSectionComponent implements OnInit {
               private modalService: NgbModal) {
     this.restaurantService.getRestaurants().subscribe(data => {
       this.restaurantList = data;
+      this.pageLoaded = true;
     });
   }
 

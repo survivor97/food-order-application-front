@@ -5,6 +5,7 @@ import {FoodService} from "../../service/food.service";
 import {Router} from "@angular/router";
 import {OrderService} from "../../service/order.service";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
+import {RestaurantService} from "../../service/restaurant.service";
 
 enum FoodMenu {
   PIZZA,
@@ -22,6 +23,8 @@ enum FoodMenu {
 })
 export class HomeComponent implements OnInit {
 
+  pageLoaded: boolean = false;
+
   foodList: any;
   nrOfFoodPages: number = 0;
   currentFoodPage: number = 0;
@@ -31,12 +34,20 @@ export class HomeComponent implements OnInit {
 
   menuOption: FoodMenu = FoodMenu.PIZZA;
 
+  selectedRestaurant: any;
+  restaurantList: any;
+
   constructor(private foodService: FoodService,
               private authenticationService: AuthenticationService,
+              private restaurantService: RestaurantService,
               private orderService: OrderService,
               private router: Router,
               private modalService: NgbModal) {
-    this.updateFoodPage();
+    this.restaurantList = restaurantService.getRestaurants().subscribe(data => {
+      this.restaurantList = data;
+      this.selectedRestaurant = this.restaurantList[0];
+      this.updateFoodPage();
+    });
   }
 
   ngOnInit(): void {
@@ -71,7 +82,7 @@ export class HomeComponent implements OnInit {
   }
 
   updateFoodPage(): void {
-    this.foodService.getFoodListOfCategory(FoodMenu[this.menuOption], this.currentFoodPage).subscribe(data => {
+    this.foodService.getFoodListOfCategoryAndRestaurantId(FoodMenu[this.menuOption], this.selectedRestaurant.id, this.currentFoodPage).subscribe(data => {
       this.foodList = data.content;
       this.nrOfFoodPages = data.totalPages;
       this.foodPages = [];
@@ -79,6 +90,7 @@ export class HomeComponent implements OnInit {
         this.foodPages.push(i);
       }
       this.resetFoodQuantity();
+      this.pageLoaded = true;
     });
   }
 
@@ -136,6 +148,13 @@ export class HomeComponent implements OnInit {
     this.lastAddedFood = food;
     this.lastAddedToCartQuantity = quantity;
     this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title-email', centered: true, size: 'md'});
+  }
+
+  selectRestaurant(restaurant: any) {
+    this.pageLoaded = false;
+
+    this.selectedRestaurant = restaurant;
+    this.updateFoodPage();
   }
 
 }

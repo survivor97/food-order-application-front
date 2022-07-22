@@ -3,13 +3,13 @@
 
 <table class="table table-striped mt-4">
   <thead>
-  <tr class="table-danger">
+  <tr>
     <th class="text-center" scope="col" colspan="5">Delivery User List</th>
   </tr>
   </thead>
   <tbody>
   <tr *ngFor="let deliveryUser of deliveryUserList; let rowNr = index">
-    <th scope="row">{{rowNr + 1}}</th>
+    <th scope="row" class="text-center">{{rowNr + 1}}</th>
     <td>{{deliveryUser.username}}</td>
     <td>{{deliveryUser.firstName}} {{deliveryUser.lastName}}</td>
     <td style="white-space: nowrap; width: 1%;">

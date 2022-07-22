@@ -31,6 +31,8 @@ import { StaffSectionComponent } from './content/sections/staff-section/staff-se
 import { RestaurantSectionComponent } from './content/sections/restaurant-section/restaurant-section.component';
 import { ManagerSectionComponent } from './content/sections/manager-section/manager-section.component';
 import { DeliveryUserSectionComponent } from './content/sections/delivery-user-section/delivery-user-section.component';
+import {UserService} from "./service/user.service";
+import { WaitingComponent } from './waiting/waiting.component';
 
 @NgModule({
   declarations: [
@@ -50,7 +52,8 @@ import { DeliveryUserSectionComponent } from './content/sections/delivery-user-s
     StaffSectionComponent,
     RestaurantSectionComponent,
     ManagerSectionComponent,
-    DeliveryUserSectionComponent
+    DeliveryUserSectionComponent,
+    WaitingComponent
   ],
   imports: [
     BrowserModule,
@@ -68,6 +71,7 @@ import { DeliveryUserSectionComponent } from './content/sections/delivery-user-s
     ManagerService,
     StaffService,
     DeliveryUserService,
+    UserService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: InterceptorService,

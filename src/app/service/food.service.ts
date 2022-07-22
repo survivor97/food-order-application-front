@@ -19,4 +19,9 @@ export class FoodService {
     return this.http.get<any>(url);
   }
 
+  getFoodListOfCategoryAndRestaurantId(category: string, restaurantId: number, page: number) {
+    const url = 'http://localhost:8080/food/' + category + '/' + restaurantId + '?page=' + page;
+    return this.http.get<any>(url);
+  }
+
 }

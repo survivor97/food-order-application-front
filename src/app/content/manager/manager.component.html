@@ -9,7 +9,19 @@
         </a>
         <hr>
         <ul class="nav nav-pills flex-column mb-auto">
-          <li class="nav-item">
+          <li>
+            <a class="nav-link link-dark" (click)="changeOption(getManagerMenu().RESTAURANTS)" [class.active]="menuOption === getManagerMenu().RESTAURANTS">
+              <svg class="bi me-2" width="16" height="16"></svg>
+              Restaurants
+            </a>
+          </li>
+          <li>
+            <a class="nav-link link-dark" (click)="changeOption(getManagerMenu().FOOD)" [class.active]="menuOption === getManagerMenu().FOOD">
+              <svg class="bi me-2" width="16" height="16"></svg>
+              Food
+            </a>
+          </li>
+          <li>
             <a class="nav-link link-dark" (click)="changeOption(getManagerMenu().STAFF)" [class.active]="menuOption === getManagerMenu().STAFF">
               <svg class="bi me-2" width="16" height="16"></svg>
               Staff
@@ -39,6 +51,12 @@
       <!--endregion-->
     </div>
     <div class="col-8 table-responsive">
+
+      <!--#region Restaurants-->
+      <div *ngIf="menuOption === getManagerMenu().RESTAURANTS">
+        <app-restaurant-section></app-restaurant-section>
+      </div>
+      <!--#endregion Restaurants-->
 
       <!--#region Staff-->
       <div *ngIf="menuOption === getManagerMenu().STAFF">

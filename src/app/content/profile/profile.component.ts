@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {AuthenticationService} from "../../service/authentication.service";
 import {Properties} from "../../properties";
+import {UserService} from "../../service/user.service";
 
 enum ProfileMenu {
   INFO,
@@ -14,9 +15,22 @@ enum ProfileMenu {
 })
 export class ProfileComponent implements OnInit {
 
+  pageLoaded: boolean = false;
   menuOption: ProfileMenu = ProfileMenu.INFO;
 
-  constructor(private authenticationService: AuthenticationService) {
+  accountDetails: any;
+
+  constructor(private authenticationService: AuthenticationService,
+              private userService: UserService) {
+    if(this.hasRole("ROLE_USER")) {
+      userService.getUserInfo().subscribe(data => {
+        this.accountDetails = data;
+        this.accountDetails.password = '';
+        this.pageLoaded = true;
+
+        console.warn("page loaded: " + this.pageLoaded);
+      });
+    }
   }
 
   ngOnInit(): void {
@@ -49,5 +63,9 @@ export class ProfileComponent implements OnInit {
 
   hasUserRole(): boolean {
     return this.authenticationService.getRolesOfAccessToken().includes("ROLE_USER");
+  }
+
+  hasRole(role: string) {
+    return this.authenticationService.getRolesOfAccessToken().includes(role);
   }
 }

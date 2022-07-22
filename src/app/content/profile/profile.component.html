@@ -39,92 +39,103 @@
       <!--endregion-->
     </div>
     <div class="col-1"></div>
-<!--#region Account Info-->
-    <div class="col-4" *ngIf="menuOption === getProfileMenu().INFO">
-      <h3 class="mb-4">Account Info</h3>
 
-      <div class="pt-4"></div>
+    <div class="col-5">
 
-      <label for="inputFirstName" class="pb-1">First Name</label>
-      <input type="text" id="inputFirstName" class="form-control" placeholder="First name" required autofocus name="firstName">
+      <!--#region loading-->
+      <div *ngIf="pageLoaded === false">
+        <app-waiting></app-waiting>
+      </div>
+      <!--#endregion loading-->
 
-      <label for="inputLastName" class="pt-3 pb-1">Last Name</label>
-      <input type="text" id="inputLastName" class="form-control" placeholder="Last name" required autofocus name="lastName">
+      <div *ngIf="pageLoaded === true">
 
-      <label for="phoneNumber" class="pt-3 pb-1">Phone Number</label>
-      <input type="text" id="phoneNumber" class="form-control" placeholder="Phone Number" required autofocus name="phoneNumber">
+        <!--#region Account Info-->
+        <div *ngIf="menuOption === getProfileMenu().INFO">
+          <h3 class="mb-4">Account Info</h3>
 
-      <label for="inputEmail" class="pt-3 pb-1">Email</label>
-      <input type="email" id="inputEmail" class="form-control" placeholder="Email" required autofocus name="email">
+          <div class="pt-4"></div>
 
-      <label for="inputUsername" class="pt-3 pb-1">Username</label>
-      <input type="text" id="inputUsername" class="form-control" placeholder="Username" required autofocus name="username">
+          <label for="inputFirstName" class="pb-1">First Name</label>
+          <input type="text" id="inputFirstName" [ngModel]="accountDetails?.firstName" (ngModelChange)="accountDetails.firstName = $event" class="form-control" placeholder="First name" required autofocus name="firstName">
 
-      <label for="inputPassword" class="pt-3 pb-1">Password</label>
-      <input type="password" id="inputPassword" class="form-control" placeholder="Password" required autofocus name="password">
+          <label for="inputLastName" class="pt-3 pb-1">Last Name</label>
+          <input type="text" id="inputLastName" [ngModel]="accountDetails?.lastNAme" (ngModelChange)="accountDetails.lastName = $event" class="form-control" placeholder="Last name" required autofocus name="lastName">
 
-      <div class="pt-3"></div>
+          <label for="phoneNumber" class="pt-3 pb-1">Phone Number</label>
+          <input type="text" id="phoneNumber" [ngModel]="accountDetails?.phoneNumber" (ngModelChange)="accountDetails.phoneNumber = $event" class="form-control" placeholder="Phone Number" required autofocus name="phoneNumber">
 
-      <div class="row mt-4">
-        <div class="col-4"></div>
-        <div class="col-4 text-center">
-          <div class="pt-2"></div>
-          <button class="btn btn-lg btn-primary btn-block pl-5 pr-5">Save</button>
-          <div class="pt-2"></div>
-          <button class="btn btn-lg btn-primary btn-block pl-5 pr-5" (click)="logout()">Logout</button>
-          <div class="pt-5"></div>
-          <div class="col-4"></div>
+          <label for="inputEmail" class="pt-3 pb-1">Email</label>
+          <input type="email" id="inputEmail" [ngModel]="accountDetails?.email" (ngModelChange)="accountDetails.email = $event" class="form-control" placeholder="Email" required autofocus name="email">
+
+          <label for="inputUsername" class="pt-3 pb-1">Username</label>
+          <input type="text" id="inputUsername" [ngModel]="accountDetails?.username" (ngModelChange)="accountDetails.username = $event" class="form-control" placeholder="Username" required autofocus name="username">
+
+          <label for="inputPassword" class="pt-3 pb-1">Password</label>
+          <input type="password" id="inputPassword" [ngModel]="accountDetails?.password" (ngModelChange)="accountDetails.password = $event" class="form-control" placeholder="Password" required autofocus name="password">
+
+          <div class="pt-3"></div>
+
+          <div class="row mt-4">
+            <div class="col-4"></div>
+            <div class="col-4 text-center">
+              <div class="pt-2"></div>
+              <button class="btn btn-lg btn-primary btn-block pl-5 pr-5">Save</button>
+              <div class="pt-2"></div>
+              <button class="btn btn-lg btn-primary btn-block pl-5 pr-5" (click)="logout()">Logout</button>
+              <div class="pt-5"></div>
+              <div class="col-4"></div>
+            </div>
+          </div>
         </div>
+        <!--#endregion Account Info-->
+
+        <!--#region Favourite Food-->
+        <div *ngIf="menuOption === getProfileMenu().FAVOURITE_FOOD">
+          <h3 class="mb-4">Favourite Food</h3>
+
+          <div class="pt-3"></div>
+
+          <table class="table table-striped mt-4">
+            <thead>
+            <tr class="table-danger">
+              <th class="text-center" scope="col" colspan="4">Favourite Food List</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <th scope="row">1</th>
+              <td>Mark</td>
+              <td>Otto</td>
+              <td>
+                <button class="btn-in-table btn-lg btn-primary btn-block pl-5 pr-5 pt-0 pb-0 float-end">Remove</button>
+              </td>
+            </tr>
+            <tr>
+              <th scope="row">2</th>
+              <td>Jacob</td>
+              <td>Thornton</td>
+              <td>
+                <button class="btn-in-table btn-lg btn-primary btn-block pl-5 pr-5 pt-0 pb-0 float-end">Remove</button>
+              </td>
+            </tr>
+            <tr>
+              <th scope="row">3</th>
+              <td>Larry</td>
+              <td>the Bird</td>
+              <td>
+                <button class="btn-in-table btn-lg btn-primary btn-block pl-5 pr-5 pt-0 pb-0 float-end">Remove</button>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+        <!--#endregion Favourite Food-->
+
       </div>
     </div>
-    <div class="col-4" *ngIf="menuOption === getProfileMenu().INFO"></div>
-<!--#endregion Account Info-->
 
-    <!--#region Favourite Food-->
-    <div class="col-5" *ngIf="menuOption === getProfileMenu().FAVOURITE_FOOD">
-      <h3 class="mb-4">Favourite Food</h3>
-
-      <div class="pt-3"></div>
-
-      <table class="table table-striped mt-4">
-        <thead>
-        <tr class="table-danger">
-          <th class="text-center" scope="col" colspan="4">Favourite Food List</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr>
-          <th scope="row">1</th>
-          <td>Mark</td>
-          <td>Otto</td>
-          <td>
-            <button class="btn-in-table btn-lg btn-primary btn-block pl-5 pr-5 pt-0 pb-0 float-end">Remove</button>
-          </td>
-        </tr>
-        <tr>
-          <th scope="row">2</th>
-          <td>Jacob</td>
-          <td>Thornton</td>
-          <td>
-            <button class="btn-in-table btn-lg btn-primary btn-block pl-5 pr-5 pt-0 pb-0 float-end">Remove</button>
-          </td>
-        </tr>
-        <tr>
-          <th scope="row">3</th>
-          <td>Larry</td>
-          <td>the Bird</td>
-          <td>
-            <button class="btn-in-table btn-lg btn-primary btn-block pl-5 pr-5 pt-0 pb-0 float-end">Remove</button>
-          </td>
-        </tr>
-        </tbody>
-      </table>
-    </div>
-    <div class="col-3" *ngIf="menuOption === getProfileMenu().FAVOURITE_FOOD"></div>
-    <!--#endregion Favourite Food-->
-
-
-
+    <div class="col-3"></div>
 
   </div>
 </div>

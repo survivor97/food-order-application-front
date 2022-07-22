@@ -3,6 +3,8 @@ import {AuthenticationService} from "../../service/authentication.service";
 import {Properties} from "../../properties";
 
 enum ManagerMenu {
+  RESTAURANTS,
+  FOOD,
   STAFF,
   DELIVERY_USERS
 }
@@ -14,7 +16,7 @@ enum ManagerMenu {
 })
 export class ManagerComponent implements OnInit {
 
-  menuOption: ManagerMenu = ManagerMenu.STAFF;
+  menuOption: ManagerMenu = ManagerMenu.RESTAURANTS;
 
   constructor(private authenticationService: AuthenticationService) { }
 

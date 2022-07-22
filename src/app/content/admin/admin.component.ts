@@ -1,10 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {AuthenticationService} from "../../service/authentication.service";
 import {Properties} from "../../properties";
-import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
-import {RestaurantService} from "../../service/restaurant.service";
-import {ManagerService} from "../../service/manager.service";
-import {DeliveryUserService} from "../../service/delivery-user.service";
+import {UserService} from "../../service/user.service";
 
 enum AdminMenu {
   RESTAURANTS,
@@ -21,12 +18,62 @@ enum AdminMenu {
 })
 export class AdminComponent implements OnInit {
 
+  pageLoaded: boolean = false;
+
+  currentUserPage: number = 0;
+  userList: any;
+  nrOfUserPages: number = 0;
+  userPages: Array<number> = [];
+
   menuOption: AdminMenu = AdminMenu.RESTAURANTS;
 
-  constructor(private authenticationService: AuthenticationService) {
+  constructor(private authenticationService: AuthenticationService,
+              private userService: UserService) {
+    this.updateUserPage();
   }
 
   ngOnInit(): void {
+  }
+
+  updateUserPage(): void {
+    this.userService.getUserPage(this.currentUserPage).subscribe(data => {
+      this.userList = data.content;
+      this.nrOfUserPages = data.totalPages;
+      this.userPages = [];
+      for(let i=0; i<this.nrOfUserPages; i++) {
+        this.userPages.push(i);
+      }
+      this.pageLoaded = true;
+    });
+  }
+
+  increasePage(): void {
+    if(this.currentUserPage < this.nrOfUserPages - 1) {
+      this.currentUserPage++;
+      this.updateUserPage();
+
+      this.pageLoaded = false;
+    }
+    window.scrollTo(0, 0);
+  }
+
+  decreasePage(): void {
+    if(this.currentUserPage > 0) {
+      this.currentUserPage--;
+      this.updateUserPage();
+
+      this.pageLoaded = false;
+    }
+    window.scrollTo(0, 0);
+  }
+
+  setPage(page: number) {
+    this.currentUserPage = page;
+    this.updateUserPage();
+
+    this.pageLoaded = false;
+
+    window.scrollTo(0, 0);
   }
 
   isLoggedIn(): boolean {

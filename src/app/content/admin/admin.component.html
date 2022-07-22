@@ -84,7 +84,56 @@
 
     <!--#region Users-->
       <div *ngIf="menuOption === getAdminMenu().USERS">
-        <h3 class="mb-4">Users</h3>
+        <h3>Users</h3>
+
+        <div class="row">
+          <div class="col-12">
+            <table class="table table-striped mt-4">
+              <thead>
+              <tr>
+                <th class="text-center">Id</th>
+                <th class="text-center" scope="col" colspan="4">User List</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr *ngFor="let user of userList; let rowNr = index">
+                <th scope="row" class="text-center">{{user.id}}</th>
+                <td style="width: 25%" class="text-center">{{user.username}}</td>
+                <td>{{user.firstName}} {{user.lastName}}</td>
+                <td style="white-space: nowrap; width: 1%;">
+                  <button class="btn-in-table btn-lg btn-primary btn-block pl-5 pr-5 pt-0 pb-0 float-end" style="margin-right: 1rem">Update</button>
+                </td>
+                <td style="white-space: nowrap; width: 1%;">
+                  <button class="btn-in-table btn-lg btn-primary btn-block pl-5 pr-5 pt-0 pb-0 float-end" style="margin-right: 1rem">Remove</button>
+                </td>
+              </tr>
+              <tr >
+                <td class="text-center" colspan="5">Empty</td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!--#region Pagination-->
+        <nav aria-label="page-navigation">
+          <ul class="pagination justify-content-end p-5">
+
+            <li class="page-item" [ngClass]="{'disabled': currentUserPage === 0}">
+              <a class="page-link" (click)="decreasePage()">Previous</a>
+            </li>
+
+            <li *ngFor="let page of userPages" class="page-item" [ngClass]="{'active': page === currentUserPage}">
+              <a class="page-link" (click)="setPage(page)">{{page+1}}</a>
+            </li>
+
+            <li class="page-item" [ngClass]="{'disabled': currentUserPage === nrOfUserPages - 1}">
+              <a class="page-link" (click)="increasePage()">Next</a>
+            </li>
+          </ul>
+        </nav>
+        <!--#endregion-->
+
       </div>
     <!--#endregion-->
 

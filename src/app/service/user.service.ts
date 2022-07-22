@@ -10,6 +10,11 @@ export class UserService {
   constructor(private http: HttpClient) {
   }
 
+  getUserPage(page: number): Observable<any> {
+    const url = 'http://localhost:8080/user/get-all' + '?page=' + page;
+    return this.http.get<any>(url);
+  }
+
   getUserInfo(): Observable<any> {
     const url = 'http://localhost:8080/user/get-user-info';
     return this.http.get<any>(url);

@@ -37,4 +37,22 @@ export class UserService {
     });
   }
 
+  searchUserByUsernameOrEmail(username: string, email: string) {
+    if(username.length === 0) {
+      username = '\'\'';
+    }
+    if(email.length === 0) {
+      email = '\'\'';
+    }
+    const url = 'http://localhost:8080/user/search?username=' + username + '&email=' + email;
+    return this.http.get<any>(url);
+  }
+
+  deleteUser(user: any) {
+    const url = 'http://localhost:8080/user/delete?id=' + user.id;
+    return this.http.delete(url, {
+      observe: 'response'
+    });
+  }
+
 }

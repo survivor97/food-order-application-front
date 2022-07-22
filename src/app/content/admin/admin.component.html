@@ -84,10 +84,60 @@
 
     <!--#region Users-->
       <div *ngIf="menuOption === getAdminMenu().USERS">
-        <h3>Users</h3>
-
         <div class="row">
           <div class="col-12">
+            <h3>Find User</h3>
+
+            <table class="table table-striped mt-4">
+              <thead>
+              <tr>
+                <th class="text-center">Id</th>
+                <th class="text-center" scope="col" colspan="4">Find User</th>
+              </tr>
+              </thead>
+              <tbody>
+              <!--#region Top row-->
+              <tr>
+                <th scope="row" class="text-center" style="width: 8%">#</th>
+                <td style="width: 25%; padding-left: 1rem">Username</td>
+                <td style="width: 25%; padding-left: 1rem">Email</td>
+                <td>Name</td>
+                <td></td>
+              </tr>
+              <!--#endregion Top row-->
+              <!--#region Input search row-->
+              <tr>
+                <th scope="row" class="text-center"></th>
+                <td style="width: 25%" class="text-center">
+                  <input type="text" id="findUsername" [(ngModel)]="searchUsername" class="form-control" placeholder="Username">
+                </td>
+                <td>
+                  <input type="text" id="findEmail" [(ngModel)]="searchEmail" class="form-control" placeholder="Email">
+                </td>
+                <td></td>
+                <td style="white-space: nowrap; width: 1%;">
+                  <button class="btn-in-table btn-lg btn-primary btn-block pl-5 pr-5 pt-0 pb-0 float-end"
+                          (click)="searchUserByUsernameOrEmail()" style="margin-right: 1rem">Find</button>
+                </td>
+              </tr>
+              <!--#endregion Input search row-->
+              <!--#region Results row-->
+              <tr *ngFor="let searchUser of searchedUserList">
+                <th scope="row" class="text-center" style="width: 8%">{{searchUser.id}}</th>
+                <td style="width: 25%; padding-left: 1rem">{{searchUser.username}}</td>
+                <td style="width: 25%; padding-left: 1rem">{{searchUser.email}}</td>
+                <td>{{searchUser.firstName}} {{searchUser.lastName}}</td>
+                <td style="white-space: nowrap; width: 1%;">
+                  <button class="btn-in-table btn-lg btn-primary btn-block pl-5 pr-5 pt-0 pb-0 float-end"
+                          (click)="deleteUser(searchUser)" style="margin-right: 1rem">Remove</button>
+                </td>
+              </tr>
+              <!--#endregion Results row-->
+              </tbody>
+            </table>
+
+            <h3 class="pt-5">All Users</h3>
+
             <table class="table table-striped mt-4">
               <thead>
               <tr>
@@ -97,17 +147,16 @@
               </thead>
               <tbody>
               <tr *ngFor="let user of userList; let rowNr = index">
-                <th scope="row" class="text-center">{{user.id}}</th>
+                <th scope="row" class="text-center" style="width: 8%">{{user.id}}</th>
                 <td style="width: 25%" class="text-center">{{user.username}}</td>
                 <td>{{user.firstName}} {{user.lastName}}</td>
+                <td></td>
                 <td style="white-space: nowrap; width: 1%;">
-                  <button class="btn-in-table btn-lg btn-primary btn-block pl-5 pr-5 pt-0 pb-0 float-end" style="margin-right: 1rem">Update</button>
-                </td>
-                <td style="white-space: nowrap; width: 1%;">
-                  <button class="btn-in-table btn-lg btn-primary btn-block pl-5 pr-5 pt-0 pb-0 float-end" style="margin-right: 1rem">Remove</button>
+                  <button class="btn-in-table btn-lg btn-primary btn-block pl-5 pr-5 pt-0 pb-0 float-end"
+                          (click)="deleteUser(user)" style="margin-right: 1rem">Remove</button>
                 </td>
               </tr>
-              <tr >
+              <tr *ngIf="userList.length === 0">
                 <td class="text-center" colspan="5">Empty</td>
               </tr>
               </tbody>

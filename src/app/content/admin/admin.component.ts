@@ -25,6 +25,10 @@ export class AdminComponent implements OnInit {
   nrOfUserPages: number = 0;
   userPages: Array<number> = [];
 
+  searchedUserList: any;
+  searchUsername: string = '';
+  searchEmail: string = '';
+
   menuOption: AdminMenu = AdminMenu.RESTAURANTS;
 
   constructor(private authenticationService: AuthenticationService,
@@ -33,6 +37,26 @@ export class AdminComponent implements OnInit {
   }
 
   ngOnInit(): void {
+  }
+
+  searchUserByUsernameOrEmail(): void {
+    this.pageLoaded = false;
+
+    this.userService.searchUserByUsernameOrEmail(this.searchUsername, this.searchEmail).subscribe(data => {
+      this.searchedUserList = data;
+      console.warn(data)
+
+      this.pageLoaded = true;
+    });
+  }
+
+  deleteUser(user: any) {
+    this.userService.deleteUser(user).subscribe(data => {
+      if(data.status === 200) {
+        this.userList.splice(this.userList.findIndex((i: { id: any; }) => i.id === user.id), 1);
+        this.searchedUserList.splice(this.searchedUserList.findIndex((i: { id: any; }) => i.id === user.id), 1);
+      }
+    });
   }
 
   updateUserPage(): void {
@@ -54,7 +78,6 @@ export class AdminComponent implements OnInit {
 
       this.pageLoaded = false;
     }
-    window.scrollTo(0, 0);
   }
 
   decreasePage(): void {
@@ -64,7 +87,6 @@ export class AdminComponent implements OnInit {
 
       this.pageLoaded = false;
     }
-    window.scrollTo(0, 0);
   }
 
   setPage(page: number) {
@@ -72,8 +94,6 @@ export class AdminComponent implements OnInit {
     this.updateUserPage();
 
     this.pageLoaded = false;
-
-    window.scrollTo(0, 0);
   }
 
   isLoggedIn(): boolean {

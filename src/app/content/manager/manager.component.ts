@@ -4,6 +4,7 @@ import {Properties} from "../../properties";
 import {FoodService} from "../../service/food.service";
 import {RestaurantService} from "../../service/restaurant.service";
 import {FoodMenu} from "../home/home.component";
+import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 
 enum ManagerMenu {
   RESTAURANTS,
@@ -21,6 +22,9 @@ export class ManagerComponent implements OnInit {
 
   pageLoaded: boolean = false;
 
+  selectedFoodCategoryOption: string = '';
+  selectedRestaurantOption: string = '';
+
   // region Manage food field
   foodList: any;
   nrOfFoodPages: number = 0;
@@ -31,27 +35,34 @@ export class ManagerComponent implements OnInit {
   // region Restaurant + Food category
   restaurantList: any;
 
-  selectedRestaurantOption: string = '';
-  selectedFoodCategoryOption: string = '';
-  // endregion Restaurant
+  //Modal
+  modalSelectedFoodCategoryOption: string = '';
+
+  modalRestaurantList: any = [];
+  modalAvailableRestaurantList: any;
+
+  foodName: string = '';
+  foodDescription: string = '';
+  foodPrice: string = '';
+  foodWeight: string = '';
+
+  foodModalUpdate: boolean = false;
+  // endregion Restaurant + Food category
 
   menuOption: ManagerMenu = ManagerMenu.RESTAURANTS;
 
   constructor(private authenticationService: AuthenticationService,
               private restaurantService: RestaurantService,
-              private foodService: FoodService) {
+              private foodService: FoodService,
+              private modalService: NgbModal) {
     this.restaurantService.getRestaurants().subscribe(data => {
       this.restaurantList = data;
       this.updateFoodPage();
     });
   }
 
-  logRestaurantOption(): void {
-    console.warn("Restaurant option: " + this.selectedRestaurantOption);
-  }
-
-  logFoodCategoryOption(): void {
-    console.warn("Food Category option: " + this.selectedFoodCategoryOption);
+  openModal(content: any): void {
+    this.modalService.open(content, {centered: true, size: 'lg'});
   }
 
   ngOnInit(): void {
@@ -133,4 +144,53 @@ export class ManagerComponent implements OnInit {
   getFoodMenu(): typeof FoodMenu {
     return FoodMenu;
   }
+
+  resetModalRestaurantList(): void {
+    this.modalRestaurantList = [];
+    this.modalAvailableRestaurantList = this.restaurantList;
+  }
+
+  addRestaurantToModal(restaurant: any): void {
+    this.modalRestaurantList.push(restaurant);
+
+    this.modalAvailableRestaurantList = this.modalAvailableRestaurantList.filter(function(value: any){
+      return value.id !== restaurant.id;
+    });
+
+    this.sortModalRestaurantLists();
+  }
+
+  removeRestaurantFromModal(restaurant: any): void {
+    this.modalAvailableRestaurantList.push(restaurant);
+
+    this.modalRestaurantList = this.modalRestaurantList.filter(function (value: any) {
+      return value.id !== restaurant.id;
+    })
+
+    this.sortModalRestaurantLists();
+  }
+
+  sortModalRestaurantLists() {
+    this.modalRestaurantList.sort(function(a: any, b: any) {
+      return a.id - b.id;
+    });
+    this.modalAvailableRestaurantList.sort(function(a: any, b: any) {
+      return a.id - b.id;
+    });
+  }
+
+  insertFood(): void {
+    const food = {
+      "name": this.foodName,
+      "description": this.foodDescription,
+      "price": this.foodPrice,
+      "weight": this.foodWeight
+    }
+    this.foodService.insertFood(food, this.selectedFoodCategoryOption, this.modalRestaurantList).subscribe(data => {
+      if(data.status === 201) {
+        this.updateFoodPage();
+      }
+    });
+  }
+
 }

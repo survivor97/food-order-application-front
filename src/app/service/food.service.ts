@@ -29,6 +29,25 @@ export class FoodService {
     return this.http.get<any>(url);
   }
 
+  insertFood(food: any, category: string, restaurantList: any): Observable<any> {
+    let url = 'http://localhost:8080/food/insert?category=' + category + '&restaurantId=';
+    for(let restaurant of restaurantList) {
+      url = url.concat(restaurant.id + ',');
+    };
+
+    url = url.slice(0, url.length - 1);
+
+    console.warn(url);
+
+    return this.http.post(
+      url,
+      JSON.stringify(food),
+      {
+        headers: {'Content-Type':'application/json; charset=utf-8'},
+        observe: 'response'
+      });
+  }
+
   deleteFood(food: any) {
     const url = 'http://localhost:8080/food/delete?id=' + food.id;
     return this.http.delete(url, {

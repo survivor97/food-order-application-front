@@ -129,7 +129,7 @@
             <tr *ngFor="let food of favouriteFoodList; let rowNr = index">
               <th class="text-center" scope="row">{{rowNr + 1}}</th>
               <td>{{food.name}}</td>
-              <td>{{food.foodCategory}}</td>
+              <td>{{food.foodCategory.name}}</td>
               <td>
                 <button class="btn-in-table btn-lg btn-primary btn-block pl-5 pr-5 pt-0 pb-0 float-end"
                 (click)="removeFoodFromFavourites(food)">Remove</button>

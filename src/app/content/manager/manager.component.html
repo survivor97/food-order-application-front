@@ -87,6 +87,10 @@
           <tr>
             <th class="text-center">Id</th>
             <th class="text-center" scope="col" colspan="4">Food List</th>
+            <td>
+              <button class="btn-add-food btn-primary btn-block pl-5 pr-5 pt-0 pb-0 float-end"
+                      (click)="openModal(foodModal); resetModalRestaurantList(); foodModalUpdate = false" style="margin-right: 1rem">+</button>
+            </td>
           </tr>
           </thead>
           <tbody>
@@ -97,7 +101,7 @@
             <td>{{food.foodCategory.name}}</td>
             <td style="white-space: nowrap; width: 1%;">
               <button class="btn-in-table btn-lg btn-primary btn-block pl-5 pr-5 pt-0 pb-0 float-end"
-                      style="margin-right: 1rem">Update</button>
+                      (click)="openModal(foodModal); foodModalUpdate = true" style="margin-right: 1rem">Update</button>
             </td>
             <td style="white-space: nowrap; width: 1%;">
               <button class="btn-in-table btn-lg btn-primary btn-block pl-5 pr-5 pt-0 pb-0 float-end"
@@ -148,3 +152,98 @@
   </div>
   <div class="pt-5"></div>
 </div>
+
+
+<!--#region Food modal-->
+<ng-template #foodModal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">
+      <span>Manage Food</span>
+    </h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+  </div>
+  <div class="modal-body">
+    <div class="row m-2 pb-4" style="background-color: whitesmoke">
+      <span *ngIf="foodModalUpdate === true" style="font-size: 22px">Update Food</span>
+      <span *ngIf="foodModalUpdate === false" style="font-size: 22px">Add Food</span>
+
+      <div class="col-2"></div>
+      <div class="col-8 pt-4">
+        <label for="inputName" class="pt-2 pb-1">Name</label>
+        <input type="text" id="inputName" [(ngModel)]="foodName" class="form-control" placeholder="Name">
+
+        <label for="inputDescription" class="pt-2 pb-1">Description</label>
+        <input type="text" id="inputDescription" [(ngModel)]="foodDescription" class="form-control" placeholder="Description">
+
+        <label for="inputPrice" class="pt-2 pb-1">Price</label>
+        <input type="text" id="inputPrice" [(ngModel)]="foodPrice" class="form-control" placeholder="Price"
+               oninput="this.value=this.value.replace(/[^\d]/,'')">
+
+        <label for="inputWeight" class="pt-2 pb-1">Weight</label>
+        <input type="text" id="inputWeight" [(ngModel)]="foodWeight" class="form-control" placeholder="Weight"
+               oninput="this.value=this.value.replace(/[^\d]/,'')">
+
+        <label for="selectFoodCategory" class="pt-2 pb-1">Food Category</label>
+        <select class="form-select" id="selectFoodCategory" [(ngModel)]="modalSelectedFoodCategoryOption" aria-label="Select Food Category">
+          <option *ngFor="let enum of getFoodMenu().keys()">{{enum}}</option>
+        </select>
+
+        <table class="table table-striped align-middle mt-4">
+          <thead>
+            <tr>
+              <th class="text-center">Id</th>
+              <th>Restaurants preparing this food</th>
+              <td></td>
+            </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let restaurant of modalRestaurantList">
+            <th scope="row" class="text-center" style="width: 8%">{{restaurant.id}}</th>
+            <td style="width: 25%">{{restaurant.name}}</td>
+            <td style="white-space: nowrap; width: 1%;">
+              <button class="btn-in-table btn-lg btn-primary btn-block pl-5 pr-5 pt-0 pb-0 float-end"
+                      (click)="removeRestaurantFromModal(restaurant)" style="margin-right: 1rem">Remove</button>
+            </td>
+          </tr>
+
+          <tr *ngIf="modalRestaurantList.length === 0">
+            <td class="text-center" colspan="3">Empty</td>
+          </tr>
+          </tbody>
+        </table>
+
+        <table class="table table-striped align-middle mt-4">
+          <tbody>
+          <!-- Available restaurants -->
+          <tr>
+            <td></td>
+            <th>All available restaurants</th>
+            <td></td>
+          </tr>
+          <tr *ngFor="let restaurant of modalAvailableRestaurantList">
+            <th scope="row" class="text-center" style="width: 8%">{{restaurant.id}}</th>
+            <td style="width: 25%">{{restaurant.name}}</td>
+            <td style="white-space: nowrap; width: 1%;">
+              <button class="btn-in-table btn-lg btn-primary btn-block pl-5 pr-5 pt-0 pb-0 float-end"
+                      (click)="addRestaurantToModal(restaurant)" style="margin-right: 1rem">Add</button>
+            </td>
+          </tr>
+          <tr *ngIf="modalAvailableRestaurantList.length === 0">
+            <td class="text-center" colspan="3">Empty</td>
+          </tr>
+          </tbody>
+        </table>
+
+        <div class="pt-4"></div>
+
+     </div>
+      <div class="col-2"></div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" *ngIf="foodModalUpdate === true" class="btn btn-primary" (click)="modal.close('Update click')">Update</button>
+    <button type="button" *ngIf="foodModalUpdate === false" class="btn btn-primary" (click)="insertFood();modal.close('Add click')">Add</button>
+    <button type="button" class="btn btn-outline-dark" (click)="modal.close('Close click')">Close</button>
+  </div>
+</ng-template>
+<!--#endregion Food modal-->

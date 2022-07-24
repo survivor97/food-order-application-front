@@ -58,6 +58,79 @@
       </div>
       <!--#endregion Restaurants-->
 
+      <!--#region ManageFood-->
+      <div *ngIf="menuOption === getManagerMenu().FOOD">
+        <h3>Manage Food</h3>
+
+        <div class="row">
+          <div class="col-4"></div>
+          <div class="col-4">
+            <h6>Category:</h6>
+
+            <select class="form-select" [(ngModel)]="selectedFoodCategoryOption" (change)="updateFoodPage()" aria-label="Select Food Category">
+              <option value="">Any</option>
+              <option *ngFor="let enum of getFoodMenu().keys()">{{enum}}</option>
+            </select>
+          </div>
+          <div class="col-4">
+            <h6>Restaurant:</h6>
+
+            <select class="form-select" [(ngModel)]="selectedRestaurantOption" (change)="updateFoodPage()" aria-label="Select Restaurant">
+              <option value="">Any</option>
+              <option *ngFor="let restaurant of restaurantList">{{restaurant.name}}</option>
+            </select>
+          </div>
+        </div>
+
+        <table class="table table-striped align-middle mt-4">
+          <thead>
+          <tr>
+            <th class="text-center">Id</th>
+            <th class="text-center" scope="col" colspan="4">Food List</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let food of foodList">
+            <th scope="row" class="text-center" style="width: 8%">{{food.id}}</th>
+            <td style="width: 25%">{{food.name}}</td>
+            <td><table><tr *ngFor="let restaurant of food.restaurantList"><td class="pb-2">{{restaurant.name}}</td></tr></table></td>
+            <td>{{food.foodCategory.name}}</td>
+            <td style="white-space: nowrap; width: 1%;">
+              <button class="btn-in-table btn-lg btn-primary btn-block pl-5 pr-5 pt-0 pb-0 float-end"
+                      style="margin-right: 1rem">Update</button>
+            </td>
+            <td style="white-space: nowrap; width: 1%;">
+              <button class="btn-in-table btn-lg btn-primary btn-block pl-5 pr-5 pt-0 pb-0 float-end"
+                      (click)="deleteFood(food)" style="margin-right: 1rem">Remove</button>
+            </td>
+          </tr>
+          <tr *ngIf="foodList.length === 0">
+            <td class="text-center" colspan="6">Empty</td>
+          </tr>
+          </tbody>
+        </table>
+
+        <!--#region Pagination-->
+        <nav aria-label="page-navigation">
+          <ul class="pagination justify-content-end p-5">
+
+            <li class="page-item" [ngClass]="{'disabled': currentFoodPage === 0}">
+              <a class="page-link" (click)="decreasePage()">Previous</a>
+            </li>
+
+            <li *ngFor="let page of foodPages" class="page-item" [ngClass]="{'active': page === currentFoodPage}">
+              <a class="page-link" (click)="setPage(page)">{{page+1}}</a>
+            </li>
+
+            <li class="page-item" [ngClass]="{'disabled': currentFoodPage === nrOfFoodPages - 1}">
+              <a class="page-link" (click)="increasePage()">Next</a>
+            </li>
+          </ul>
+        </nav>
+        <!--#endregion-->
+      </div>
+      <!--#endregion Manage Food-->
+
       <!--#region Staff-->
       <div *ngIf="menuOption === getManagerMenu().STAFF">
         <app-staff-section></app-staff-section>

@@ -8,13 +8,20 @@ import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {RestaurantService} from "../../service/restaurant.service";
 import {UserService} from "../../service/user.service";
 
-enum FoodMenu {
+export enum FoodMenu {
   PIZZA,
   BURGER,
   GRILL,
   FAST_FOOD,
   DESSERT,
   DRINK
+}
+
+export namespace FoodMenu {
+  export function keys(): Array<string>{
+    var keys = Object.keys(FoodMenu);
+    return keys.slice(keys.length / 2, keys.length-1);
+  }
 }
 
 @Component({
@@ -115,6 +122,10 @@ export class HomeComponent implements OnInit {
     return FoodMenu;
   }
 
+  deleteFood(food: any) {
+    this
+  }
+
   changeOption(option: FoodMenu): void {
     this.menuOption = option;
     this.currentFoodPage = 0;
@@ -142,13 +153,8 @@ export class HomeComponent implements OnInit {
     }
   }
 
-  addButton(food: any): void {
-    if(!this.authenticationService.getIsLoggedIn()) {
-      this.router.navigate(['/login']);
-    }
-    else {
-      this.addToCart(food);
-    }
+  goToLoginPage() {
+    this.router.navigate(['/login']);
   }
 
   addToCart(food: any) {

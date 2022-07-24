@@ -125,15 +125,21 @@
                   <button type="button" class="btn btn-primary rounded-button btn-color" (click)="increaseQuantity(food)">+</button>
                 </div>
                 <div class="col-6 text-center col-centering" style="padding-right: 0.5rem">
-                  <button type="button" class="btn btn-primary add-to-cart-btn float-end btn-color" (click)="openAddedToCartModal(addedToCartModal, food, food.quantity); addButton(food);">Add</button>
+                  <button *ngIf="isLoggedIn()" type="button" class="btn btn-primary add-to-cart-btn float-end btn-color" (click)="openAddedToCartModal(addedToCartModal, food, food.quantity); addToCart(food);">Add</button>
+                  <button *ngIf="!isLoggedIn()" type="button" class="btn btn-primary add-to-cart-btn float-end btn-color" (click)="goToLoginPage()">Add</button>
 
                   <!--In favourites button-->
-                  <button type="button" *ngIf="hasFoodToFavourites(food)" (click)="removeFoodFromFavourites(food)" class="btn btn-primary add-to-cart-btn float-end btn-added-to-favourites-color" style="width: 2rem; margin-right: 0.25rem;">
+                  <button type="button" *ngIf="isLoggedIn() && hasFoodToFavourites(food)" (click)="removeFoodFromFavourites(food)" class="btn btn-primary add-to-cart-btn float-end btn-added-to-favourites-color" style="width: 2rem; margin-right: 0.25rem;">
                     <img src="../../../assets/favourites_icon.png" class="img-favourites" alt="" width="20" height="20">
                   </button>
 
                   <!--Not in favourites button-->
-                  <button type="button" *ngIf="!hasFoodToFavourites(food)" (click)="addFoodToFavourites(food)" class="btn btn-primary add-to-cart-btn float-end btn-favourites-color" style="width: 2rem; margin-right: 0.25rem;">
+                  <button type="button" *ngIf="isLoggedIn() && !hasFoodToFavourites(food)" (click)="addFoodToFavourites(food)" class="btn btn-primary add-to-cart-btn float-end btn-favourites-color" style="width: 2rem; margin-right: 0.25rem;">
+                    <img src="../../../assets/favourites_icon.png" class="img-favourites" alt="" width="20" height="20">
+                  </button>
+
+                  <!-- Not logged in -> login page-->
+                  <button type="button" *ngIf="!isLoggedIn()" (click)="goToLoginPage()" class="btn btn-primary add-to-cart-btn float-end btn-favourites-color" style="width: 2rem; margin-right: 0.25rem;">
                     <img src="../../../assets/favourites_icon.png" class="img-favourites" alt="" width="20" height="20">
                   </button>
                 </div>

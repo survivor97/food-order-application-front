@@ -109,3 +109,17 @@ li>a {
   user-select: none;
   cursor:pointer;
 }
+
+.page-item.active > .page-link {
+  background-color: #8d0e0e;
+  border-color: #8d0e0e;
+}
+
+.page-item.disabled > .page-link {
+  background-color: lightgray;
+  color: #363636;
+}
+
+.page-link {
+  color: #b01111;
+}

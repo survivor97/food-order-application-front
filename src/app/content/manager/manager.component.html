@@ -101,7 +101,8 @@
             <td>{{food.foodCategory.name}}</td>
             <td style="white-space: nowrap; width: 1%;">
               <button class="btn-in-table btn-lg btn-primary btn-block pl-5 pr-5 pt-0 pb-0 float-end"
-                      (click)="openModal(foodModal); foodModalUpdate = true" style="margin-right: 1rem">Update</button>
+                      (click)="updateModalSelectedFood(food); updateModalRestaurantLists(food); openModal(foodModal); foodModalUpdate = true"
+                      style="margin-right: 1rem">Update</button>
             </td>
             <td style="white-space: nowrap; width: 1%;">
               <button class="btn-in-table btn-lg btn-primary btn-block pl-5 pr-5 pt-0 pb-0 float-end"
@@ -184,8 +185,8 @@
                oninput="this.value=this.value.replace(/[^\d]/,'')">
 
         <label for="selectFoodCategory" class="pt-2 pb-1">Food Category</label>
-        <select class="form-select" id="selectFoodCategory" [(ngModel)]="modalSelectedFoodCategoryOption" aria-label="Select Food Category">
-          <option *ngFor="let enum of getFoodMenu().keys()">{{enum}}</option>
+        <select class="form-select" id="selectFoodCategory" (change)="updateModalFoodCategoryOption($event.target)" aria-label="Select Food Category">
+          <option *ngFor="let enum of getFoodMenu().keys()" [selected]="modalSelectedFoodCategoryOption === enum">{{enum}}</option>
         </select>
 
         <table class="table table-striped align-middle mt-4">
@@ -241,8 +242,8 @@
     </div>
   </div>
   <div class="modal-footer">
-    <button type="button" *ngIf="foodModalUpdate === true" class="btn btn-primary" (click)="modal.close('Update click')">Update</button>
-    <button type="button" *ngIf="foodModalUpdate === false" class="btn btn-primary" (click)="insertFood();modal.close('Add click')">Add</button>
+    <button type="button" *ngIf="foodModalUpdate === true" class="btn btn-primary" [disabled]="modalRestaurantList.length === 0" (click)="updateFood();modal.close('Update click')">Update</button>
+    <button type="button" *ngIf="foodModalUpdate === false" class="btn btn-primary" [disabled]="modalRestaurantList.length === 0" (click)="insertFood();modal.close('Add click')">Add</button>
     <button type="button" class="btn btn-outline-dark" (click)="modal.close('Close click')">Close</button>
   </div>
 </ng-template>

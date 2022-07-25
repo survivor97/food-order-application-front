@@ -39,12 +39,16 @@ export class ManagerComponent implements OnInit {
   modalSelectedFoodCategoryOption: string = '';
 
   modalRestaurantList: any = [];
-  modalAvailableRestaurantList: any;
+  modalAvailableRestaurantList: any = [];
 
+  modalSelectedFood: any;
+
+  foodId: number = 0;
   foodName: string = '';
   foodDescription: string = '';
   foodPrice: string = '';
   foodWeight: string = '';
+  foodCategory: string = '';
 
   foodModalUpdate: boolean = false;
   // endregion Restaurant + Food category
@@ -68,7 +72,19 @@ export class ManagerComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  updateModalSelectedFood(food: any): void {
+    this.foodId = food.id;
+    this.foodName = food.name;
+    this.foodDescription = food.description;
+    this.foodPrice = food.price;
+    this.foodWeight = food.weight;
+    this.foodCategory = food.foodCategory;
+
+    this.modalSelectedFoodCategoryOption = food.foodCategory.name;
+  }
+
   updateFoodPage(): void {
+    console.warn('category: ' + this.selectedFoodCategoryOption);
     this.pageLoaded = false;
 
     this.foodService.searchFood(this.currentFoodPage, this.selectedFoodCategoryOption, this.selectedRestaurantOption).subscribe(data => {
@@ -148,6 +164,8 @@ export class ManagerComponent implements OnInit {
   resetModalRestaurantList(): void {
     this.modalRestaurantList = [];
     this.modalAvailableRestaurantList = this.restaurantList;
+
+    this.modalSelectedFoodCategoryOption = FoodMenu[0];
   }
 
   addRestaurantToModal(restaurant: any): void {
@@ -179,6 +197,28 @@ export class ManagerComponent implements OnInit {
     });
   }
 
+  updateModalFoodCategoryOption(input: any) {
+    this.modalSelectedFoodCategoryOption = input.value;
+  }
+
+  updateModalRestaurantLists(food: any) {
+    let currentRestaurantList = food.restaurantList;
+    let modalRestaurantList = [];
+    let modalAvailableRestaurantList = [];
+
+    for(let restaurant of this.restaurantList) {
+      if(currentRestaurantList.findIndex((i: { id: any; }) => i.id === restaurant.id) >= 0) {
+        modalRestaurantList.push(restaurant);
+      }
+      else {
+        modalAvailableRestaurantList.push(restaurant);
+      }
+    }
+
+    this.modalRestaurantList = modalRestaurantList;
+    this.modalAvailableRestaurantList = modalAvailableRestaurantList;
+  }
+
   insertFood(): void {
     const food = {
       "name": this.foodName,
@@ -188,6 +228,28 @@ export class ManagerComponent implements OnInit {
     }
     this.foodService.insertFood(food, this.selectedFoodCategoryOption, this.modalRestaurantList).subscribe(data => {
       if(data.status === 201) {
+        this.updateFoodPage();
+      }
+    });
+  }
+
+  updateFood(): void {
+    const food = {
+      "id": this.foodId,
+      "name": this.foodName,
+      "description": this.foodDescription,
+      "price": this.foodPrice,
+      "weight": this.foodWeight,
+      "foodCategory": {
+        "name": this.modalSelectedFoodCategoryOption
+      },
+      "restaurantList": this.modalRestaurantList
+    }
+
+    console.warn(food);
+
+    this.foodService.updateFood(food).subscribe(data => {
+      if(data.status === 200) {
         this.updateFoodPage();
       }
     });

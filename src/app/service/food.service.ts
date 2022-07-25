@@ -11,6 +11,7 @@ export class FoodService {
 
   searchFood(page:number, category: string, restaurantName: string): Observable<any> {
     const url = 'http://localhost:8080/food/search?category=' + category + '&restaurantName=' + restaurantName + '&page=' + page;
+    console.warn('search food url: ' + url);
     return this.http.get<any>(url);
   }
 
@@ -41,6 +42,16 @@ export class FoodService {
 
     return this.http.post(
       url,
+      JSON.stringify(food),
+      {
+        headers: {'Content-Type':'application/json; charset=utf-8'},
+        observe: 'response'
+      });
+  }
+
+  updateFood(food: any): Observable<any> {
+    return this.http.put(
+      'http://localhost:8080/food/update',
       JSON.stringify(food),
       {
         headers: {'Content-Type':'application/json; charset=utf-8'},

@@ -5,6 +5,8 @@ import {FoodService} from "../../service/food.service";
 import {RestaurantService} from "../../service/restaurant.service";
 import {FoodMenu} from "../home/home.component";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
+import {ImageService} from "../../service/image.service";
+import {DomSanitizer} from "@angular/platform-browser";
 
 enum ManagerMenu {
   RESTAURANTS,
@@ -53,11 +55,21 @@ export class ManagerComponent implements OnInit {
   foodModalUpdate: boolean = false;
   // endregion Restaurant + Food category
 
+  // region Image upload
+  uploadedImage: any;
+
+  uploadStatus: string = '';
+
+  image: any;
+  // endregion
+
   menuOption: ManagerMenu = ManagerMenu.RESTAURANTS;
 
   constructor(private authenticationService: AuthenticationService,
               private restaurantService: RestaurantService,
               private foodService: FoodService,
+              private imageService: ImageService,
+              private sanitizer: DomSanitizer,
               private modalService: NgbModal) {
     this.restaurantService.getRestaurants().subscribe(data => {
       this.restaurantList = data;
@@ -254,5 +266,35 @@ export class ManagerComponent implements OnInit {
       }
     });
   }
+
+  // region Image upload
+  onImageUpload(event: any): void {
+    if(event.target.files[0].size > 1000000) {
+      this.uploadStatus = 'ERROR';
+    }
+    else {
+      this.uploadedImage = event.target.files[0];
+      this.uploadStatus = '';
+      console.warn(this.uploadedImage);
+    }
+  }
+
+  imageUploadAction(): void {
+    this.imageService.postImage(this.uploadedImage).subscribe((data) => {
+        if (data.status === 200) {
+          this.uploadStatus = 'OK';
+          this.imageService.getImage(this.uploadedImage.name).subscribe(img => {
+            const unsafeImageUrl = URL.createObjectURL(img);
+            const imgUrl = this.sanitizer.bypassSecurityTrustUrl(unsafeImageUrl);
+            this.image = imgUrl;
+          });
+        }
+        else {
+          this.uploadStatus = 'ERROR';
+        }
+      }
+    );
+  }
+  // endregion
 
 }

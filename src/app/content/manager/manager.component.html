@@ -189,6 +189,35 @@
           <option *ngFor="let enum of getFoodMenu().keys()" [selected]="modalSelectedFoodCategoryOption === enum">{{enum}}</option>
         </select>
 
+        <!--#region Upload Image-->
+        <label for="imageUpload" class="pt-4 pb-2">Food Image</label>
+        <div id="imageUpload" class="form-group">
+          <input class="form-control" type="file" id="formFile" (change)="onImageUpload($event)">
+        </div>
+
+        <div class="row">
+          <div class="col-12">
+            <input type="button" value="Upload" (click)="imageUploadAction()" class="btn-in-table btn-lg btn-primary btn-block pl-5 pr-5 pt-0 pb-0 mt-3 mb-2 float-end">
+          </div>
+        </div>
+
+        <div *ngIf="uploadStatus === 'OK'" >
+          <div class="alert alert-success mt-2 row">
+            <div class="col-12">
+              Upload successful!
+            </div>
+          </div>
+          <div class="pt-4 text-center">
+            <img [src]="image" width="200" height="200">
+          </div>
+        </div>
+
+        <div *ngIf="uploadStatus === 'ERROR'" class="alert alert-danger mt-2">
+          The file is too big!
+        </div>
+
+        <!--#endregion-->
+
         <table class="table table-striped align-middle mt-4">
           <thead>
             <tr>

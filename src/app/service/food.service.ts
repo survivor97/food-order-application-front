@@ -30,15 +30,10 @@ export class FoodService {
     return this.http.get<any>(url);
   }
 
-  insertFood(food: any, category: string, restaurantList: any): Observable<any> {
-    let url = 'http://localhost:8080/food/insert?category=' + category + '&restaurantId=';
-    for(let restaurant of restaurantList) {
-      url = url.concat(restaurant.id + ',');
-    };
+  insertFood(food: any): Observable<any> {
+    let url = 'http://localhost:8080/food/insert';
 
-    url = url.slice(0, url.length - 1);
-
-    console.warn(url);
+    console.warn(food);
 
     return this.http.post(
       url,

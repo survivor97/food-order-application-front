@@ -38,7 +38,7 @@ export class ManagerComponent implements OnInit {
   restaurantList: any;
 
   //Modal
-  modalSelectedFoodCategoryOption: string = '';
+  modalSelectedFoodCategoryOption = FoodMenu[0];
 
   modalRestaurantList: any = [];
   modalAvailableRestaurantList: any = [];
@@ -94,6 +94,8 @@ export class ManagerComponent implements OnInit {
     this.foodCategory = food.foodCategory;
 
     this.modalSelectedFoodCategoryOption = food.foodCategory.name;
+
+    console.warn(food);
   }
 
   updateFoodPage(): void {
@@ -237,13 +239,30 @@ export class ManagerComponent implements OnInit {
       "name": this.foodName,
       "description": this.foodDescription,
       "price": this.foodPrice,
-      "weight": this.foodWeight
+      "weight": this.foodWeight,
+      "foodCategory": {
+        "name": this.modalSelectedFoodCategoryOption
+      },
+      "restaurantList": this.modalRestaurantList
     }
-    this.foodService.insertFood(food, this.selectedFoodCategoryOption, this.modalRestaurantList).subscribe(data => {
+
+    this.foodService.insertFood(food).subscribe(data => {
       if(data.status === 201) {
-        this.updateFoodPage();
+        if(this.uploadStatus == 'OK') {
+          console.warn(data);
+          this.imageService.setImage(data.body, this.uploadedImageResponseObject.resourceName).subscribe(data => {
+            if(data.status === 200) {
+              this.updateFoodPage();
+              console.warn('Image update successful.');
+            }
+            else {
+              console.error('Error on image update.');
+            }
+          });
+        }
       }
     });
+
   }
 
   updateFood(): void {
@@ -259,24 +278,21 @@ export class ManagerComponent implements OnInit {
       "restaurantList": this.modalRestaurantList
     }
 
-    console.warn(food);
-
     this.foodService.updateFood(food).subscribe(data => {
       if(data.status === 200) {
-        this.updateFoodPage();
+        if(this.uploadStatus == 'OK') {
+          this.imageService.setImage(food, this.uploadedImageResponseObject.resourceName).subscribe(data => {
+            if(data.status === 200) {
+              this.updateFoodPage();
+              console.warn('Image update successful.');
+            }
+            else {
+              console.error('Error on image update.');
+            }
+          });
+        }
       }
     });
-
-    if(this.uploadStatus == 'OK') {
-      this.imageService.setImage(food, this.uploadedImageResponseObject.resourceName).subscribe(data => {
-        if(data.status === 200) {
-          console.warn('Image update successful.');
-        }
-        else {
-          console.error('Error on image update.');
-        }
-      });
-    }
   }
 
   // region Image upload
@@ -311,6 +327,15 @@ export class ManagerComponent implements OnInit {
     this.uploadedImage = undefined;
     this.uploadStatus = '';
     this.uploadedImageResponseObject = undefined;
+    this.foodImage = null;
+  }
+
+  resetModalFields() {
+    this.foodId = -1;
+    this.foodName = '';
+    this.foodDescription = '';
+    this.foodPrice = '';
+    this.foodWeight = '';
   }
 
   getResourceImageOfFoodImage(foodImage: any): string {

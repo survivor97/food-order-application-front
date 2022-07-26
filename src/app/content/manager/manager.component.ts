@@ -59,8 +59,7 @@ export class ManagerComponent implements OnInit {
   uploadedImage: any;
 
   uploadStatus: string = '';
-
-  image: any;
+  uploadedImageResponseObject: any;
   // endregion
 
   menuOption: ManagerMenu = ManagerMenu.RESTAURANTS;
@@ -265,6 +264,17 @@ export class ManagerComponent implements OnInit {
         this.updateFoodPage();
       }
     });
+
+    if(this.uploadStatus == 'OK') {
+      this.imageService.setImage(food, this.uploadedImageResponseObject.resourceName).subscribe(data => {
+        if(data.status === 200) {
+          console.warn('Image update successful.');
+        }
+        else {
+          console.error('Error on image update.');
+        }
+      });
+    }
   }
 
   // region Image upload
@@ -275,7 +285,6 @@ export class ManagerComponent implements OnInit {
     else {
       this.uploadedImage = event.target.files[0];
       this.uploadStatus = '';
-      console.warn(this.uploadedImage);
     }
   }
 
@@ -283,17 +292,23 @@ export class ManagerComponent implements OnInit {
     this.imageService.postImage(this.uploadedImage).subscribe((data) => {
         if (data.status === 200) {
           this.uploadStatus = 'OK';
-          this.imageService.getImage(this.uploadedImage.name).subscribe(img => {
-            const unsafeImageUrl = URL.createObjectURL(img);
-            const imgUrl = this.sanitizer.bypassSecurityTrustUrl(unsafeImageUrl);
-            this.image = imgUrl;
-          });
+          this.uploadedImageResponseObject = data.body.image;
         }
         else {
           this.uploadStatus = 'ERROR';
         }
       }
     );
+  }
+
+  getImageUrl(imageUUID: string): string {
+    return this.imageService.getImageUrl(imageUUID);
+  }
+
+  resetModalImage(): void {
+    this.uploadedImage = undefined;
+    this.uploadStatus = '';
+    this.uploadedImageResponseObject = undefined;
   }
   // endregion
 

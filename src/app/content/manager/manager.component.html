@@ -101,7 +101,7 @@
             <td>{{food.foodCategory.name}}</td>
             <td style="white-space: nowrap; width: 1%;">
               <button class="btn-in-table btn-lg btn-primary btn-block pl-5 pr-5 pt-0 pb-0 float-end"
-                      (click)="updateModalSelectedFood(food); updateModalRestaurantLists(food); openModal(foodModal); foodModalUpdate = true"
+                      (click)="resetModalImage(); updateModalSelectedFood(food); updateModalRestaurantLists(food); openModal(foodModal); foodModalUpdate = true"
                       style="margin-right: 1rem">Update</button>
             </td>
             <td style="white-space: nowrap; width: 1%;">
@@ -208,7 +208,7 @@
             </div>
           </div>
           <div class="pt-4 text-center">
-            <img [src]="image" width="200" height="200">
+            <img [src]="getImageUrl(uploadedImageResponseObject.resourceName)" width="200" height="200">
           </div>
         </div>
 

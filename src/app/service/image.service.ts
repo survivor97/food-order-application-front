@@ -9,12 +9,18 @@ export class ImageService {
 
   constructor(private http: HttpClient) { }
 
-  getImage(imageName: string): Observable<any> {
-    const url = 'http://localhost:8080/get/image/' + imageName;
-    return this.http.get(url,
+  setImage(food: any, imageUUID: string): Observable<any> {
+    const url = 'http://localhost:8080/food/set-image/' + food.id + '?uuid=' + imageUUID;
+    return this.http.put(url,
+      null,
       {
-        responseType: 'blob'
+        observe: 'response'
       });
+  }
+
+  getImageUrl(imageUUID: string): string {
+    const url = 'http://localhost:8080/image/get?name=' + imageUUID;
+    return url;
   }
 
   postImage(uploadedImage: any): Observable<any> {

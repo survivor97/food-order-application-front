@@ -107,7 +107,18 @@
       <div class="row">
         <div class="col-md-4 p-3" *ngFor="let food of foodList">
           <div class="card">
-            <img class="card-img-top" src="../../../assets/user_icon.png" alt="Card image cap">
+
+            <!-- #region Food image -->
+            <div *ngIf="food.foodImage == null" class="p-4">
+              <img class="card-img-top" src="../../../assets/user_icon.png" alt="Card image cap">
+            </div>
+
+            <div *ngIf="food.foodImage != null" class="p-4">
+              <img class="card-img-top" [src]="getImageUrl(food)" alt="Card image cap">
+            </div>
+
+            <!-- #endregion Food image -->
+
             <div class="card-body">
               <h5 class="card-title">{{food.name}}</h5>
               <p class="card-text">{{food.description}}</p>

@@ -7,6 +7,7 @@ import {OrderService} from "../../service/order.service";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {RestaurantService} from "../../service/restaurant.service";
 import {UserService} from "../../service/user.service";
+import {ImageService} from "../../service/image.service";
 
 export enum FoodMenu {
   PIZZA,
@@ -55,6 +56,7 @@ export class HomeComponent implements OnInit {
               private restaurantService: RestaurantService,
               private orderService: OrderService,
               private userService: UserService,
+              private imageService: ImageService,
               private router: Router,
               private modalService: NgbModal) {
     this.restaurantList = restaurantService.getRestaurants().subscribe(data => {
@@ -204,6 +206,10 @@ export class HomeComponent implements OnInit {
       }
     }
     return false;
+  }
+
+  getImageUrl(food: any): string {
+    return this.imageService.getImageUrl(food.foodImage.resourceName);
   }
 
 }

@@ -50,6 +50,7 @@ export class ManagerComponent implements OnInit {
   foodDescription: string = '';
   foodPrice: string = '';
   foodWeight: string = '';
+  foodImage: any;
   foodCategory: string = '';
 
   foodModalUpdate: boolean = false;
@@ -89,6 +90,7 @@ export class ManagerComponent implements OnInit {
     this.foodDescription = food.description;
     this.foodPrice = food.price;
     this.foodWeight = food.weight;
+    this.foodImage = food.foodImage;
     this.foodCategory = food.foodCategory;
 
     this.modalSelectedFoodCategoryOption = food.foodCategory.name;
@@ -309,6 +311,10 @@ export class ManagerComponent implements OnInit {
     this.uploadedImage = undefined;
     this.uploadStatus = '';
     this.uploadedImageResponseObject = undefined;
+  }
+
+  getResourceImageOfFoodImage(foodImage: any): string {
+    return foodImage.resourceName;
   }
   // endregion
 

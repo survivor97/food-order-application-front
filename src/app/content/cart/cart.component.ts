@@ -108,7 +108,7 @@ export class CartComponent implements OnInit {
     const order = {
       "foodList": this.foodList,
       "address": {
-        "street": this.streetAddress,
+        "streetAddress": this.streetAddress,
         "city": this.city,
         "zipCode": this.zipCode
       }

@@ -38,23 +38,25 @@
       </div>
       <!--endregion-->
     </div>
-    <div class="col-6 table-responsive">
+    <div class="col-8 table-responsive">
       <div *ngIf="menuOption === getDeliveryMenu().NEW_ORDERS">
         <!--#region New Orders List-->
         <h3 class="mb-4">New Orders</h3>
 
         <table class="table table-striped mt-4">
           <thead>
-          <tr class="table-danger">
+          <tr>
             <th class="text-center" scope="col" colspan="5">New Orders List</th>
           </tr>
           </thead>
           <tbody>
           <tr>
-            <th scope="row">1</th>
+            <th scope="row" class="text-center">1</th>
             <td>Mark</td>
             <td>Otto</td>
-            <td>Abc</td>
+            <td style="white-space: nowrap; width: 1%;">
+              <button class="btn-in-table btn-lg btn-primary btn-block pl-5 pr-5 pt-0 pb-0 float-end" style="margin-right: 1rem">Details</button>
+            </td>
             <td style="white-space: nowrap; width: 1%;">
               <button class="btn-in-table btn-lg btn-primary btn-block pl-5 pr-5 pt-0 pb-0 float-end" style="margin-right: 1rem">Take Order</button>
             </td>
@@ -69,18 +71,18 @@
 
         <table class="table table-striped mt-4">
           <thead>
-          <tr class="table-danger">
+          <tr>
             <th class="text-center" scope="col" colspan="5">Active Order</th>
           </tr>
           </thead>
           <tbody>
           <tr>
-            <th scope="row">1</th>
-            <td>Mark</td>
-            <td>Otto</td>
-            <td>Abc</td>
+            <td class="text-center">Delivery Status: <b>-status-</b></td>
+            <td style="white-space: nowrap; width: 1%">
+              <button class="btn-in-table btn-lg btn-primary btn-block pl-5 pr-5 pt-0 pb-0 float-end" style="margin-right: 1rem">Next Status</button>
+            </td>
             <td style="white-space: nowrap; width: 1%;">
-              <button class="btn-in-table btn-lg btn-primary btn-block pl-5 pr-5 pt-0 pb-0 float-end" style="margin-right: 1rem">Take Order</button>
+              <button class="btn-in-table btn-lg btn-primary btn-block pl-5 pr-5 pt-0 pb-0 float-end" style="margin-right: 1rem">Delivered!</button>
             </td>
           </tr>
           </tbody>
@@ -88,7 +90,7 @@
         <!--#endregion Active Order-->
       </div>
     </div>
-    <div class="col-3"></div>
+    <div class="col-1"></div>
   </div>
   <div class="pt-5"></div>
 </div>

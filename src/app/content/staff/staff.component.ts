@@ -3,6 +3,11 @@ import {AuthenticationService} from "../../service/authentication.service";
 import {Properties} from "../../properties";
 import {OrderService, OrderStatus} from "../../service/order.service";
 
+enum StaffMenu {
+  PENDING,
+  ACCEPTED
+}
+
 @Component({
   selector: 'app-staff',
   templateUrl: './staff.component.html',
@@ -10,9 +15,12 @@ import {OrderService, OrderStatus} from "../../service/order.service";
 })
 export class StaffComponent implements OnInit {
 
+  menuOption: StaffMenu = StaffMenu.PENDING;
+
   pageLoaded: boolean = false;
 
-  receivedOrderList: any;
+  receivedOrderList: any = [];
+  acceptedOrderList: any = [];
 
   constructor(private authenticationService: AuthenticationService,
               private orderService: OrderService) {
@@ -38,11 +46,29 @@ export class StaffComponent implements OnInit {
     this.authenticationService.logout();
   }
 
+  getStaffMenu(): typeof StaffMenu {
+    return StaffMenu;
+  }
+
+  changeOption(option: StaffMenu): void {
+    this.menuOption = option;
+    window.scrollTo(0, 0);
+  }
+
   updateOrderList(): void {
     this.pageLoaded = false;
 
     this.orderService.getOrderByStatus(OrderStatus.RECEIVED).subscribe(data => {
       this.receivedOrderList = data;
+      this.pageLoaded = true;
+    });
+  }
+
+  updateAcceptedOrderList(): void {
+    this.pageLoaded = false;
+
+    this.orderService.getOrderByStatus(OrderStatus.ACCEPTED).subscribe(data => {
+      this.acceptedOrderList = data;
       this.pageLoaded = true;
     });
   }
@@ -55,10 +81,23 @@ export class StaffComponent implements OnInit {
     });
   }
 
+  prepareOrder(order: any): void {
+    this.orderService.prepareOrder(order).subscribe(data => {
+      if(data.status === 200) {
+        this.updateAcceptedOrderList();
+      }
+    });
+  }
+
   rejectOrder(order: any): void {
     this.orderService.rejectOrder(order).subscribe(data => {
       if(data.status === 200) {
-        this.updateOrderList();
+        if(this.menuOption === StaffMenu.PENDING) {
+          this.updateOrderList();
+        }
+        else if(this.menuOption === StaffMenu.ACCEPTED) {
+          this.updateAcceptedOrderList();
+        }
       }
     });
   }

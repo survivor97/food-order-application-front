@@ -36,6 +36,11 @@ export class OrderService {
     // console.warn("CART: " + [...this.cartItems.entries()])
   }
 
+  getOrderByStatus(orderStatus: OrderStatus) {
+    const url = 'http://localhost:8080/orders?status=' + OrderStatus[orderStatus.valueOf()];
+    return this.http.get(url);
+  }
+
   placeOrder(order: any): Observable<any> {
     console.warn(JSON.stringify(order));
     const url = 'http://localhost:8080/orders/new-authenticated';
@@ -56,9 +61,13 @@ export class OrderService {
       });
   }
 
-  getOrderByStatus(orderStatus: OrderStatus) {
-    const url = 'http://localhost:8080/orders?status=' + OrderStatus[orderStatus.valueOf()];
-    return this.http.get(url);
+  prepareOrder(order: any) {
+    const url = 'http://localhost:8080/orders/prepare-order?id=' + order.id;
+    return this.http.put(url,
+      null,
+      {
+        observe: 'response'
+      });
   }
 
   rejectOrder(order: any) {

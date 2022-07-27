@@ -10,9 +10,17 @@
         <hr>
         <ul class="nav nav-pills flex-column mb-auto">
           <li class="nav-item pill-custom pill-custom">
-            <a class="nav-link active">
+            <a class="nav-link link-dark" (click)="changeOption(getStaffMenu().PENDING); updateOrderList()"
+               [class.active]="menuOption === getStaffMenu().PENDING">
               <svg class="bi me-2" width="16" height="16"></svg>
-              Orders
+              Pending
+            </a>
+          </li>
+          <li class="nav-item pill-custom pill-custom">
+            <a class="nav-link link-dark" (click)="changeOption(getStaffMenu().ACCEPTED); updateAcceptedOrderList()"
+               [class.active]="menuOption === getStaffMenu().ACCEPTED">
+              <svg class="bi me-2" width="16" height="16"></svg>
+              Accepted
             </a>
           </li>
         </ul>
@@ -33,43 +41,83 @@
       <!--endregion-->
     </div>
     <div class="col-8 table-responsive">
-      <!--#region Orders-->
-      <h3 class="mb-4">Incoming Orders</h3>
+      <!--#region PENDING-->
+      <div *ngIf="menuOption === getStaffMenu().PENDING">
+        <h3 class="mb-4">Incoming Orders</h3>
 
-      <div *ngIf="pageLoaded === true">
-        <table class="table table-striped mt-4">
-          <thead>
-          <tr class="table-danger">
-            <th class="text-center" scope="col" colspan="5">Orders</th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr *ngFor="let order of receivedOrderList">
-            <th scope="row" class="text-center">1</th>
-            <td>{{order.orderDateTime}}</td>
-            <td>
-              <button class="btn-in-table btn-lg btn-primary btn-block pl-5 pr-5 pt-0 pb-0 float-end" style="margin-right: 1rem">Details</button>
-            </td>
-            <td style="white-space: nowrap; width: 1%;">
-              <button class="btn-in-table btn-lg btn-primary btn-block pl-5 pr-5 pt-0 pb-0 float-end" style="margin-right: 1rem"
-                      (click)="acceptOrder(order)">Accept</button>
-            </td>
-            <td style="white-space: nowrap; width: 1%;">
-              <button class="btn-in-table btn-lg btn-primary btn-block pl-5 pr-5 pt-0 pb-0 float-end" style="margin-right: 1rem"
-                      (click)="rejectOrder(order)">Reject</button>
-            </td>
-          </tr>
-          <tr *ngIf="receivedOrderList.length === 0">
-            <td class="text-center">Empty</td>
-          </tr>
-          </tbody>
-        </table>
+        <div *ngIf="pageLoaded === true">
+          <table class="table table-striped mt-4">
+            <thead>
+            <tr>
+              <th class="text-center" scope="col" colspan="5">Orders</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let order of receivedOrderList">
+              <th scope="row" class="text-center">1</th>
+              <td>{{order.orderDateTime}}</td>
+              <td style="white-space: nowrap; width: 1%;">
+                <button class="btn-in-table btn-lg btn-primary btn-block pl-5 pr-5 pt-0 pb-0 float-end" style="margin-right: 1rem">Details</button>
+              </td>
+              <td style="white-space: nowrap; width: 1%;">
+                <button class="btn-in-table btn-lg btn-primary btn-block pl-5 pr-5 pt-0 pb-0 float-end" style="margin-right: 1rem"
+                        (click)="acceptOrder(order)">Accept</button>
+              </td>
+              <td style="white-space: nowrap; width: 1%;">
+                <button class="btn-in-table btn-lg btn-primary btn-block pl-5 pr-5 pt-0 pb-0 float-end" style="margin-right: 1rem"
+                        (click)="rejectOrder(order)">Reject</button>
+              </td>
+            </tr>
+            <tr *ngIf="receivedOrderList.length === 0">
+              <td class="text-center">Empty</td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+        <div *ngIf="pageLoaded === false">
+          <app-waiting></app-waiting>
+        </div>
       </div>
-      <div *ngIf="pageLoaded === false">
-        <app-waiting></app-waiting>
-      </div>
+      <!--#endregion PENDING-->
+      <!--#region ACCEPTED-->
+      <div *ngIf="menuOption === getStaffMenu().ACCEPTED">
+        <h3 class="mb-4">Accepted Orders</h3>
 
-      <!--#endregion Orders-->
+        <div *ngIf="pageLoaded === true">
+          <table class="table table-striped mt-4">
+            <thead>
+            <tr>
+              <th class="text-center" scope="col" colspan="5">Orders</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let order of acceptedOrderList">
+              <th scope="row" class="text-center">1</th>
+              <td>{{order.orderDateTime}}</td>
+              <td style="white-space: nowrap; width: 1%;">
+                <button class="btn-in-table btn-lg btn-primary btn-block pl-5 pr-5 pt-0 pb-0 float-end" style="margin-right: 1rem"
+                >Details</button>
+              </td>
+              <td style="white-space: nowrap; width: 1%;">
+                <button class="btn-in-table btn-lg btn-primary btn-block pl-5 pr-5 pt-0 pb-0 float-end" style="margin-right: 1rem"
+                (click)="prepareOrder(order)">Prepare</button>
+              </td>
+              <td style="white-space: nowrap; width: 1%;">
+                <button class="btn-in-table btn-lg btn-primary btn-block pl-5 pr-5 pt-0 pb-0 float-end" style="margin-right: 1rem"
+                (click)="rejectOrder(order)">Reject</button>
+              </td>
+            </tr>
+            <tr *ngIf="acceptedOrderList.length === 0">
+              <td class="text-center">Empty</td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+        <div *ngIf="pageLoaded === false">
+          <app-waiting></app-waiting>
+        </div>
+      </div>
+      <!--#endregion ACCEPTED-->
   </div>
     <div class="col-1"></div>
   <div class="pt-5"></div>

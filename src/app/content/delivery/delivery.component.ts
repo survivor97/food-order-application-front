@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {AuthenticationService} from "../../service/authentication.service";
 import {Properties} from "../../properties";
+import {OrderService, OrderStatus} from "../../service/order.service";
 
 enum DeliveryMenu {
   NEW_ORDERS,
@@ -16,7 +17,14 @@ export class DeliveryComponent implements OnInit {
 
   menuOption: DeliveryMenu = DeliveryMenu.NEW_ORDERS;
 
-  constructor(private authenticationService: AuthenticationService) { }
+  pageLoaded: boolean = false;
+
+  availableOrderList: any = [];
+
+  constructor(private authenticationService: AuthenticationService,
+              private orderService: OrderService) {
+      this.updateAvailableOrderList();
+  }
 
   ngOnInit(): void {
   }
@@ -44,6 +52,15 @@ export class DeliveryComponent implements OnInit {
   changeOption(option: DeliveryMenu): void {
     this.menuOption = option;
     window.scrollTo(0, 0);
+  }
+
+  updateAvailableOrderList(): void {
+    this.pageLoaded = false;
+
+    this.orderService.getOrderByStatus(OrderStatus.ACCEPTED).subscribe(data => {
+      this.availableOrderList = data;
+      this.pageLoaded = true;
+    });
   }
 
 }

@@ -3,6 +3,7 @@ import {AuthenticationService} from "../../service/authentication.service";
 import {Properties} from "../../properties";
 import {OrderService} from "../../service/order.service";
 import {Router} from "@angular/router";
+import {debounceTime, Subject} from "rxjs";
 
 enum CartMenu {
   LIST,
@@ -16,6 +17,9 @@ enum CartMenu {
   styleUrls: ['./cart.component.css']
 })
 export class CartComponent implements OnInit {
+
+  //Debounce
+  placeOrderButtonClicked = new Subject<string>();
 
   cartItems = new Map<number, any>();
   foodList: any = [];
@@ -33,6 +37,10 @@ export class CartComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    const placeOrderButtonClickedDebounced = this.placeOrderButtonClicked.pipe(debounceTime(500));
+    placeOrderButtonClickedDebounced.subscribe(() =>
+      this.placeOrder()
+    );
   }
 
   isLoggedIn(): boolean {
@@ -93,6 +101,10 @@ export class CartComponent implements OnInit {
       return  true;
     }
     return false;
+  }
+
+  placeOrderDebounceClick(): void {
+    this.placeOrderButtonClicked.next('');
   }
 
   placeOrder(): void {

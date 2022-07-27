@@ -12,7 +12,7 @@
           <li class="nav-item pill-custom pill-custom">
             <a class="nav-link link-dark" (click)="changeOption(getDeliveryMenu().NEW_ORDERS)" [class.active]="menuOption === getDeliveryMenu().NEW_ORDERS">
               <svg class="bi me-2" width="16" height="16"></svg>
-              New Orders
+              Available Orders
             </a>
           </li>
           <li>
@@ -50,16 +50,19 @@
           </tr>
           </thead>
           <tbody>
-          <tr>
+          <tr *ngFor="let order of availableOrderList">
             <th scope="row" class="text-center">1</th>
-            <td>Mark</td>
-            <td>Otto</td>
+            <td>{{order.orderDateTime}}</td>
+            <td></td>
             <td style="white-space: nowrap; width: 1%;">
               <button class="btn-in-table btn-lg btn-primary btn-block pl-5 pr-5 pt-0 pb-0 float-end" style="margin-right: 1rem">Details</button>
             </td>
             <td style="white-space: nowrap; width: 1%;">
               <button class="btn-in-table btn-lg btn-primary btn-block pl-5 pr-5 pt-0 pb-0 float-end" style="margin-right: 1rem">Take Order</button>
             </td>
+          </tr>
+          <tr *ngIf="availableOrderList.length === 0">
+            <td class="text-center">Empty</td>
           </tr>
           </tbody>
         </table>
@@ -82,7 +85,8 @@
               <button class="btn-in-table btn-lg btn-primary btn-block pl-5 pr-5 pt-0 pb-0 float-end" style="margin-right: 1rem">Next Status</button>
             </td>
             <td style="white-space: nowrap; width: 1%;">
-              <button class="btn-in-table btn-lg btn-primary btn-block pl-5 pr-5 pt-0 pb-0 float-end" style="margin-right: 1rem">Delivered!</button>
+              <button class="btn-in-table btn-lg btn-primary btn-block pl-5 pr-5 pt-0 pb-0 float-end" style="margin-right: 1rem"
+              >Delivered!</button>
             </td>
           </tr>
           </tbody>

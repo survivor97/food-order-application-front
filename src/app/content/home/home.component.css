@@ -90,8 +90,8 @@ a:hover {
 
 .img-favourites {
   position: relative;
-  left: -0.48rem;
-  top: -0.15rem;
+  left: -200%;
+  top: -15%;
 }
 
 .card-img-top {

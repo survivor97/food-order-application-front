@@ -105,7 +105,7 @@
     <!--#region Menu-->
     <div class="container">
       <div class="row">
-        <div class="col-md-4 p-3" *ngFor="let food of foodList">
+        <div class="col-md-4 p-3 card-group" *ngFor="let food of foodList">
           <div class="card">
 
             <!-- #region Food image -->
@@ -119,9 +119,13 @@
 
             <!-- #endregion Food image -->
 
-            <div class="card-body">
-              <h5 class="card-title">{{food.name}}</h5>
-              <p class="card-text">{{food.description}}</p>
+            <div class="card-body" style="padding-top: 0">
+              <div style="height:4rem">
+                <h5 class="card-title">{{food.name}}</h5>
+              </div>
+              <div style="height: 2rem">
+                <p class="card-text">{{food.description}}</p>
+              </div>
               <div class="pt-4 pb-3">
                 <h5>Price: {{food.price}} lei</h5>
               </div>

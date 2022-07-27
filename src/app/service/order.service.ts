@@ -1,4 +1,6 @@
 import { Injectable } from '@angular/core';
+import {Observable} from "rxjs";
+import {HttpClient} from "@angular/common/http";
 
 @Injectable({
   providedIn: 'root'
@@ -7,7 +9,7 @@ export class OrderService {
 
   cartItems = new Map<number, any>();
 
-  constructor() { }
+  constructor(private http: HttpClient) { }
 
   addToCart(food: any): void {
     if(food.quantity > 0) {
@@ -22,8 +24,22 @@ export class OrderService {
       }
       food.quantity = 0;
     }
+    // console.warn("CART: " + [...this.cartItems.entries()])
+  }
 
-    console.warn("CART: " + [...this.cartItems.entries()]);
+  placeOrder(order: any): Observable<any> {
+    console.warn(JSON.stringify(order));
+    const url = 'http://localhost:8080/orders/new-authenticated';
+    return this.http.post(url,
+      JSON.stringify(order),
+      {
+        headers: {'Content-Type':'application/json; charset=utf-8'},
+        observe: 'response'
+      });
+  }
+
+  resetCartItems(): void {
+    this.cartItems = new Map<number, any>();
   }
 
 }

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {AuthenticationService} from "../../service/authentication.service";
 import {Properties} from "../../properties";
 import {OrderService} from "../../service/order.service";
+import {Router} from "@angular/router";
 
 enum CartMenu {
   LIST,
@@ -17,6 +18,7 @@ enum CartMenu {
 export class CartComponent implements OnInit {
 
   cartItems = new Map<number, any>();
+  foodList: any = [];
 
   menuOption: CartMenu = CartMenu.LIST;
 
@@ -25,7 +27,8 @@ export class CartComponent implements OnInit {
   zipCode: string = '';
 
   constructor(private authenticationService: AuthenticationService,
-              private orderService: OrderService) {
+              private orderService: OrderService,
+              private router: Router) {
     this.cartItems = this.orderService.cartItems;
   }
 
@@ -90,6 +93,35 @@ export class CartComponent implements OnInit {
       return  true;
     }
     return false;
+  }
+
+  placeOrder(): void {
+    for(let cartItem of this.cartItems.values()) {
+      for(let i=0; i<cartItem.cartQuantity; i++) {
+        const foodItem = {
+          "id": cartItem.id
+        }
+        this.foodList.push(foodItem);
+      }
+    }
+
+    const order = {
+      "foodList": this.foodList,
+      "address": {
+        "street": this.streetAddress,
+        "city": this.city,
+        "zipCode": this.zipCode
+      }
+    }
+
+    this.orderService.placeOrder(order).subscribe(data => {
+      if(data.status === 201) {
+        console.warn("Order sent successfully");
+        this.orderService.resetCartItems();
+        this.foodList = [];
+        this.router.navigate(['']);
+      }
+    });
   }
 
 }

@@ -41,6 +41,11 @@ export class OrderService {
     return this.http.get(url);
   }
 
+  getActiveOrder(): Observable<any> {
+    const url = 'http://localhost:8080/delivery-user/active-order';
+    return this.http.get(url);
+  }
+
   placeOrder(order: any): Observable<any> {
     console.warn(JSON.stringify(order));
     const url = 'http://localhost:8080/orders/new-authenticated';
@@ -72,6 +77,15 @@ export class OrderService {
 
   rejectOrder(order: any) {
     const url = 'http://localhost:8080/orders/set-rejected-status?id=' + order.id;
+    return this.http.put(url,
+      null,
+      {
+        observe: 'response'
+      });
+  }
+
+  takeOrder(order: any): Observable<any>{
+    const url = 'http://localhost:8080/delivery-user/take-order?id=' + order.id;
     return this.http.put(url,
       null,
       {

@@ -15,8 +15,9 @@
               Available Orders
             </a>
           </li>
-          <li>
-            <a class="nav-link link-dark" (click)="changeOption(getDeliveryMenu().ACTIVE_ORDER)" [class.active]="menuOption === getDeliveryMenu().ACTIVE_ORDER">
+          <li *ngIf="activeOrder != null">
+            <a class="nav-link link-dark" (click)="changeOption(getDeliveryMenu().ACTIVE_ORDER); getActiveOrder()"
+               [class.active]="menuOption === getDeliveryMenu().ACTIVE_ORDER">
               <svg class="bi me-2" width="16" height="16"></svg>
               Active Order
             </a>
@@ -58,7 +59,8 @@
               <button class="btn-in-table btn-lg btn-primary btn-block pl-5 pr-5 pt-0 pb-0 float-end" style="margin-right: 1rem">Details</button>
             </td>
             <td style="white-space: nowrap; width: 1%;">
-              <button class="btn-in-table btn-lg btn-primary btn-block pl-5 pr-5 pt-0 pb-0 float-end" style="margin-right: 1rem">Take Order</button>
+              <button class="btn-in-table btn-lg btn-primary btn-block pl-5 pr-5 pt-0 pb-0 float-end" style="margin-right: 1rem"
+              (click)="takeOrder(order)">Take Order</button>
             </td>
           </tr>
           <tr *ngIf="availableOrderList.length === 0">
@@ -80,7 +82,7 @@
           </thead>
           <tbody>
           <tr>
-            <td class="text-center">Delivery Status: <b>-status-</b></td>
+            <td class="text-center">Delivery Status: <b>{{activeOrder.orderStatus}}</b></td>
             <td style="white-space: nowrap; width: 1%">
               <button class="btn-in-table btn-lg btn-primary btn-block pl-5 pr-5 pt-0 pb-0 float-end" style="margin-right: 1rem">Next Status</button>
             </td>

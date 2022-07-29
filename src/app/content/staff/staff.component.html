@@ -23,6 +23,13 @@
               Accepted
             </a>
           </li>
+          <li class="nav-item pill-custom pill-custom">
+            <a class="nav-link link-dark" (click)="changeOption(getStaffMenu().ACCEPTED); updateAcceptedOrderList()"
+               [class.active]="menuOption === getStaffMenu().ACCEPTED">
+              <svg class="bi me-2" width="16" height="16"></svg>
+              Preparing
+            </a>
+          </li>
         </ul>
         <div class="pt-5 pb-5"></div>
         <hr *ngIf="isLoggedIn()">

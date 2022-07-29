@@ -20,10 +20,12 @@ export class DeliveryComponent implements OnInit {
   pageLoaded: boolean = false;
 
   availableOrderList: any = [];
+  activeOrder: any;
 
   constructor(private authenticationService: AuthenticationService,
               private orderService: OrderService) {
       this.updateAvailableOrderList();
+      this.getActiveOrder();
   }
 
   ngOnInit(): void {
@@ -57,10 +59,29 @@ export class DeliveryComponent implements OnInit {
   updateAvailableOrderList(): void {
     this.pageLoaded = false;
 
-    this.orderService.getOrderByStatus(OrderStatus.ACCEPTED).subscribe(data => {
-      this.availableOrderList = data;
+    this.orderService.getOrderByStatus(OrderStatus.PREPARING).subscribe(data => {
+      if(Array.isArray(data)) {
+        this.availableOrderList = data.filter(order => order.deliveryUser == null);
+        console.warn(this.availableOrderList);
+      }
       this.pageLoaded = true;
     });
+  }
+
+  takeOrder(order: any) {
+    this.orderService.takeOrder(order).subscribe(data => {
+      if(data.status === 200) {
+        console.warn("Order taken successfully!");
+        this.updateAvailableOrderList();
+        this.getActiveOrder();
+      }
+    })
+  }
+
+  getActiveOrder() {
+    this.orderService.getActiveOrder().subscribe(data => {
+      this.activeOrder = data;
+    })
   }
 
 }

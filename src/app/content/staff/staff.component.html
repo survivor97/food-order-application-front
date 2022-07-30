@@ -24,8 +24,8 @@
             </a>
           </li>
           <li class="nav-item pill-custom pill-custom">
-            <a class="nav-link link-dark" (click)="changeOption(getStaffMenu().ACCEPTED); updateAcceptedOrderList()"
-               [class.active]="menuOption === getStaffMenu().ACCEPTED">
+            <a class="nav-link link-dark" (click)="changeOption(getStaffMenu().PREPARING); updatePreparingOrderList()"
+               [class.active]="menuOption === getStaffMenu().PREPARING">
               <svg class="bi me-2" width="16" height="16"></svg>
               Preparing
             </a>
@@ -125,6 +125,41 @@
         </div>
       </div>
       <!--#endregion ACCEPTED-->
+      <!--#region PREPARING-->
+      <div *ngIf="menuOption === getStaffMenu().PREPARING">
+        <h3 class="mb-4">Orders Preparing</h3>
+
+        <div *ngIf="pageLoaded === true">
+          <table class="table table-striped mt-4">
+            <thead>
+            <tr>
+              <th class="text-center" scope="col" colspan="5">Orders</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let order of preparingOrderList">
+              <th scope="row" class="text-center">1</th>
+              <td>{{order.orderDateTime}}</td>
+              <td style="white-space: nowrap; width: 1%;">
+                <button class="btn-in-table btn-lg btn-primary btn-block pl-5 pr-5 pt-0 pb-0 float-end" style="margin-right: 1rem"
+                        (click)="shipOrder(order)">Ship</button>
+              </td>
+              <td style="white-space: nowrap; width: 1%;">
+                <button class="btn-in-table btn-lg btn-primary btn-block pl-5 pr-5 pt-0 pb-0 float-end" style="margin-right: 1rem"
+                        (click)="rejectOrder(order)">Reject</button>
+              </td>
+            </tr>
+            <tr *ngIf="preparingOrderList.length === 0">
+              <td class="text-center">Empty</td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+        <div *ngIf="pageLoaded === false">
+          <app-waiting></app-waiting>
+        </div>
+      </div>
+      <!--#endregion PREPARING-->
   </div>
     <div class="col-1"></div>
   <div class="pt-5"></div>

@@ -105,3 +105,13 @@ li>a {
   user-select: none;
   cursor:pointer;
 }
+
+.btn-in-table.disabled,.btn-in-table:disabled{
+  opacity:.65
+}
+.btn-in-table:not(:disabled):not(.disabled){
+  cursor:pointer
+}
+a.btn-in-table.disabled,fieldset:disabled a.btn-in-table{
+  pointer-events:none
+}

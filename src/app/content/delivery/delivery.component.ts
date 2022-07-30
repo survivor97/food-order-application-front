@@ -19,7 +19,7 @@ export class DeliveryComponent implements OnInit {
 
   pageLoaded: boolean = false;
 
-  availableOrderList: any = [];
+  acceptedOrderList: any = [];
   activeOrder: any;
 
   constructor(private authenticationService: AuthenticationService,
@@ -59,10 +59,10 @@ export class DeliveryComponent implements OnInit {
   updateAvailableOrderList(): void {
     this.pageLoaded = false;
 
-    this.orderService.getOrderByStatus(OrderStatus.PREPARING).subscribe(data => {
+    this.orderService.getAccepterOrders().subscribe(data => {
       if(Array.isArray(data)) {
-        this.availableOrderList = data.filter(order => order.deliveryUser == null);
-        console.warn(this.availableOrderList);
+        this.acceptedOrderList = data.filter(order => order.deliveryUser == null);
+        console.warn(this.acceptedOrderList);
       }
       this.pageLoaded = true;
     });
@@ -75,7 +75,18 @@ export class DeliveryComponent implements OnInit {
         this.updateAvailableOrderList();
         this.getActiveOrder();
       }
-    })
+    });
+  }
+
+  setDelivered(order: any) {
+    this.orderService.setOrderDelivered(order).subscribe(data => {
+      if(data.status === 200) {
+        console.warn("Order delivered successfully!");
+        this.updateAvailableOrderList();
+        this.activeOrder = null;
+        this.changeOption(DeliveryMenu.NEW_ORDERS);
+      }
+    });
   }
 
   getActiveOrder() {

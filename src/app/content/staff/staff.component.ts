@@ -5,7 +5,8 @@ import {OrderService, OrderStatus} from "../../service/order.service";
 
 enum StaffMenu {
   PENDING,
-  ACCEPTED
+  ACCEPTED,
+  PREPARING
 }
 
 @Component({
@@ -21,6 +22,7 @@ export class StaffComponent implements OnInit {
 
   receivedOrderList: any = [];
   acceptedOrderList: any = [];
+  preparingOrderList: any = [];
 
   constructor(private authenticationService: AuthenticationService,
               private orderService: OrderService) {
@@ -73,6 +75,15 @@ export class StaffComponent implements OnInit {
     });
   }
 
+  updatePreparingOrderList(): void {
+    this.pageLoaded = false;
+
+    this.orderService.getOrderByStatus(OrderStatus.PREPARING).subscribe(data => {
+      this.preparingOrderList = data;
+      this.pageLoaded = true;
+    });
+  }
+
   acceptOrder(order: any): void {
     this.orderService.acceptOrder(order).subscribe(data => {
       if(data.status === 200) {
@@ -89,6 +100,14 @@ export class StaffComponent implements OnInit {
     });
   }
 
+  shipOrder(order: any): void {
+    this.orderService.shipOrder(order).subscribe(data => {
+      if(data.status === 200) {
+        this.updatePreparingOrderList();
+      }
+    });
+  }
+
   rejectOrder(order: any): void {
     this.orderService.rejectOrder(order).subscribe(data => {
       if(data.status === 200) {
@@ -97,6 +116,9 @@ export class StaffComponent implements OnInit {
         }
         else if(this.menuOption === StaffMenu.ACCEPTED) {
           this.updateAcceptedOrderList();
+        }
+        else if(this.menuOption === StaffMenu.PREPARING) {
+          this.updatePreparingOrderList();
         }
       }
     });

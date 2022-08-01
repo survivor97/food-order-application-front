@@ -21,6 +21,12 @@
               Favourite Food
             </a>
           </li>
+          <li *ngIf="hasUserRole()">
+            <a class="nav-link link-dark" (click)="changeOption(getProfileMenu().ORDER_HISTORY)" [class.active]="menuOption === getProfileMenu().ORDER_HISTORY">
+              <svg class="bi me-2" width="16" height="16"></svg>
+              My Orders
+            </a>
+          </li>
         </ul>
         <div class="pt-5 pb-5"></div>
         <hr *ngIf="isLoggedIn()">
@@ -142,6 +148,43 @@
           </table>
         </div>
         <!--#endregion Favourite Food-->
+
+        <!--#region Order History-->
+        <div *ngIf="menuOption === getProfileMenu().ORDER_HISTORY">
+          <h3 class="mb-4">My Orders</h3>
+
+          <div class="pt-3"></div>
+
+          <table class="table table-striped mt-4">
+            <thead>
+            <tr>
+              <th class="text-center" scope="col" colspan="4">Order History</th>
+            </tr>
+            <tr>
+              <th class="left-space-table-td">Date</th>
+              <th class="left-space-table-td">Address</th>
+              <th class="left-space-table-td">Status</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let order of orderHistoryList">
+              <td class="left-space-table-td" style="white-space: nowrap; width: 1%;">{{getFormattedDate(order.dateTime)}}</td>
+              <td class="left-space-table-td" style="white-space: nowrap; width: 1%">{{order.address.streetAddress}}, {{order.address.zipCode}}</td>
+              <td class="left-space-table-td" style="padding-right: 2rem">{{order.orderStatus}}</td>
+              <td style="white-space: nowrap; width: 1%">
+                <button class="btn-in-table btn-lg btn-primary btn-block pl-5 pr-5 pt-0 pb-0 float-end" style="margin-right: 1rem"
+                          >Details</button>
+              </td>
+            </tr>
+            <tr *ngIf="orderHistoryList.length === 0">
+              <td class="text-center" colspan="4">Empty</td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+        <!--#endregion Order History-->
+
+        <div class="pt-5 pb-5"></div>
 
       </div>
     </div>

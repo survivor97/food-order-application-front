@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {AuthenticationService} from "../../service/authentication.service";
 import {Properties} from "../../properties";
 import {OrderService, OrderStatus} from "../../service/order.service";
+import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 
 enum DeliveryMenu {
   NEW_ORDERS,
@@ -24,8 +25,15 @@ export class DeliveryComponent implements OnInit {
   activeOrderItemMap = new Map<number, any>();
   filteredOrderFood: any = [];
 
+  // region selected modal food
+  selectedOrderModal: any;
+  mappedSelectedOrder: any = new Map<number, any>();
+  filteredSelectedOrderFood: any = [];
+  // endregion selected modal food
+
   constructor(private authenticationService: AuthenticationService,
-              private orderService: OrderService) {
+              private orderService: OrderService,
+              private modalService: NgbModal) {
       this.updateAvailableOrderList();
       this.getActiveOrder();
   }
@@ -108,8 +116,7 @@ export class DeliveryComponent implements OnInit {
     return this.activeOrder.orderStatus === OrderStatus[OrderStatus.ON_THE_WAY.valueOf()];
   }
 
-  mapActiveOrderItems(): number {
-    let total = 0;
+  mapActiveOrderItems(): void {
 
     this.activeOrder.foodList.forEach((data: any) => {
       if(this.activeOrderItemMap.get(data.id) == null) {
@@ -127,11 +134,57 @@ export class DeliveryComponent implements OnInit {
       return seenItems.hasOwnProperty(data.id) ? false : (seenItems[data.id] = true);
     });
 
+  }
+
+  getMappedQuantity(food: any, map: any): number {
+    return map.get(food.id).quantity;
+  }
+
+  getCartTotal(order: any): number {
+    let total = 0;
+
+    order.foodList.forEach((food: any) => {
+      total += parseInt(food.price);
+    });
+
     return total;
   }
 
-  getMappedQuantity(food: any): number {
-    return this.activeOrderItemMap.get(food.id).quantity;
+  openModal(content: any): void {
+    this.modalService.open(content, {centered: true, size: 'lg'});
+  }
+
+  selectModalOrder(order: any) {
+    this.selectedOrderModal = order;
+    this.mapSelectedOrder(order);
+  }
+
+  mapSelectedOrder(order: any): void {
+
+    this.mappedSelectedOrder = new Map<number, any>();
+
+    order.foodList.forEach((data: any) => {
+      if(this.mappedSelectedOrder.get(data.id) == null) {
+        data.quantity = 1;
+        this.mappedSelectedOrder.set(data.id, data);
+      }
+      else {
+        this.mappedSelectedOrder.get(data.id).quantity++;
+      }
+    });
+
+    let seenItems: any = {};
+
+    this.filteredSelectedOrderFood = order.foodList.filter((data: any) => {
+      return seenItems.hasOwnProperty(data.id) ? false : (seenItems[data.id] = true);
+    });
+  }
+
+  getFormattedDate(inputDate: string) {
+    const date: Date = new Date(inputDate);
+    const dateString: string = ('0' + date.getDate()).slice(-2) + '/' + ('0' + (date.getMonth()+1)).slice(-2) + '/' + date.getFullYear();
+    const timeString: string = ('0' + date.getHours()).slice(-2) + ':' + ('0' + date.getMinutes()).slice(-2);
+    return dateString + ' ' + timeString;
   }
 
 }

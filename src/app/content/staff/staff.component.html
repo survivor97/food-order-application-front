@@ -60,19 +60,21 @@
             </tr>
             </thead>
             <tbody>
-            <tr *ngFor="let order of receivedOrderList">
-              <th scope="row" class="text-center">1</th>
-              <td>{{order.orderDateTime}}</td>
+            <tr *ngFor="let order of receivedOrderList; let rowNr = index">
+              <th scope="row" class="left-space-table-td">{{rowNr + 1}}</th>
+              <td style="white-space: nowrap; width: 1%;">{{getFormattedDate(order.dateTime)}}</td>
+              <td class="text-center"><b>Order id: </b> {{order.id}}</td>
               <td style="white-space: nowrap; width: 1%;">
-                <button class="btn-in-table btn-lg btn-primary btn-block pl-5 pr-5 pt-0 pb-0 float-end" style="margin-right: 1rem">Details</button>
+                <button class="btn-in-table btn-lg btn-primary btn-block pl-5 pr-5 pt-0 pb-0 float-end" style="margin-right: 1rem"
+                  (click)="selectModalOrder(order); openModal(orderDetailsModal)">Details</button>
               </td>
               <td style="white-space: nowrap; width: 1%;">
                 <button class="btn-in-table btn-lg btn-primary btn-block pl-5 pr-5 pt-0 pb-0 float-end" style="margin-right: 1rem"
-                        (click)="acceptOrder(order)">Accept</button>
+                  (click)="acceptOrder(order)">Accept</button>
               </td>
               <td style="white-space: nowrap; width: 1%;">
                 <button class="btn-in-table btn-lg btn-primary btn-block pl-5 pr-5 pt-0 pb-0 float-end" style="margin-right: 1rem"
-                        (click)="rejectOrder(order)">Reject</button>
+                  (click)="rejectOrder(order)">Reject</button>
               </td>
             </tr>
             <tr *ngIf="receivedOrderList.length === 0">
@@ -98,20 +100,21 @@
             </tr>
             </thead>
             <tbody>
-            <tr *ngFor="let order of acceptedOrderList">
-              <th scope="row" class="text-center">1</th>
-              <td>{{order.orderDateTime}}</td>
+            <tr *ngFor="let order of acceptedOrderList; let rowNr = index">
+              <th scope="row" class="left-space-table-td">{{rowNr + 1}}</th>
+              <td style="white-space: nowrap; width: 1%;">{{getFormattedDate(order.dateTime)}}</td>
+              <td class="text-center"><b>Order id: </b> {{order.id}}</td>
               <td style="white-space: nowrap; width: 1%;">
                 <button class="btn-in-table btn-lg btn-primary btn-block pl-5 pr-5 pt-0 pb-0 float-end" style="margin-right: 1rem"
-                >Details</button>
+                  (click)="selectModalOrder(order); openModal(orderDetailsModal)">Details</button>
               </td>
               <td style="white-space: nowrap; width: 1%;">
                 <button class="btn-in-table btn-lg btn-primary btn-block pl-5 pr-5 pt-0 pb-0 float-end" style="margin-right: 1rem"
-                (click)="prepareOrder(order)">Prepare</button>
+                  (click)="prepareOrder(order)">Prepare</button>
               </td>
               <td style="white-space: nowrap; width: 1%;">
                 <button class="btn-in-table btn-lg btn-primary btn-block pl-5 pr-5 pt-0 pb-0 float-end" style="margin-right: 1rem"
-                (click)="rejectOrder(order)">Reject</button>
+                  (click)="rejectOrder(order)">Reject</button>
               </td>
             </tr>
             <tr *ngIf="acceptedOrderList.length === 0">
@@ -137,9 +140,14 @@
             </tr>
             </thead>
             <tbody>
-            <tr *ngFor="let order of preparingOrderList">
-              <th scope="row" class="text-center">1</th>
-              <td>{{order.orderDateTime}}</td>
+            <tr *ngFor="let order of preparingOrderList; let rowNr = index">
+              <th scope="row" class="left-space-table-td">{{rowNr + 1}}</th>
+              <td style="white-space: nowrap; width: 1%;">{{getFormattedDate(order.dateTime)}}</td>
+              <td class="text-center"><b>Order id: </b> {{order.id}}</td>
+              <td style="white-space: nowrap; width: 1%;">
+                <button class="btn-in-table btn-lg btn-primary btn-block pl-5 pr-5 pt-0 pb-0 float-end" style="margin-right: 1rem"
+                        (click)="selectModalOrder(order); openModal(orderDetailsModal)">Details</button>
+              </td>
               <td style="white-space: nowrap; width: 1%;">
                 <button class="btn-in-table btn-lg btn-primary btn-block pl-5 pr-5 pt-0 pb-0 float-end" style="margin-right: 1rem"
                         (click)="shipOrder(order)">Ship</button>
@@ -160,7 +168,111 @@
         </div>
       </div>
       <!--#endregion PREPARING-->
-  </div>
+    </div>
     <div class="col-1"></div>
-  <div class="pt-5"></div>
+    <div class="pt-5"></div>
+  </div>
 </div>
+
+<!--#region Order details modal-->
+<ng-template #orderDetailsModal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">
+      <span>Order details</span>
+    </h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+  </div>
+  <div class="modal-body">
+    <div class="row m-2 pb-4" style="background-color: whitesmoke">
+      <span style="font-size: 22px">Details</span>
+
+      <div class="col-2"></div>
+      <div class="col-8 pt-4">
+        <table class="table table-striped mt-4">
+          <thead>
+          <tr>
+            <th class="text-center" scope="col" colspan="5">Order Details</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td colspan="2" class="left-space-table-td">
+              <b>Order id:</b> {{selectedOrderModal.id}}
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2" class="left-space-table-td">
+              <b>Order time:</b> {{getFormattedDate(selectedOrderModal.dateTime)}}
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2" class="left-space-table-td">
+              <b>Address:</b> {{selectedOrderModal.address.streetAddress}}, {{selectedOrderModal.address.city}}, {{selectedOrderModal.address.zipCode}}
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2" class="left-space-table-td">
+              <b>Customer: </b> {{selectedOrderModal.user.firstName}} {{selectedOrderModal.user.lastName}}
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2" class="left-space-table-td">
+              <b>Username: </b> {{selectedOrderModal.user.username}}
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2" class="left-space-table-td">
+              <b>Phone: </b> {{selectedOrderModal.user.phoneNumber}}
+            </td>
+          </tr>
+          </tbody>
+        </table>
+
+        <table class="table table-striped mt-4">
+          <thead>
+          <tr>
+            <th class="text-center" scope="col" colspan="3">Order Content</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td class="left-space-table-td"><b>Name</b></td>
+            <td style="width: 20%"><b>Quantity</b></td>
+            <td style="width: 10%"><b>Price</b></td>
+          </tr>
+          <tr *ngFor="let food of filteredOrderFood">
+            <td class="left-space-table-td">
+              {{food.name}}
+            </td>
+            <td>
+              {{getMappedQuantity(food)}}
+            </td>
+            <td style="white-space: nowrap; width: 1%; padding-right: 2rem">
+              {{food.price}} lei
+            </td>
+          </tr>
+          <tr>
+            <td colspan="3" class="text-center">
+              Total: {{getCartTotal()}} lei
+            </td>
+          </tr>
+          </tbody>
+        </table>
+        <div class="pt-4"></div>
+      </div>
+      <div class="col-2"></div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button *ngIf="menuOption === getStaffMenu().PENDING" class="btn-in-table btn-lg btn-primary btn-block pl-5 pr-5 pt-0 pb-0 float-end" style="margin-right: 1rem"
+            (click)="acceptOrder(selectedOrderModal); modal.close('Accept click')">Accept</button>
+    <button *ngIf="menuOption === getStaffMenu().ACCEPTED" class="btn-in-table btn-lg btn-primary btn-block pl-5 pr-5 pt-0 pb-0 float-end" style="margin-right: 1rem"
+            (click)="prepareOrder(selectedOrderModal); modal.close('Accept click')">Prepare</button>
+    <button *ngIf="menuOption === getStaffMenu().PREPARING" class="btn-in-table btn-lg btn-primary btn-block pl-5 pr-5 pt-0 pb-0 float-end" style="margin-right: 1rem"
+            (click)="shipOrder(selectedOrderModal); modal.close('Ship click')">Ship</button>
+    <button class="btn-in-table btn-lg btn-primary btn-block pl-5 pr-5 pt-0 pb-0 float-end" style="margin-right: 1rem"
+            (click)="rejectOrder(selectedOrderModal); modal.close('Reject click')">Reject</button>
+    <button type="button" class="btn btn-outline-dark" (click)="modal.close('Close click')">Close</button>
+  </div>
+</ng-template>
+<!--#endregion Order details modal-->

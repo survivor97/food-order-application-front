@@ -25,6 +25,11 @@ export class UserService {
     return this.http.get<any>(url);
   }
 
+  getOrderHistory(): Observable<any> {
+    const url = 'http://localhost:8080/user/get-order-history';
+    return this.http.get<any>(url);
+  }
+
   addFoodToFavourites(food: any): Observable<any> {
     const url = 'http://localhost:8080/user/add-food-to-favorites?foodId=' + food.id;
     return this.http.put(url, null, { observe: 'response' });

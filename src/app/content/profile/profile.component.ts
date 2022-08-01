@@ -9,7 +9,8 @@ import {DeliveryUserService} from "../../service/delivery-user.service";
 
 enum ProfileMenu {
   INFO,
-  FAVOURITE_FOOD
+  FAVOURITE_FOOD,
+  ORDER_HISTORY
 }
 
 @Component({
@@ -24,7 +25,10 @@ export class ProfileComponent implements OnInit {
 
   accountDetails: any;
 
+  // region User Field
   favouriteFoodList: any;
+  orderHistoryList: any;
+  // endregion User Field
 
   constructor(private authenticationService: AuthenticationService,
               private userService: UserService,
@@ -37,10 +41,16 @@ export class ProfileComponent implements OnInit {
         this.accountDetails = data;
         this.accountDetails.password = '';
 
-      userService.getFavouriteFoodList().subscribe(data => {
-        this.favouriteFoodList = data;
-        this.pageLoaded = true;
-      });
+        userService.getFavouriteFoodList().subscribe(data => {
+          this.favouriteFoodList = data;
+          this.pageLoaded = true;
+        });
+
+        userService.getOrderHistory().subscribe(data => {
+          this.orderHistoryList = data;
+          console.warn(this.orderHistoryList);
+          this.pageLoaded = true;
+        });
       });
     }
     else if(this.hasRole("ROLE_ADMIN")) {
@@ -115,6 +125,13 @@ export class ProfileComponent implements OnInit {
         this.favouriteFoodList.splice(this.favouriteFoodList.findIndex((i: { id: any; }) => i.id === food.id), 1);
       }
     });
+  }
+
+  getFormattedDate(inputDate: string) {
+    const date: Date = new Date(inputDate);
+    const dateString: string = ('0' + date.getDate()).slice(-2) + '/' + ('0' + (date.getMonth()+1)).slice(-2) + '/' + date.getFullYear();
+    const timeString: string = ('0' + date.getHours()).slice(-2) + ':' + ('0' + date.getMinutes()).slice(-2);
+    return dateString + ' ' + timeString;
   }
 
 }

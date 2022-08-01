@@ -105,3 +105,7 @@ li>a {
   user-select: none;
   cursor:pointer;
 }
+
+.left-space-table-td {
+  padding-left: 2rem;
+}

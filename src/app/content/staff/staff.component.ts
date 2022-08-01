@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {AuthenticationService} from "../../service/authentication.service";
 import {Properties} from "../../properties";
 import {OrderService, OrderStatus} from "../../service/order.service";
+import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 
 enum StaffMenu {
   PENDING,
@@ -24,8 +25,13 @@ export class StaffComponent implements OnInit {
   acceptedOrderList: any = [];
   preparingOrderList: any = [];
 
+  selectedOrderModal: any;
+  mappedOrder: any = new Map<number, any>();
+  filteredOrderFood: any = [];
+
   constructor(private authenticationService: AuthenticationService,
-              private orderService: OrderService) {
+              private orderService: OrderService,
+              private modalService: NgbModal) {
     this.updateOrderList();
   }
 
@@ -122,6 +128,61 @@ export class StaffComponent implements OnInit {
         }
       }
     });
+  }
+
+  openModal(content: any): void {
+    this.modalService.open(content, {centered: true, size: 'lg'});
+  }
+
+  selectModalOrder(order: any) {
+    this.selectedOrderModal = order;
+    this.mapOrder(order);
+  }
+
+  debugPrint(order: any) {
+    console.warn(order);
+  }
+
+  mapOrder(order: any): void {
+
+    this.mappedOrder = new Map<number, any>();
+
+    order.foodList.forEach((data: any) => {
+      if(this.mappedOrder.get(data.id) == null) {
+        data.quantity = 1;
+        this.mappedOrder.set(data.id, data);
+      }
+      else {
+        this.mappedOrder.get(data.id).quantity++;
+      }
+    });
+
+    let seenItems: any = {};
+
+    this.filteredOrderFood = order.foodList.filter((data: any) => {
+      return seenItems.hasOwnProperty(data.id) ? false : (seenItems[data.id] = true);
+    });
+  }
+
+  getMappedQuantity(food: any): number {
+    return this.mappedOrder.get(food.id).quantity;
+  }
+
+  getCartTotal(): number {
+    let total = 0;
+
+    this.selectedOrderModal.foodList.forEach((food: any) => {
+      total += parseInt(food.price);
+    });
+
+    return total;
+  }
+
+  getFormattedDate(inputDate: string) {
+    const date: Date = new Date(inputDate);
+    const dateString: string = ('0' + date.getDate()).slice(-2) + '/' + ('0' + (date.getMonth()+1)).slice(-2) + '/' + date.getFullYear();
+    const timeString: string = ('0' + date.getHours()).slice(-2) + ':' + ('0' + date.getMinutes()).slice(-2);
+    return dateString + ' ' + timeString;
   }
 
 }

@@ -33,6 +33,7 @@ import { ManagerSectionComponent } from './content/sections/manager-section/mana
 import { DeliveryUserSectionComponent } from './content/sections/delivery-user-section/delivery-user-section.component';
 import {UserService} from "./service/user.service";
 import { WaitingComponent } from './waiting/waiting.component';
+import {Utilities} from "./utilities";
 
 @NgModule({
   declarations: [
@@ -53,7 +54,8 @@ import { WaitingComponent } from './waiting/waiting.component';
     RestaurantSectionComponent,
     ManagerSectionComponent,
     DeliveryUserSectionComponent,
-    WaitingComponent
+    WaitingComponent,
+    Utilities
   ],
   imports: [
     BrowserModule,

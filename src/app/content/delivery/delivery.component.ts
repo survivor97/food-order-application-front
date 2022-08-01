@@ -180,11 +180,4 @@ export class DeliveryComponent implements OnInit {
     });
   }
 
-  getFormattedDate(inputDate: string) {
-    const date: Date = new Date(inputDate);
-    const dateString: string = ('0' + date.getDate()).slice(-2) + '/' + ('0' + (date.getMonth()+1)).slice(-2) + '/' + date.getFullYear();
-    const timeString: string = ('0' + date.getHours()).slice(-2) + ':' + ('0' + date.getMinutes()).slice(-2);
-    return dateString + ' ' + timeString;
-  }
-
 }

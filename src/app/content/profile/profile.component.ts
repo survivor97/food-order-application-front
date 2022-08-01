@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {AuthenticationService} from "../../service/authentication.service";
 import {Properties} from "../../properties";
 import {UserService} from "../../service/user.service";
@@ -6,6 +6,7 @@ import {AdminService} from "../../service/admin.service";
 import {ManagerService} from "../../service/manager.service";
 import {StaffService} from "../../service/staff.service";
 import {DeliveryUserService} from "../../service/delivery-user.service";
+import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 
 enum ProfileMenu {
   INFO,
@@ -30,12 +31,19 @@ export class ProfileComponent implements OnInit {
   orderHistoryList: any;
   // endregion User Field
 
+  // region selected modal food
+  selectedOrderModal: any;
+  mappedOrder: any = new Map<number, any>();
+  filteredOrderFood: any = [];
+  // endregion selected modal food
+
   constructor(private authenticationService: AuthenticationService,
               private userService: UserService,
               private adminService: AdminService,
               private managerService: ManagerService,
               private staffService: StaffService,
-              private deliveryUserService: DeliveryUserService) {
+              private deliveryUserService: DeliveryUserService,
+              private modalService: NgbModal) {
     if(this.hasRole("ROLE_USER")) {
       userService.getUserInfo().subscribe(data => {
         this.accountDetails = data;
@@ -127,11 +135,57 @@ export class ProfileComponent implements OnInit {
     });
   }
 
-  getFormattedDate(inputDate: string) {
-    const date: Date = new Date(inputDate);
-    const dateString: string = ('0' + date.getDate()).slice(-2) + '/' + ('0' + (date.getMonth()+1)).slice(-2) + '/' + date.getFullYear();
-    const timeString: string = ('0' + date.getHours()).slice(-2) + ':' + ('0' + date.getMinutes()).slice(-2);
-    return dateString + ' ' + timeString;
+  openModal(content: any): void {
+    this.modalService.open(content, {centered: true, size: 'lg'});
   }
 
+  selectModalOrder(order: any) {
+    this.selectedOrderModal = order;
+    this.mapOrder(order);
+  }
+
+  mapOrder(order: any): void {
+
+    this.mappedOrder = new Map<number, any>();
+
+    order.foodList.forEach((data: any) => {
+      if(this.mappedOrder.get(data.id) == null) {
+        data.quantity = 1;
+        this.mappedOrder.set(data.id, data);
+      }
+      else {
+        this.mappedOrder.get(data.id).quantity++;
+      }
+    });
+
+    let seenItems: any = {};
+
+    this.filteredOrderFood = order.foodList.filter((data: any) => {
+      return seenItems.hasOwnProperty(data.id) ? false : (seenItems[data.id] = true);
+    });
+  }
+
+  getMappedQuantity(food: any): number {
+    return this.mappedOrder.get(food.id).quantity;
+  }
+
+  getCartTotal(): number {
+    let total = 0;
+
+    this.selectedOrderModal.foodList.forEach((food: any) => {
+      total += parseInt(food.price);
+    });
+
+    return total;
+  }
+
+  getCartTotalForOrder(order: any): number {
+    let total = 0;
+
+    order.foodList.forEach((food: any) => {
+      total += parseInt(food.price);
+    });
+
+    return total;
+  }
 }

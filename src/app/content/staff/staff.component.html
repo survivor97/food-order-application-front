@@ -62,7 +62,7 @@
             <tbody>
             <tr *ngFor="let order of receivedOrderList; let rowNr = index">
               <th scope="row" class="left-space-table-td">{{rowNr + 1}}</th>
-              <td style="white-space: nowrap; width: 1%;">{{getFormattedDate(order.dateTime)}}</td>
+              <td style="white-space: nowrap; width: 1%;">{{order.dateTime | parseDate}}</td>
               <td class="text-center"><b>Order id: </b> {{order.id}}</td>
               <td style="white-space: nowrap; width: 1%;">
                 <button class="btn-in-table btn-lg btn-primary btn-block pl-5 pr-5 pt-0 pb-0 float-end" style="margin-right: 1rem"
@@ -102,7 +102,7 @@
             <tbody>
             <tr *ngFor="let order of acceptedOrderList; let rowNr = index">
               <th scope="row" class="left-space-table-td">{{rowNr + 1}}</th>
-              <td style="white-space: nowrap; width: 1%;">{{getFormattedDate(order.dateTime)}}</td>
+              <td style="white-space: nowrap; width: 1%;">{{order.dateTime | parseDate}}</td>
               <td class="text-center"><b>Order id: </b> {{order.id}}</td>
               <td style="white-space: nowrap; width: 1%;">
                 <button class="btn-in-table btn-lg btn-primary btn-block pl-5 pr-5 pt-0 pb-0 float-end" style="margin-right: 1rem"
@@ -142,7 +142,7 @@
             <tbody>
             <tr *ngFor="let order of preparingOrderList; let rowNr = index">
               <th scope="row" class="left-space-table-td">{{rowNr + 1}}</th>
-              <td style="white-space: nowrap; width: 1%;">{{getFormattedDate(order.dateTime)}}</td>
+              <td style="white-space: nowrap; width: 1%;">{{order.dateTime | parseDate}}</td>
               <td class="text-center"><b>Order id: </b> {{order.id}}</td>
               <td style="white-space: nowrap; width: 1%;">
                 <button class="btn-in-table btn-lg btn-primary btn-block pl-5 pr-5 pt-0 pb-0 float-end" style="margin-right: 1rem"
@@ -202,7 +202,7 @@
           </tr>
           <tr>
             <td colspan="2" class="left-space-table-td">
-              <b>Order time:</b> {{getFormattedDate(selectedOrderModal.dateTime)}}
+              <b>Order time:</b> {{selectedOrderModal.dateTime | parseDate}}
             </td>
           </tr>
           <tr>
@@ -238,7 +238,8 @@
           <tr>
             <td class="left-space-table-td"><b>Name</b></td>
             <td style="width: 20%"><b>Quantity</b></td>
-            <td style="width: 10%"><b>Price</b></td>
+            <td style="width: 10%"><b>Price/Item (lei)</b></td>
+            <td style="width: 10%"><b>Total (lei)</b></td>
           </tr>
           <tr *ngFor="let food of filteredOrderFood">
             <td class="left-space-table-td">
@@ -250,10 +251,13 @@
             <td style="white-space: nowrap; width: 1%; padding-right: 2rem">
               {{food.price}} lei
             </td>
+            <td style="white-space: nowrap; width: 1%; padding-right: 2rem">
+              {{food.price * food.quantity}} lei
+            </td>
           </tr>
           <tr>
-            <td colspan="3" class="text-center">
-              Total: {{getCartTotal()}} lei
+            <td colspan="4" class="text-center">
+              <b>Total: {{getCartTotal()}} lei</b>
             </td>
           </tr>
           </tbody>

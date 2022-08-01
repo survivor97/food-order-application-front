@@ -139,10 +139,6 @@ export class StaffComponent implements OnInit {
     this.mapOrder(order);
   }
 
-  debugPrint(order: any) {
-    console.warn(order);
-  }
-
   mapOrder(order: any): void {
 
     this.mappedOrder = new Map<number, any>();
@@ -176,13 +172,6 @@ export class StaffComponent implements OnInit {
     });
 
     return total;
-  }
-
-  getFormattedDate(inputDate: string) {
-    const date: Date = new Date(inputDate);
-    const dateString: string = ('0' + date.getDate()).slice(-2) + '/' + ('0' + (date.getMonth()+1)).slice(-2) + '/' + date.getFullYear();
-    const timeString: string = ('0' + date.getHours()).slice(-2) + ':' + ('0' + date.getMinutes()).slice(-2);
-    return dateString + ' ' + timeString;
   }
 
 }

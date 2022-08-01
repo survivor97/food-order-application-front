@@ -7,6 +7,7 @@ import {ManagerService} from "../../service/manager.service";
 import {StaffService} from "../../service/staff.service";
 import {DeliveryUserService} from "../../service/delivery-user.service";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
+import {OrderStatus} from "../../service/order.service";
 
 enum ProfileMenu {
   INFO,
@@ -188,4 +189,13 @@ export class ProfileComponent implements OnInit {
 
     return total;
   }
+
+  readyToBePickedStatusCondition(order: any): boolean {
+    console.warn(order);
+    if(order.deliveryUser == null && order.orderStatus === OrderStatus[OrderStatus.ON_THE_WAY]) {
+      return true;
+    }
+    return false;
+  }
+
 }

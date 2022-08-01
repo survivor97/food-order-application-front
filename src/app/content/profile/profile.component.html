@@ -172,7 +172,10 @@
             <tr *ngFor="let order of orderHistoryList">
               <td class="left-space-table-td" style="white-space: nowrap; width: 1%;">{{order.dateTime | parseDate}}</td>
               <td class="left-space-table-td" style="white-space: nowrap; width: 1%">{{order.address.streetAddress}}, {{order.address.zipCode}}</td>
-              <td class="left-space-table-td" style="padding-right: 2rem">{{order.orderStatus}}</td>
+
+              <td *ngIf="readyToBePickedStatusCondition(order)" class="left-space-table-td" style="padding-right: 2rem">PICK_READY</td>
+              <td *ngIf="!readyToBePickedStatusCondition(order)" class="left-space-table-td" style="padding-right: 2rem">{{order.orderStatus}}</td>
+
               <td class="left-space-table-td" style="padding-right: 2rem">{{getCartTotalForOrder(order)}}</td>
               <td style="white-space: nowrap; width: 1%">
                 <button class="btn-in-table btn-lg btn-primary btn-block pl-5 pr-5 pt-0 pb-0 float-end" style="margin-right: 1rem"
@@ -232,21 +235,6 @@
           <tr>
             <td colspan="2" class="left-space-table-td">
               <b>Address:</b> {{selectedOrderModal.address.streetAddress}}, {{selectedOrderModal.address.city}}, {{selectedOrderModal.address.zipCode}}
-            </td>
-          </tr>
-          <tr>
-            <td colspan="2" class="left-space-table-td">
-              <b>Customer: </b> {{selectedOrderModal.user.firstName}} {{selectedOrderModal.user.lastName}}
-            </td>
-          </tr>
-          <tr>
-            <td colspan="2" class="left-space-table-td">
-              <b>Username: </b> {{selectedOrderModal.user.username}}
-            </td>
-          </tr>
-          <tr>
-            <td colspan="2" class="left-space-table-td">
-              <b>Phone: </b> {{selectedOrderModal.user.phoneNumber}}
             </td>
           </tr>
 <!--          region courier found -->

@@ -21,6 +21,8 @@ export class DeliveryComponent implements OnInit {
 
   acceptedOrderList: any = [];
   activeOrder: any;
+  activeOrderItemMap = new Map<number, any>();
+  filteredOrderFood: any = [];
 
   constructor(private authenticationService: AuthenticationService,
               private orderService: OrderService) {
@@ -69,6 +71,8 @@ export class DeliveryComponent implements OnInit {
   }
 
   takeOrder(order: any) {
+    this.pageLoaded = false;
+
     this.orderService.takeOrder(order).subscribe(data => {
       if(data.status === 200) {
         console.warn("Order taken successfully!");
@@ -91,8 +95,43 @@ export class DeliveryComponent implements OnInit {
 
   getActiveOrder() {
     this.orderService.getActiveOrder().subscribe(data => {
+      console.warn(data);
       this.activeOrder = data;
+
+      if(data != null) {
+        this.mapActiveOrderItems();
+      }
     })
+  }
+
+  canBeDelivered(): boolean {
+    return this.activeOrder.orderStatus === OrderStatus[OrderStatus.ON_THE_WAY.valueOf()];
+  }
+
+  mapActiveOrderItems(): number {
+    let total = 0;
+
+    this.activeOrder.foodList.forEach((data: any) => {
+      if(this.activeOrderItemMap.get(data.id) == null) {
+        data.quantity = 1;
+        this.activeOrderItemMap.set(data.id, data);
+      }
+      else {
+        this.activeOrderItemMap.get(data.id).quantity++;
+      }
+    });
+
+    let seenItems: any = {};
+
+    this.filteredOrderFood = this.activeOrder.foodList.filter((data: any) => {
+      return seenItems.hasOwnProperty(data.id) ? false : (seenItems[data.id] = true);
+    });
+
+    return total;
+  }
+
+  getMappedQuantity(food: any): number {
+    return this.activeOrderItemMap.get(food.id).quantity;
   }
 
 }

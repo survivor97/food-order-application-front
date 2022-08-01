@@ -40,60 +40,108 @@
       <!--endregion-->
     </div>
     <div class="col-8 table-responsive">
-      <div *ngIf="menuOption === getDeliveryMenu().NEW_ORDERS">
-        <!--#region New Orders List-->
-        <h3 class="mb-4">New Orders</h3>
+      <div *ngIf="pageLoaded === true">
+        <div *ngIf="menuOption === getDeliveryMenu().NEW_ORDERS">
+          <!--#region New Orders List-->
+          <h3 class="mb-4">New Orders</h3>
 
-        <table class="table table-striped mt-4">
-          <thead>
-          <tr>
-            <th class="text-center" scope="col" colspan="5">New Orders List</th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr *ngFor="let order of acceptedOrderList">
-            <th scope="row" class="text-center">1</th>
-            <td>{{order.orderDateTime}}</td>
-            <td></td>
-            <td style="white-space: nowrap; width: 1%;">
-              <button class="btn-in-table btn-lg btn-primary btn-block pl-5 pr-5 pt-0 pb-0 float-end" style="margin-right: 1rem">Details</button>
-            </td>
-            <td style="white-space: nowrap; width: 1%;">
-              <button class="btn-in-table btn-lg btn-primary btn-block pl-5 pr-5 pt-0 pb-0 float-end" style="margin-right: 1rem"
-              (click)="takeOrder(order); changeOption(getDeliveryMenu().ACTIVE_ORDER)" [disabled]="activeOrder != null">Take Order</button>
-            </td>
-          </tr>
-          <tr *ngIf="acceptedOrderList.length === 0">
-            <td class="text-center">Empty</td>
-          </tr>
-          </tbody>
-        </table>
-        <!--#endregion New Orders List-->
+          <table class="table table-striped mt-4">
+            <thead>
+            <tr>
+              <th class="text-center" scope="col" colspan="5">New Orders List</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let order of acceptedOrderList">
+              <th scope="row" class="text-center">1</th>
+              <td>{{order.orderDateTime}}</td>
+              <td></td>
+              <td style="white-space: nowrap; width: 1%;">
+                <button class="btn-in-table btn-lg btn-primary btn-block pl-5 pr-5 pt-0 pb-0 float-end" style="margin-right: 1rem">Details</button>
+              </td>
+              <td style="white-space: nowrap; width: 1%;">
+                <button class="btn-in-table btn-lg btn-primary btn-block pl-5 pr-5 pt-0 pb-0 float-end" style="margin-right: 1rem"
+                        (click)="takeOrder(order); changeOption(getDeliveryMenu().ACTIVE_ORDER)" [disabled]="activeOrder != null">Take Order</button>
+              </td>
+            </tr>
+            <tr *ngIf="acceptedOrderList.length === 0">
+              <td class="text-center">Empty</td>
+            </tr>
+            </tbody>
+          </table>
+          <!--#endregion New Orders List-->
+        </div>
+        <div *ngIf="menuOption === getDeliveryMenu().ACTIVE_ORDER">
+          <!--#region Active Order-->
+          <h3 class="mb-4">Active Order</h3>
+
+          <table class="table table-striped mt-4">
+            <thead>
+            <tr>
+              <th class="text-center" scope="col" colspan="5">Active Order</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <td class="left-space-table-td">Order Status: <b>{{activeOrder.orderStatus}}</b></td>
+              <td style="white-space: nowrap; width: 1%;">
+                <button class="btn-in-table btn-lg btn-primary btn-block pl-5 pr-5 pt-0 pb-0 float-end" style="margin-right: 1rem"
+                        (click)="setDelivered(activeOrder)" [disabled]="canBeDelivered() === false">Delivered!</button>
+              </td>
+            </tr>
+            <tr>
+              <td colspan="2" class="left-space-table-td">
+                <b>Address:</b> {{activeOrder.address.streetAddress}}, {{activeOrder.address.city}}, {{activeOrder.address.zipCode}}
+              </td>
+            </tr>
+            <tr>
+              <td colspan="2" class="left-space-table-td">
+                <b>Customer: </b> {{activeOrder.user.firstName}} {{activeOrder.user.lastName}}
+              </td>
+            </tr>
+            <tr>
+              <td colspan="2" class="left-space-table-td">
+                <b>Phone: </b> {{activeOrder.user.phoneNumber}}
+              </td>
+            </tr>
+            </tbody>
+          </table>
+
+          <table class="table table-striped mt-4">
+            <thead>
+            <tr>
+              <th class="text-center" scope="col" colspan="3">Order Details</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <td class="left-space-table-td"><b>Name</b></td>
+              <td style="width: 20%"><b>Quantity</b></td>
+              <td style="width: 10%"><b>Price</b></td>
+            </tr>
+            <tr *ngFor="let food of filteredOrderFood">
+              <td class="left-space-table-td">
+                {{food.name}}
+              </td>
+              <td>
+                {{getMappedQuantity(food)}}
+              </td>
+              <td>
+                {{food.price}} lei
+              </td>
+            </tr>
+            <tr>
+              <td colspan="3" class="text-center">
+                Total: lei
+              </td>
+            </tr>
+            </tbody>
+          </table>
+          <!--#endregion Active Order-->
+        </div>
       </div>
-      <div *ngIf="menuOption === getDeliveryMenu().ACTIVE_ORDER">
-        <!--#region Active Order-->
-        <h3 class="mb-4">Active Order</h3>
-
-        <table class="table table-striped mt-4">
-          <thead>
-          <tr>
-            <th class="text-center" scope="col" colspan="5">Active Order</th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr>
-            <td class="text-center">Delivery Status: <b></b></td>
-            <td style="white-space: nowrap; width: 1%">
-              <button class="btn-in-table btn-lg btn-primary btn-block pl-5 pr-5 pt-0 pb-0 float-end" style="margin-right: 1rem">Next Status</button>
-            </td>
-            <td style="white-space: nowrap; width: 1%;">
-              <button class="btn-in-table btn-lg btn-primary btn-block pl-5 pr-5 pt-0 pb-0 float-end" style="margin-right: 1rem"
-              (click)="setDelivered(activeOrder)">Delivered!</button>
-            </td>
-          </tr>
-          </tbody>
-        </table>
-        <!--#endregion Active Order-->
+      <div *ngIf="pageLoaded === false">
+        <app-waiting></app-waiting>
       </div>
     </div>
     <div class="col-1"></div>

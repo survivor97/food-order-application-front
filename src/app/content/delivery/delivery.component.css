@@ -115,3 +115,7 @@ li>a {
 a.btn-in-table.disabled,fieldset:disabled a.btn-in-table{
   pointer-events:none
 }
+
+.left-space-table-td {
+  padding-left: 2rem;
+}

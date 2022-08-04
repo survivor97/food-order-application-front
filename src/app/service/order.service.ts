@@ -6,6 +6,7 @@ export enum OrderStatus {
   RECEIVED,
   ACCEPTED,
   PREPARING,
+  PICK_READY,
   ON_THE_WAY,
   DELIVERED,
   REJECTED
@@ -80,7 +81,16 @@ export class OrderService {
       });
   }
 
-  shipOrder(order: any) {
+  setPickReady(order: any) {
+    const url = 'http://localhost:8080/orders/pick-ready?id=' + order.id;
+    return this.http.put(url,
+        null,
+        {
+          observe: 'response'
+        });
+  }
+
+  setOnTheWay(order: any) {
     const url = 'http://localhost:8080/orders/on-the-way?id=' + order.id;
     return this.http.put(url,
         null,

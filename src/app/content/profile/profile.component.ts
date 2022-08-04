@@ -8,6 +8,7 @@ import {StaffService} from "../../service/staff.service";
 import {DeliveryUserService} from "../../service/delivery-user.service";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {OrderStatus} from "../../service/order.service";
+import {StompService} from "../../service/websocket/stomp.service";
 
 enum ProfileMenu {
   INFO,
@@ -44,7 +45,8 @@ export class ProfileComponent implements OnInit {
               private managerService: ManagerService,
               private staffService: StaffService,
               private deliveryUserService: DeliveryUserService,
-              private modalService: NgbModal) {
+              private modalService: NgbModal,
+              private stompService: StompService) {
     if(this.hasRole("ROLE_USER")) {
       userService.getUserInfo().subscribe(data => {
         this.accountDetails = data;
@@ -55,12 +57,18 @@ export class ProfileComponent implements OnInit {
           this.pageLoaded = true;
         });
 
-        userService.getOrderHistory().subscribe(data => {
-          this.orderHistoryList = data;
-          console.warn(this.orderHistoryList);
-          this.pageLoaded = true;
-        });
+        this.updateUserOrderHistory();
       });
+
+      //Customer websocket
+
+      let topics: string[] = new Array('/topic/customer/' + authenticationService.getUsernameOfAccessToken());
+
+      this.stompService.subscribe(topics,(message: string): void => {
+        this.customerSubscribeCallback(message);
+      },(): void => {
+      });
+
     }
     else if(this.hasRole("ROLE_ADMIN")) {
       adminService.getAdminInfo().subscribe(data => {
@@ -93,6 +101,21 @@ export class ProfileComponent implements OnInit {
   }
 
   ngOnInit(): void {
+  }
+
+  customerSubscribeCallback(message: string): void {
+    const responseMessage = JSON.parse(message);
+    if(responseMessage.messageContent === 'order-update') {
+      this.pageLoaded = false;
+      this.updateUserOrderHistory();
+    }
+  }
+
+  updateUserOrderHistory() {
+    this.userService.getOrderHistory().subscribe(data => {
+      this.orderHistoryList = data;
+      this.pageLoaded = true;
+    });
   }
 
   logout(): void {
@@ -188,14 +211,6 @@ export class ProfileComponent implements OnInit {
     });
 
     return total;
-  }
-
-  readyToBePickedStatusCondition(order: any): boolean {
-    console.warn(order);
-    if(order.deliveryUser == null && order.orderStatus === OrderStatus[OrderStatus.ON_THE_WAY]) {
-      return true;
-    }
-    return false;
   }
 
 }

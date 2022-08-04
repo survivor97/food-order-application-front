@@ -34,6 +34,7 @@ import { DeliveryUserSectionComponent } from './content/sections/delivery-user-s
 import {UserService} from "./service/user.service";
 import { WaitingComponent } from './waiting/waiting.component';
 import {Utilities} from "./utilities";
+import {StompService} from "./service/websocket/stomp.service";
 
 @NgModule({
   declarations: [
@@ -74,6 +75,7 @@ import {Utilities} from "./utilities";
     StaffService,
     DeliveryUserService,
     UserService,
+    StompService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: InterceptorService,

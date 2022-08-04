@@ -3,6 +3,7 @@ import {AuthenticationService} from "../../service/authentication.service";
 import {Properties} from "../../properties";
 import {OrderService, OrderStatus} from "../../service/order.service";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
+import {StompService} from "../../service/websocket/stomp.service";
 
 enum DeliveryMenu {
   NEW_ORDERS,
@@ -33,12 +34,43 @@ export class DeliveryComponent implements OnInit {
 
   constructor(private authenticationService: AuthenticationService,
               private orderService: OrderService,
-              private modalService: NgbModal) {
+              private modalService: NgbModal,
+              private stompService: StompService) {
       this.updateAvailableOrderList();
-      this.getActiveOrder();
+      this.getActiveOrderAndUpdateAvailableList();
   }
 
   ngOnInit(): void {
+    let topics: string[] = new Array('/topic/delivery-user', '/topic/delivery-user/' + this.authenticationService.getUsernameOfAccessToken());
+
+    this.stompService.subscribe(topics,(message: string): void => {
+      this.subscribeCallback(message);
+    },(): void => {
+    });
+  }
+
+  subscribeCallback(message: string): void {
+    const responseMessage = JSON.parse(message);
+
+    if(responseMessage.messageContent === 'new-order-available') {
+      console.warn('NEW ORDER');
+      if(this.menuOption === DeliveryMenu.NEW_ORDERS) {
+        this.updateAvailableOrderList();
+      }
+    }
+
+    if(responseMessage.messageContent === 'order-update') {
+      console.warn('ORDER UPDATE');
+      if(this.menuOption === DeliveryMenu.ACTIVE_ORDER) {
+        this.getActiveOrderAndUpdateAvailableList();
+      }
+    }
+
+    if(responseMessage.messageContent === 'order-rejected') {
+      this.updateAvailableOrderList();
+      this.activeOrder = null;
+      this.changeOption(DeliveryMenu.NEW_ORDERS);
+    }
   }
 
   isLoggedIn(): boolean {
@@ -72,7 +104,6 @@ export class DeliveryComponent implements OnInit {
     this.orderService.getAccepterOrders().subscribe(data => {
       if(Array.isArray(data)) {
         this.acceptedOrderList = data.filter(order => order.deliveryUser == null);
-        console.warn(this.acceptedOrderList);
       }
       this.pageLoaded = true;
     });
@@ -84,8 +115,19 @@ export class DeliveryComponent implements OnInit {
     this.orderService.takeOrder(order).subscribe(data => {
       if(data.status === 200) {
         console.warn("Order taken successfully!");
-        this.updateAvailableOrderList();
-        this.getActiveOrder();
+
+        console.warn(data);
+
+        if(data.body.orderStatus === 'PICK_READY') {
+          console.warn("HERE 1");
+          this.orderService.setOnTheWay(order).subscribe(() => {
+            this.getActiveOrderAndUpdateAvailableList();
+          });
+        }
+        else {
+          console.warn("HERE 2");
+          this.getActiveOrderAndUpdateAvailableList();
+        }
       }
     });
   }
@@ -101,22 +143,29 @@ export class DeliveryComponent implements OnInit {
     });
   }
 
-  getActiveOrder() {
+  getActiveOrderAndUpdateAvailableList() {
+    this.pageLoaded = false;
+
     this.orderService.getActiveOrder().subscribe(data => {
-      console.warn(data);
       this.activeOrder = data;
 
       if(data != null) {
         this.mapActiveOrderItems();
+        console.warn("DATA : " );
+        console.warn(this.activeOrderItemMap);
       }
+
+      this.updateAvailableOrderList();
     })
   }
 
   canBeDelivered(): boolean {
-    return this.activeOrder.orderStatus === OrderStatus[OrderStatus.ON_THE_WAY.valueOf()];
+    return this.activeOrder != null && this.activeOrder.orderStatus === OrderStatus[OrderStatus.ON_THE_WAY.valueOf()];
   }
 
   mapActiveOrderItems(): void {
+
+    this.activeOrderItemMap = new Map<number, any>();
 
     this.activeOrder.foodList.forEach((data: any) => {
       if(this.activeOrderItemMap.get(data.id) == null) {

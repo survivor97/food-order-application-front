@@ -3,6 +3,7 @@ import {AuthenticationService} from "../../service/authentication.service";
 import {Properties} from "../../properties";
 import {OrderService, OrderStatus} from "../../service/order.service";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
+import {StompService} from "../../service/websocket/stomp.service";
 
 enum StaffMenu {
   PENDING,
@@ -31,11 +32,28 @@ export class StaffComponent implements OnInit {
 
   constructor(private authenticationService: AuthenticationService,
               private orderService: OrderService,
-              private modalService: NgbModal) {
+              private modalService: NgbModal,
+              private stompService: StompService) {
     this.updateOrderList();
   }
 
   ngOnInit(): void {
+    let topics: string[] = new Array('/topic/staff');
+
+    this.stompService.subscribe(topics,(message: string): void => {
+      this.subscribeCallback(message);
+    },(): void => {
+    });
+  }
+
+  subscribeCallback(message: string): void {
+    const responseMessage = JSON.parse(message);
+    if(responseMessage.messageContent === 'new-order') {
+      console.warn('NEW ORDER');
+      if(this.menuOption === StaffMenu.PENDING) {
+        this.updateOrderList();
+      }
+    }
   }
 
   isLoggedIn(): boolean {
@@ -107,9 +125,22 @@ export class StaffComponent implements OnInit {
   }
 
   shipOrder(order: any): void {
-    this.orderService.shipOrder(order).subscribe(data => {
-      if(data.status === 200) {
-        this.updatePreparingOrderList();
+    this.orderService.getOrderByStatus(OrderStatus.PREPARING).subscribe(data => {
+      this.preparingOrderList = data;
+
+      if(this.preparingOrderList[this.preparingOrderList.findIndex((i: { id: any; }) => i.id === order.id)].deliveryUser == null) {
+        this.orderService.setPickReady(order).subscribe(data => {
+          if(data.status === 200) {
+            this.updatePreparingOrderList();
+          }
+        });
+      }
+      else {
+        this.orderService.setOnTheWay(order).subscribe(data => {
+          if(data.status === 200) {
+            this.updatePreparingOrderList();
+          }
+        });
       }
     });
   }

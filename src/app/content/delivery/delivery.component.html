@@ -22,6 +22,13 @@
               Active Order
             </a>
           </li>
+          <li>
+            <a class="nav-link link-dark" (click)="changeOption(getDeliveryMenu().ORDER_HISTORY)"
+               [class.active]="menuOption === getDeliveryMenu().ORDER_HISTORY">
+              <svg class="bi me-2" width="16" height="16"></svg>
+              My Orders
+            </a>
+          </li>
         </ul>
         <div class="pt-5 pb-5"></div>
         <hr *ngIf="isLoggedIn()">
@@ -162,6 +169,42 @@
             </tbody>
           </table>
           <!--#endregion Active Order-->
+        </div>
+        <div *ngIf="menuOption === getDeliveryMenu().ORDER_HISTORY">
+          <!--#region Order History List-->
+          <h3 class="mb-4">Order History</h3>
+
+          <table class="table table-striped mt-4">
+            <thead>
+            <tr>
+              <th class="text-center" scope="col" colspan="5">Order List</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let order of orderHistoryList; let rowNr = index">
+              <th class="left-space-table-td">
+                {{rowNr + 1}}
+              </th>
+              <th>
+                Order id: {{order.id}}
+              </th>
+              <td>{{order.dateTime | parseDate}}</td>
+              <td style="white-space: nowrap; width: 1%;">
+                <span style="padding-right: 2rem">
+                  Status: <b>{{order.orderStatus}}</b>
+                </span>
+              </td>
+              <td style="white-space: nowrap; width: 1%;">
+                <button class="btn-in-table btn-lg btn-primary btn-block pl-5 pr-5 pt-0 pb-0 float-end" style="margin-right: 1rem"
+                        (click)="selectModalOrder(order); openModal(orderDetailsModal)">Details</button>
+              </td>
+            </tr>
+            <tr *ngIf="orderHistoryList.length === 0">
+              <td class="text-center">Empty</td>
+            </tr>
+            </tbody>
+          </table>
+          <!--#endregion Order History List-->
         </div>
       </div>
       <div *ngIf="pageLoaded === false">

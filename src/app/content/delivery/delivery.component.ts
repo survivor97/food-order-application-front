@@ -4,10 +4,12 @@ import {Properties} from "../../properties";
 import {OrderService, OrderStatus} from "../../service/order.service";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {StompService} from "../../service/websocket/stomp.service";
+import {DeliveryUserService} from "../../service/delivery-user.service";
 
 enum DeliveryMenu {
   NEW_ORDERS,
-  ACTIVE_ORDER
+  ACTIVE_ORDER,
+  ORDER_HISTORY
 }
 
 @Component({
@@ -25,6 +27,7 @@ export class DeliveryComponent implements OnInit {
   activeOrder: any;
   activeOrderItemMap = new Map<number, any>();
   filteredOrderFood: any = [];
+  orderHistoryList: any = [];
 
   // region selected modal food
   selectedOrderModal: any;
@@ -34,10 +37,12 @@ export class DeliveryComponent implements OnInit {
 
   constructor(private authenticationService: AuthenticationService,
               private orderService: OrderService,
+              private deliveryUserService: DeliveryUserService,
               private modalService: NgbModal,
               private stompService: StompService) {
       this.updateAvailableOrderList();
       this.getActiveOrderAndUpdateAvailableList();
+      this.getOrderHistoryList();
   }
 
   ngOnInit(): void {
@@ -54,22 +59,20 @@ export class DeliveryComponent implements OnInit {
 
     if(responseMessage.messageContent === 'new-order-available') {
       console.warn('NEW ORDER');
-      if(this.menuOption === DeliveryMenu.NEW_ORDERS) {
-        this.updateAvailableOrderList();
-      }
+      this.updateAvailableOrderList();
     }
 
     if(responseMessage.messageContent === 'order-update') {
       console.warn('ORDER UPDATE');
-      if(this.menuOption === DeliveryMenu.ACTIVE_ORDER) {
-        this.getActiveOrderAndUpdateAvailableList();
-      }
+      this.getActiveOrderAndUpdateAvailableList();
+      this.getOrderHistoryList();
     }
 
     if(responseMessage.messageContent === 'order-rejected') {
       this.updateAvailableOrderList();
       this.activeOrder = null;
       this.changeOption(DeliveryMenu.NEW_ORDERS);
+      this.getOrderHistoryList();
     }
   }
 
@@ -99,7 +102,10 @@ export class DeliveryComponent implements OnInit {
   }
 
   updateAvailableOrderList(): void {
-    this.pageLoaded = false;
+    if(this.menuOption === DeliveryMenu.NEW_ORDERS)
+    {
+      this.pageLoaded = false;
+    }
 
     this.orderService.getAccepterOrders().subscribe(data => {
       if(Array.isArray(data)) {
@@ -110,23 +116,24 @@ export class DeliveryComponent implements OnInit {
   }
 
   takeOrder(order: any) {
-    this.pageLoaded = false;
+    if(this.menuOption === DeliveryMenu.NEW_ORDERS)
+    {
+      this.pageLoaded = false;
+    }
 
     this.orderService.takeOrder(order).subscribe(data => {
       if(data.status === 200) {
         console.warn("Order taken successfully!");
 
-        console.warn(data);
-
         if(data.body.orderStatus === 'PICK_READY') {
-          console.warn("HERE 1");
           this.orderService.setOnTheWay(order).subscribe(() => {
             this.getActiveOrderAndUpdateAvailableList();
+            this.getOrderHistoryList();
           });
         }
         else {
-          console.warn("HERE 2");
           this.getActiveOrderAndUpdateAvailableList();
+          this.getOrderHistoryList();
         }
       }
     });
@@ -137,6 +144,7 @@ export class DeliveryComponent implements OnInit {
       if(data.status === 200) {
         console.warn("Order delivered successfully!");
         this.updateAvailableOrderList();
+        this.getOrderHistoryList();
         this.activeOrder = null;
         this.changeOption(DeliveryMenu.NEW_ORDERS);
       }
@@ -144,14 +152,15 @@ export class DeliveryComponent implements OnInit {
   }
 
   getActiveOrderAndUpdateAvailableList() {
-    this.pageLoaded = false;
+    if(this.menuOption === DeliveryMenu.ACTIVE_ORDER) {
+      this.pageLoaded = false;
+    }
 
     this.orderService.getActiveOrder().subscribe(data => {
       this.activeOrder = data;
 
       if(data != null) {
         this.mapActiveOrderItems();
-        console.warn("DATA : " );
         console.warn(this.activeOrderItemMap);
       }
 
@@ -227,6 +236,18 @@ export class DeliveryComponent implements OnInit {
     this.filteredSelectedOrderFood = order.foodList.filter((data: any) => {
       return seenItems.hasOwnProperty(data.id) ? false : (seenItems[data.id] = true);
     });
+  }
+
+  getOrderHistoryList(): void {
+    if(this.menuOption === DeliveryMenu.ORDER_HISTORY) {
+      this.pageLoaded = false;
+    }
+
+    this.deliveryUserService.getOrderHistory().subscribe(data => {
+          this.orderHistoryList = data;
+          this.pageLoaded = true;
+        }
+    );
   }
 
 }

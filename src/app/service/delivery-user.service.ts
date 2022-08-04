@@ -45,4 +45,9 @@ export class DeliveryUserService {
     const url = 'http://localhost:8080/delivery-user/get-delivery-user-info';
     return this.http.get<any>(url);
   }
+
+  getOrderHistory(): Observable<any> {
+    const url = 'http://localhost:8080/delivery-user/get-order-history';
+    return this.http.get<any>(url);
+  }
 }

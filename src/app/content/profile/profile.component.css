@@ -105,3 +105,7 @@ li>a {
 .left-space-table-td {
   padding-left: 2rem;
 }
+
+.input-error {
+  border: 2px solid #ee5f5b;
+}

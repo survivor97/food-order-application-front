@@ -14,4 +14,14 @@ export class AdminService {
     return this.http.get<any>(url);
   }
 
+  updateAdmin(admin: any): Observable<any> {
+    return this.http.put(
+        'http://localhost:8080/admin/update',
+        JSON.stringify(admin),
+        {
+          headers: {'Content-Type':'application/json; charset=utf-8'},
+          observe: 'response'
+        });
+  }
+
 }

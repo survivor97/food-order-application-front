@@ -1,6 +1,7 @@
 import {Injectable} from '@angular/core';
 import {LoginService} from "./login.service";
 import {Router} from "@angular/router";
+import {HttpClient} from "@angular/common/http";
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +11,9 @@ export class AuthenticationService {
   accessToken: string = '';
   refreshToken: string = '';
 
-  constructor(private loginService: LoginService, private router: Router) { }
+  constructor(private loginService: LoginService,
+              private http: HttpClient,
+              private router: Router) { }
 
   login(username: string, password: string): void {
     this.loginService.login(username, password).subscribe(response => {

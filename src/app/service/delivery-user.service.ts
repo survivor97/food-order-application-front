@@ -34,6 +34,16 @@ export class DeliveryUserService {
       });
   }
 
+  updateAuthenticatedDeliveryUser(deliveryUser: any): Observable<any> {
+    return this.http.put(
+        'http://localhost:8080/delivery-user/update-authenticated',
+        JSON.stringify(deliveryUser),
+        {
+          headers: {'Content-Type':'application/json; charset=utf-8'},
+          observe: 'response'
+        });
+  }
+
   deleteDeliveryUser(id: number): Observable<any> {
     const url = 'http://localhost:8080/delivery-user/delete?id=' + id;
     return this.http.delete(url, {

@@ -65,9 +65,11 @@ export class HomeComponent implements OnInit {
       this.updateFoodPage();
     });
 
-    this.favouriteFoodList = userService.getFavouriteFoodList().subscribe(data => {
-      this.favouriteFoodList = data;
-    });
+    if(authenticationService.getRolesOfAccessToken().includes("ROLE_USER")) {
+      this.favouriteFoodList = userService.getFavouriteFoodList().subscribe(data => {
+        this.favouriteFoodList = data;
+      });
+    }
   }
 
   ngOnInit(): void {

@@ -53,6 +53,16 @@ export class UserService {
     return this.http.get<any>(url);
   }
 
+  updateUser(user: any): Observable<any> {
+    return this.http.put(
+        'http://localhost:8080/user/update',
+        JSON.stringify(user),
+        {
+          headers: {'Content-Type':'application/json; charset=utf-8'},
+          observe: 'response'
+        });
+  }
+
   deleteUser(user: any) {
     const url = 'http://localhost:8080/user/delete?id=' + user.id;
     return this.http.delete(url, {

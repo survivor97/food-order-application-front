@@ -34,6 +34,16 @@ export class StaffService {
       });
   }
 
+  updateAuthenticatedStaff(staff: any) : Observable<any> {
+    return this.http.put(
+        'http://localhost:8080/staff/update-authenticated',
+        JSON.stringify(staff),
+        {
+          headers: {'Content-Type':'application/json; charset=utf-8'},
+          observe: 'response'
+        });
+  }
+
   deleteStaff(id: number): Observable<any> {
     const url = 'http://localhost:8080/staff/delete?id=' + id;
     return this.http.delete(url, {

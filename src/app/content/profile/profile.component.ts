@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {AuthenticationService} from "../../service/authentication.service";
 import {Properties} from "../../properties";
 import {UserService} from "../../service/user.service";
@@ -7,8 +7,8 @@ import {ManagerService} from "../../service/manager.service";
 import {StaffService} from "../../service/staff.service";
 import {DeliveryUserService} from "../../service/delivery-user.service";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
-import {OrderStatus} from "../../service/order.service";
 import {StompService} from "../../service/websocket/stomp.service";
+import {LoginService} from "../../service/login.service";
 
 enum ProfileMenu {
   INFO,
@@ -22,6 +22,11 @@ enum ProfileMenu {
   styleUrls: ['./profile.component.css']
 })
 export class ProfileComponent implements OnInit {
+
+  @ViewChild('infoModal') infoModal: any;
+
+  infoModalTitle: string = '';
+  infoModalMessage: string = '';
 
   pageLoaded: boolean = false;
   menuOption: ProfileMenu = ProfileMenu.INFO;
@@ -39,6 +44,15 @@ export class ProfileComponent implements OnInit {
   filteredOrderFood: any = [];
   // endregion selected modal food
 
+  // user identity
+  userType: string = '';
+  //
+
+  // submitted field
+  wrongPassword: boolean = false;
+  newPasswordsDontMatch: boolean = false;
+  //
+
   constructor(private authenticationService: AuthenticationService,
               private userService: UserService,
               private adminService: AdminService,
@@ -46,11 +60,14 @@ export class ProfileComponent implements OnInit {
               private staffService: StaffService,
               private deliveryUserService: DeliveryUserService,
               private modalService: NgbModal,
-              private stompService: StompService) {
+              private stompService: StompService,
+              private loginService: LoginService) {
     if(this.hasRole("ROLE_USER")) {
+      this.userType = 'USER';
+
       userService.getUserInfo().subscribe(data => {
         this.accountDetails = data;
-        this.accountDetails.password = '';
+        this.resetPasswords();
 
         userService.getFavouriteFoodList().subscribe(data => {
           this.favouriteFoodList = data;
@@ -71,30 +88,38 @@ export class ProfileComponent implements OnInit {
 
     }
     else if(this.hasRole("ROLE_ADMIN")) {
+      this.userType = 'ADMIN';
+
       adminService.getAdminInfo().subscribe(data => {
         this.accountDetails = data;
-        this.accountDetails.password = '';
+        this.resetPasswords();
         this.pageLoaded = true;
       });
     }
     else if(this.hasRole("ROLE_MANAGER")) {
+      this.userType = 'MANAGER';
+
       managerService.getManagerInfo().subscribe(data => {
         this.accountDetails = data;
-        this.accountDetails.password = '';
+        this.resetPasswords();
         this.pageLoaded = true;
       });
     }
     else if(this.hasRole("ROLE_STAFF")) {
+      this.userType = 'STAFF';
+
       staffService.getStaffInfo().subscribe(data => {
         this.accountDetails = data;
-        this.accountDetails.password = '';
+        this.resetPasswords();
         this.pageLoaded = true;
       });
     }
     else if(this.hasRole("ROLE_DELIVERY_USER")) {
+      this.userType = 'DELIVERY_USER';
+
       deliveryUserService.getDeliveryUserInfo().subscribe(data => {
         this.accountDetails = data;
-        this.accountDetails.password = '';
+        this.resetPasswords();
         this.pageLoaded = true;
       });
     }
@@ -211,6 +236,99 @@ export class ProfileComponent implements OnInit {
     });
 
     return total;
+  }
+
+  openInfoModal(title: string, message: string): void {
+    this.infoModalTitle = title;
+    this.infoModalMessage = message;
+    this.modalService.open(this.infoModal, {centered: true, size: 'md'});
+  }
+
+  resetPasswords(): void {
+    this.accountDetails.password = '';
+    this.accountDetails.currentPassword = '';
+    this.accountDetails.newPassword = '';
+    this.accountDetails.newPasswordConfirm = '';
+  }
+
+  saveCall(): void {
+    if(this.userType === 'USER') {
+      this.userService.updateUser(this.accountDetails).subscribe(data => {
+        if(data.status === 200) {
+          this.openInfoModal('Account updated!', 'Account updated successfully!');
+          this.resetPasswords();
+        }
+      });
+    }
+    else if(this.userType === 'ADMIN') {
+      this.adminService.updateAdmin(this.accountDetails).subscribe(data => {
+        if(data.status === 200) {
+          this.openInfoModal('Account updated!', 'Account updated successfully!');
+          this.resetPasswords();
+        }
+      });
+    }
+    else if(this.userType === 'MANAGER') {
+      this.managerService.updateAuthenticatedManager(this.accountDetails).subscribe(data => {
+        if(data.status === 200) {
+          this.openInfoModal('Account updated!', 'Account updated successfully!');
+          this.resetPasswords();
+        }
+      });
+    }
+    else if(this.userType === 'STAFF') {
+      this.staffService.updateAuthenticatedStaff(this.accountDetails).subscribe(data => {
+        if(data.status === 200) {
+          this.openInfoModal('Account updated!', 'Account updated successfully!');
+          this.resetPasswords();
+        }
+      });
+    }
+    else if(this.userType === 'DELIVERY_USER') {
+      this.deliveryUserService.updateAuthenticatedDeliveryUser(this.accountDetails).subscribe(data => {
+        if(data.status === 200) {
+          this.openInfoModal('Account updated!', 'Account updated successfully!');
+          this.resetPasswords();
+        }
+      });
+    }
+  }
+
+  saveProfile(): void {
+    this.loginService.login(this.accountDetails.username, this.accountDetails.currentPassword).subscribe(data => {
+      if(data.status === 200) {
+
+        // CHANGE PASSWORD
+        if(this.accountDetails.newPassword.length > 0 || this.accountDetails.newPasswordConfirm.length > 0) {
+          if(this.accountDetails.newPassword === this.accountDetails.newPasswordConfirm) {
+            this.wrongPassword = false;
+            this.newPasswordsDontMatch = false;
+
+            this.accountDetails.password = this.accountDetails.newPassword;
+            this.saveCall();
+          }
+          else {
+            this.newPasswordsDontMatch = true;
+            this.openInfoModal('Save Failed', 'New password doesn\'t match');
+          }
+        }
+
+        // WITHOUT NEW PASSWORD
+        else {
+          this.accountDetails.password = null;
+
+          this.saveCall();
+          this.resetPasswords();
+
+          this.wrongPassword = false;
+          this.newPasswordsDontMatch = false;
+        }
+      }
+    }, error => {
+      this.openInfoModal('Save Failed', 'Wrong account password');
+      this.wrongPassword = true;
+      console.warn("NOT OK");
+    });
   }
 
 }

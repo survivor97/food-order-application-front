@@ -85,8 +85,14 @@
               <label for="inputUsername" class="pt-3 pb-1">Username</label>
               <input type="text" id="inputUsername" disabled = "true" [ngModel]="accountDetails?.username" (ngModelChange)="accountDetails.username = $event" class="form-control" placeholder="Username" required autofocus name="username">
 
-              <label for="inputPassword" class="pt-3 pb-1">Password</label>
-              <input type="password" id="inputPassword" [ngModel]="accountDetails?.password" (ngModelChange)="accountDetails.password = $event" class="form-control" placeholder="Password" required autofocus name="password">
+              <label for="inputCurrentPassword" class="pt-3 pb-1">Current Password</label>
+              <input type="password" id="inputCurrentPassword" [ngModel]="accountDetails?.currentPassword" (ngModelChange)="accountDetails.currentPassword = $event" class="form-control" [ngClass]="{'input-error' : wrongPassword}" placeholder="Password" required autofocus name="currentPassword">
+
+              <label for="inputNewPassword" class="pt-3 pb-1">New Password</label>
+              <input type="password" id="inputNewPassword" [ngModel]="accountDetails?.newPassword" (ngModelChange)="accountDetails.newPassword = $event" class="form-control" [ngClass]="{'input-error' : newPasswordsDontMatch}" placeholder="Password" required autofocus name="newPassword">
+
+              <label for="inputNewPasswordConfirm" class="pt-3 pb-1">Confirm Password</label>
+              <input type="password" id="inputNewPasswordConfirm" [ngModel]="accountDetails?.newPasswordConfirm" (ngModelChange)="accountDetails.newPasswordConfirm = $event" [ngClass]="{'input-error' : newPasswordsDontMatch}" class="form-control" placeholder="Password" required autofocus name="newPasswordConfirm">
 
               <div *ngIf="hasRole('ROLE_DELIVERY_USER')">
                 <label for="inputVehicleManufacturer" class="pt-3 pb-1">Vehicle Manufacturer</label>
@@ -104,8 +110,8 @@
               <div class="row mt-4">
                 <div class="col-4"></div>
                 <div class="col-4 text-center">
-                  <div class="pt-2"></div>
-                  <button class="btn btn-lg btn-primary btn-block pl-5 pr-5">Save</button>
+                  <div class="pt-2 mt-4"></div>
+                  <button class="btn btn-lg btn-primary btn-block pl-5 pr-5" (click)="saveProfile()">Save</button>
                   <div class="pt-2"></div>
                   <button class="btn btn-lg btn-primary btn-block pl-5 pr-5" (click)="logout()">Logout</button>
                   <div class="pt-5"></div>
@@ -305,3 +311,18 @@
   </div>
 </ng-template>
 <!--#endregion Order details modal-->
+
+<!--#region info modal-->
+<ng-template #infoModal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">{{infoModalTitle}}</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+  </div>
+  <div class="modal-body text-center">
+    <p class="mt-3" style="font-size: 20px">{{infoModalMessage}}</p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark" (click)="modal.close('Close click')">Close</button>
+  </div>
+</ng-template>
+<!--#endregion info modal-->

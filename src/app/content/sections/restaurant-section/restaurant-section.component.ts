@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, EventEmitter, OnInit, Output, ViewChild} from '@angular/core';
 import {RestaurantService} from "../../../service/restaurant.service";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 
@@ -8,6 +8,13 @@ import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
   styleUrls: ['./restaurant-section.component.css']
 })
 export class RestaurantSectionComponent implements OnInit {
+
+  @Output() eventEmitter = new EventEmitter<string>();
+
+  @ViewChild('infoModal') infoModal: any;
+
+  infoModalTitle: string = '';
+  infoModalMessage: string = '';
 
   pageLoaded = false;
   restaurantList: any;
@@ -65,6 +72,7 @@ export class RestaurantSectionComponent implements OnInit {
 
   insertRestaurant(): void {
     const restaurant = {
+      id: null,
       name: this.restaurantName,
       description: this.restaurantDescription,
       address: {
@@ -76,7 +84,11 @@ export class RestaurantSectionComponent implements OnInit {
 
     this.restaurantService.insert(restaurant).subscribe(data => {
       if(data.status === 201) {
+        restaurant.id = data.body.id;
         this.restaurantList.push(restaurant);
+        this.openInfoModal('New Restaurant', 'Restaurant inserted successfully!');
+
+        this.eventEmitter.emit('new-restaurant');
       }
     });
   }
@@ -96,6 +108,9 @@ export class RestaurantSectionComponent implements OnInit {
     this.restaurantService.updateRestaurant(restaurant).subscribe(data => {
       if(data.status === 200) {
         this.restaurantList[this.restaurantList.findIndex((i: { id: any; }) => i.id === restaurant.id)] = restaurant;
+        this.openInfoModal('Update', 'Restaurant updated successfully!');
+
+        this.eventEmitter.emit('update-restaurant');
       }
     });
   }
@@ -104,8 +119,17 @@ export class RestaurantSectionComponent implements OnInit {
     this.restaurantService.deleteRestaurant(restaurant.id).subscribe(data => {
       if(data.status === 200) {
         this.restaurantList.splice(this.restaurantList.findIndex((i: { id: any; }) => i.id === restaurant.id), 1);
+        this.openInfoModal('Remove', 'Restaurant removed successfully!');
+
+        this.eventEmitter.emit('delete-restaurant');
       }
     });
+  }
+
+  openInfoModal(title: string, message: string): void {
+    this.infoModalTitle = title;
+    this.infoModalMessage = message;
+    this.modalService.open(this.infoModal, {centered: true, size: 'md'});
   }
 
 }

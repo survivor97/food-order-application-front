@@ -83,7 +83,7 @@
               <input type="email" id="inputEmail" [ngModel]="accountDetails?.email" (ngModelChange)="accountDetails.email = $event" class="form-control" placeholder="Email" required autofocus name="email">
 
               <label for="inputUsername" class="pt-3 pb-1">Username</label>
-              <input type="text" id="inputUsername" [ngModel]="accountDetails?.username" (ngModelChange)="accountDetails.username = $event" class="form-control" placeholder="Username" required autofocus name="username">
+              <input type="text" id="inputUsername" disabled = "true" [ngModel]="accountDetails?.username" (ngModelChange)="accountDetails.username = $event" class="form-control" placeholder="Username" required autofocus name="username">
 
               <label for="inputPassword" class="pt-3 pb-1">Password</label>
               <input type="password" id="inputPassword" [ngModel]="accountDetails?.password" (ngModelChange)="accountDetails.password = $event" class="form-control" placeholder="Password" required autofocus name="password">

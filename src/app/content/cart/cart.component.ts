@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {AuthenticationService} from "../../service/authentication.service";
 import {Properties} from "../../properties";
 import {OrderService} from "../../service/order.service";
 import {Router} from "@angular/router";
 import {debounceTime, Subject} from "rxjs";
+import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 
 enum CartMenu {
   LIST,
@@ -17,6 +18,11 @@ enum CartMenu {
   styleUrls: ['./cart.component.css']
 })
 export class CartComponent implements OnInit {
+
+  @ViewChild('infoModal') infoModal: any;
+
+  infoModalTitle: string = '';
+  infoModalMessage: string = '';
 
   //Debounce
   placeOrderButtonClicked = new Subject<string>();
@@ -32,7 +38,8 @@ export class CartComponent implements OnInit {
 
   constructor(private authenticationService: AuthenticationService,
               private orderService: OrderService,
-              private router: Router) {
+              private router: Router,
+              private modalService: NgbModal) {
     this.cartItems = this.orderService.cartItems;
   }
 
@@ -129,11 +136,18 @@ export class CartComponent implements OnInit {
     this.orderService.placeOrder(order).subscribe(data => {
       if(data.status === 201) {
         console.warn("Order sent successfully");
+        this.openInfoModal('Order sent', 'Order sent successfully!');
         this.orderService.resetCartItems();
         this.foodList = [];
         this.router.navigate(['']);
       }
     });
+  }
+
+  openInfoModal(title: string, message: string): void {
+    this.infoModalTitle = title;
+    this.infoModalMessage = message;
+    this.modalService.open(this.infoModal, {centered: true, size: 'md', backdrop: "static"});
   }
 
 }

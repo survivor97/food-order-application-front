@@ -54,7 +54,7 @@
 
       <!--#region Restaurants-->
       <div *ngIf="menuOption === getManagerMenu().RESTAURANTS">
-        <app-restaurant-section></app-restaurant-section>
+        <app-restaurant-section (eventEmitter)="receiveMessage($event)"></app-restaurant-section>
       </div>
       <!--#endregion Restaurants-->
 
@@ -153,8 +153,6 @@
   </div>
   <div class="pt-5"></div>
 </div>
-
-
 <!--#region Food modal-->
 <ng-template #foodModal let-modal>
   <div class="modal-header">
@@ -294,3 +292,18 @@
   </div>
 </ng-template>
 <!--#endregion Food modal-->
+
+<!--#region info modal-->
+<ng-template #infoModal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">{{infoModalTitle}}</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+  </div>
+  <div class="modal-body text-center">
+    <p class="mt-3" style="font-size: 20px">{{infoModalMessage}}</p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark" (click)="modal.close('Close click')">Close</button>
+  </div>
+</ng-template>
+<!--#endregion info modal-->

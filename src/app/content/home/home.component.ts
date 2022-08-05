@@ -1,4 +1,4 @@
-import {Component, OnInit, TemplateRef, ViewChild} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {AuthenticationService} from "../../service/authentication.service";
 import {Properties} from "../../properties";
 import {FoodService} from "../../service/food.service";
@@ -103,6 +103,7 @@ export class HomeComponent implements OnInit {
 
   updateFoodPage(): void {
     this.foodService.getFoodListOfCategoryAndRestaurantId(FoodMenu[this.menuOption], this.selectedRestaurant.id, this.currentFoodPage).subscribe(data => {
+      console.warn(this.selectedRestaurant.id);
       this.foodList = data.content;
       this.nrOfFoodPages = data.totalPages;
       this.foodPages = [];

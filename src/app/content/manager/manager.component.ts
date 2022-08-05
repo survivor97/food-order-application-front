@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {AuthenticationService} from "../../service/authentication.service";
 import {Properties} from "../../properties";
 import {FoodService} from "../../service/food.service";
@@ -21,6 +21,11 @@ enum ManagerMenu {
   styleUrls: ['./manager.component.css']
 })
 export class ManagerComponent implements OnInit {
+
+  @ViewChild('infoModal') infoModal: any;
+
+  infoModalTitle: string = '';
+  infoModalMessage: string = '';
 
   pageLoaded: boolean = false;
 
@@ -94,8 +99,6 @@ export class ManagerComponent implements OnInit {
     this.foodCategory = food.foodCategory;
 
     this.modalSelectedFoodCategoryOption = food.foodCategory.name;
-
-    console.warn(food);
   }
 
   updateFoodPage(): void {
@@ -142,6 +145,7 @@ export class ManagerComponent implements OnInit {
   deleteFood(food: any) {
     this.foodService.deleteFood(food).subscribe(data => {
       if(data.status === 200) {
+        this.openInfoModal('Food Removed', 'Food removed successfully!');
         this.updateFoodPage();
       }
     });
@@ -247,9 +251,12 @@ export class ManagerComponent implements OnInit {
     }
 
     this.foodService.insertFood(food).subscribe(data => {
+      console.warn(data.status);
       if(data.status === 201) {
+        this.openInfoModal('New food', 'New food created!');
+        this.updateFoodPage();
+
         if(this.uploadStatus == 'OK') {
-          console.warn(data);
           this.imageService.setImage(data.body, this.uploadedImageResponseObject.resourceName).subscribe(data => {
             if(data.status === 200) {
               this.updateFoodPage();
@@ -280,6 +287,8 @@ export class ManagerComponent implements OnInit {
 
     this.foodService.updateFood(food).subscribe(data => {
       if(data.status === 200) {
+        this.openInfoModal('Update food', 'Food updated!');
+
         if(this.uploadStatus == 'OK') {
           this.imageService.setImage(food, this.uploadedImageResponseObject.resourceName).subscribe(data => {
             if(data.status === 200) {
@@ -342,5 +351,20 @@ export class ManagerComponent implements OnInit {
     return foodImage.resourceName;
   }
   // endregion
+
+  openInfoModal(title: string, message: string): void {
+    this.infoModalTitle = title;
+    this.infoModalMessage = message;
+    this.modalService.open(this.infoModal, {centered: true, size: 'md'});
+  }
+
+  // region Listen to restaurant-section events
+  receiveMessage($event: any) {
+    this.restaurantService.getRestaurants().subscribe(data => {
+      this.restaurantList = data;
+      this.updateFoodPage();
+    });
+  }
+  // endregion Listen to restaurant-section events
 
 }

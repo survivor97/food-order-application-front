@@ -54,7 +54,7 @@
 
       <!--#region Restaurants-->
       <div *ngIf="menuOption === getManagerMenu().RESTAURANTS">
-        <app-restaurant-section (eventEmitter)="receiveMessage($event)"></app-restaurant-section>
+        <app-restaurant-section (eventEmitter)="receiveEvent($event)"></app-restaurant-section>
       </div>
       <!--#endregion Restaurants-->
 
@@ -138,13 +138,13 @@
 
       <!--#region Staff-->
       <div *ngIf="menuOption === getManagerMenu().STAFF">
-        <app-staff-section></app-staff-section>
+        <app-staff-section (eventEmitter)="receiveEvent($event)"></app-staff-section>
       </div>
       <!--#endregion Staff-->
 
       <!--#region Delivery User-->
       <div *ngIf="menuOption === getManagerMenu().DELIVERY_USERS">
-        <app-delivery-user-section></app-delivery-user-section>
+        <app-delivery-user-section (eventEmitter)="receiveEvent($event)"></app-delivery-user-section>
       </div>
       <!--#endregion Delivery User-->
 

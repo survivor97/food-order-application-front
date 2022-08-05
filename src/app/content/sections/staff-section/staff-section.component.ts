@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, EventEmitter, OnInit, Output, ViewChild} from '@angular/core';
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {StaffService} from "../../../service/staff.service";
 
@@ -9,10 +9,7 @@ import {StaffService} from "../../../service/staff.service";
 })
 export class StaffSectionComponent implements OnInit {
 
-  @ViewChild('infoModal') infoModal: any;
-
-  infoModalTitle: string = '';
-  infoModalMessage: string = '';
+  @Output() eventEmitter = new EventEmitter<any>();
 
   staffList: any;
 
@@ -71,9 +68,14 @@ export class StaffSectionComponent implements OnInit {
 
     this.staffService.insertStaff(staff).subscribe(data => {
       if(data.status === 201) {
-        this.openInfoModal('New Staff User', 'Staff User inserted successfully!');
         staff.id = data.body.id;
         this.staffList.push(staff);
+
+        this.eventEmitter.emit({
+          'source': 'staff-section',
+          'title': 'New Staff User',
+          'message': 'Staff User inserted successfully!'
+        });
       }
     });
   }
@@ -90,8 +92,13 @@ export class StaffSectionComponent implements OnInit {
 
     this.staffService.updateStaff(staff).subscribe(data => {
       if(data.status === 200) {
-        this.openInfoModal('Staff Updated', 'Staff updated successfully!');
         this.staffList[this.staffList.findIndex((i: { id: any; }) => i.id === staff.id)] = staff;
+
+        this.eventEmitter.emit({
+          'source': 'staff-section',
+          'title': 'Staff Updated',
+          'message': 'Staff updated successfully!'
+        });
       }
     });
   }
@@ -99,17 +106,17 @@ export class StaffSectionComponent implements OnInit {
   deleteStaff(staff: any): void {
     this.staffService.deleteStaff(staff.id).subscribe(data => {
       if(data.status === 200) {
-        this.openInfoModal('Staff Removed', 'Staff removed successfully!');
         this.staffList.splice(this.staffList.findIndex((i: { id: any; }) => i.id === staff.id), 1);
+
+        this.eventEmitter.emit({
+          'source': 'staff-section',
+          'title': 'Staff Removed',
+          'message': 'Staff removed successfully!'
+        });
       }
     });
   }
   //#endregion
 
-  openInfoModal(title: string, message: string): void {
-    this.infoModalTitle = title;
-    this.infoModalMessage = message;
-    this.modalService.open(this.infoModal, {centered: true, size: 'md'});
-  }
 
 }

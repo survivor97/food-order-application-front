@@ -358,13 +358,19 @@ export class ManagerComponent implements OnInit {
     this.modalService.open(this.infoModal, {centered: true, size: 'md'});
   }
 
-  // region Listen to restaurant-section events
-  receiveMessage($event: any) {
-    this.restaurantService.getRestaurants().subscribe(data => {
-      this.restaurantList = data;
-      this.updateFoodPage();
-    });
+  // region Event listener
+
+  receiveEvent($event: any): void {
+    console.warn($event);
+    if($event.source === 'restaurant-section') {
+      this.restaurantService.getRestaurants().subscribe(data => {
+        this.restaurantList = data;
+        this.updateFoodPage();
+      });
+    }
+
+    this.openInfoModal($event.title, $event.message);
   }
-  // endregion Listen to restaurant-section events
+  // endregion Event listener
 
 }

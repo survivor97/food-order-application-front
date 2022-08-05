@@ -1,7 +1,8 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {AuthenticationService} from "../../service/authentication.service";
 import {Properties} from "../../properties";
 import {UserService} from "../../service/user.service";
+import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 
 enum AdminMenu {
   RESTAURANTS,
@@ -18,7 +19,12 @@ enum AdminMenu {
 })
 export class AdminComponent implements OnInit {
 
-  pageLoaded: boolean = false;
+  @ViewChild('infoModal') infoModal: any;
+
+  infoModalTitle: string = '';
+  infoModalMessage: string = '';
+
+  pageLoaded: boolean;
 
   currentUserPage: number = 0;
   userList: any;
@@ -32,7 +38,9 @@ export class AdminComponent implements OnInit {
   menuOption: AdminMenu = AdminMenu.RESTAURANTS;
 
   constructor(private authenticationService: AuthenticationService,
-              private userService: UserService) {
+              private userService: UserService,
+              private modalService: NgbModal) {
+    this.pageLoaded = false;
     this.updateUserPage();
   }
 
@@ -44,22 +52,27 @@ export class AdminComponent implements OnInit {
 
     this.userService.searchUserByUsernameOrEmail(this.searchUsername, this.searchEmail).subscribe(data => {
       this.searchedUserList = data;
-      console.warn(data)
 
       this.pageLoaded = true;
     });
   }
 
   deleteUser(user: any) {
+    if(this.menuOption === AdminMenu.USERS) {
+      this.pageLoaded = false;
+    }
+
     this.userService.deleteUser(user).subscribe(data => {
       if(data.status === 200) {
-        this.userList.splice(this.userList.findIndex((i: { id: any; }) => i.id === user.id), 1);
-        this.searchedUserList.splice(this.searchedUserList.findIndex((i: { id: any; }) => i.id === user.id), 1);
+        this.updateUserPage();
       }
     });
   }
 
   updateUserPage(): void {
+    //Reset the searched user
+    this.searchedUserList = null;
+
     this.userService.getUserPage(this.currentUserPage).subscribe(data => {
       this.userList = data.content;
       this.nrOfUserPages = data.totalPages;
@@ -119,6 +132,16 @@ export class AdminComponent implements OnInit {
   changeOption(option: AdminMenu): void {
     this.menuOption = option;
     window.scrollTo(0, 0);
+  }
+
+  openInfoModal(title: string, message: string): void {
+    this.infoModalTitle = title;
+    this.infoModalMessage = message;
+    this.modalService.open(this.infoModal, {centered: true, size: 'md'});
+  }
+
+  receiveEvent($event: any): void {
+    this.openInfoModal($event.title, $event.message);
   }
 
 }

@@ -9,12 +9,7 @@ import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 })
 export class RestaurantSectionComponent implements OnInit {
 
-  @Output() eventEmitter = new EventEmitter<string>();
-
-  @ViewChild('infoModal') infoModal: any;
-
-  infoModalTitle: string = '';
-  infoModalMessage: string = '';
+  @Output() eventEmitter = new EventEmitter<any>();
 
   pageLoaded = false;
   restaurantList: any;
@@ -86,9 +81,12 @@ export class RestaurantSectionComponent implements OnInit {
       if(data.status === 201) {
         restaurant.id = data.body.id;
         this.restaurantList.push(restaurant);
-        this.openInfoModal('New Restaurant', 'Restaurant inserted successfully!');
 
-        this.eventEmitter.emit('new-restaurant');
+        this.eventEmitter.emit({
+          'source': 'restaurant-section',
+          'title': 'New Restaurant',
+          'message': 'Restaurant inserted successfully!'
+        });
       }
     });
   }
@@ -108,9 +106,12 @@ export class RestaurantSectionComponent implements OnInit {
     this.restaurantService.updateRestaurant(restaurant).subscribe(data => {
       if(data.status === 200) {
         this.restaurantList[this.restaurantList.findIndex((i: { id: any; }) => i.id === restaurant.id)] = restaurant;
-        this.openInfoModal('Update', 'Restaurant updated successfully!');
 
-        this.eventEmitter.emit('update-restaurant');
+        this.eventEmitter.emit({
+          'source': 'restaurant-section',
+          'title': 'Update',
+          'message': 'Restaurant updated successfully!'
+        });
       }
     });
   }
@@ -119,17 +120,14 @@ export class RestaurantSectionComponent implements OnInit {
     this.restaurantService.deleteRestaurant(restaurant.id).subscribe(data => {
       if(data.status === 200) {
         this.restaurantList.splice(this.restaurantList.findIndex((i: { id: any; }) => i.id === restaurant.id), 1);
-        this.openInfoModal('Remove', 'Restaurant removed successfully!');
 
-        this.eventEmitter.emit('delete-restaurant');
+        this.eventEmitter.emit({
+          'source': 'restaurant-section',
+          'title': 'Delete',
+          'message': 'Restaurant deleted successfully!'
+        });
       }
     });
-  }
-
-  openInfoModal(title: string, message: string): void {
-    this.infoModalTitle = title;
-    this.infoModalMessage = message;
-    this.modalService.open(this.infoModal, {centered: true, size: 'md'});
   }
 
 }

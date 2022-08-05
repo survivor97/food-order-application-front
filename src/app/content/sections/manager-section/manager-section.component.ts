@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {ManagerService} from "../../../service/manager.service";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 
@@ -8,6 +8,8 @@ import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
   styleUrls: ['./manager-section.component.css']
 })
 export class ManagerSectionComponent implements OnInit {
+
+  @Output() eventEmitter = new EventEmitter<any>();
 
   managerList: any;
 
@@ -54,6 +56,7 @@ export class ManagerSectionComponent implements OnInit {
 
   insertManager(): void {
     const manager = {
+      id: null,
       firstName: this.managerFirstName,
       lastName: this.managerLastName,
       email: this.managerEmail,
@@ -63,7 +66,14 @@ export class ManagerSectionComponent implements OnInit {
 
     this.managerService.insertManager(manager).subscribe(data => {
       if(data.status === 201) {
+        manager.id = data.body.id;
         this.managerList.push(manager);
+
+        this.eventEmitter.emit({
+          'source': 'manager-section',
+          'title': 'New Manager',
+          'message': 'New Manager Inserted Successfully!'
+        });
       }
     });
   }
@@ -81,6 +91,12 @@ export class ManagerSectionComponent implements OnInit {
     this.managerService.updateManager(manager).subscribe(data => {
       if(data.status === 200) {
         this.managerList[this.managerList.findIndex((i: { id: any; }) => i.id === manager.id)] = manager;
+
+        this.eventEmitter.emit({
+          'source': 'manager-section',
+          'title': 'Manager Update',
+          'message': 'Manager Updated Successfully!'
+        });
       }
     });
   }
@@ -89,8 +105,16 @@ export class ManagerSectionComponent implements OnInit {
     this.managerService.deleteManager(manager.id).subscribe(data => {
       if(data.status === 200) {
         this.managerList.splice(this.managerList.findIndex((i: { id: any; }) => i.id === manager.id), 1);
+
+        this.eventEmitter.emit({
+          'source': 'manager-section',
+          'title': 'Manager Deleted',
+          'message': 'Manager Deleted Successfully!'
+        });
       }
     });
   }
+
+
 
 }

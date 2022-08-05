@@ -60,25 +60,25 @@
 
     <!--#region Restaurants-->
     <div *ngIf="menuOption === getAdminMenu().RESTAURANTS">
-      <app-restaurant-section></app-restaurant-section>
+      <app-restaurant-section (eventEmitter)="receiveEvent($event)"></app-restaurant-section>
     </div>
     <!--#endregion Restaurants-->
 
     <!--#region Managers-->
       <div *ngIf="menuOption === getAdminMenu().MANAGERS">
-        <app-manager-section></app-manager-section>
+        <app-manager-section (eventEmitter)="receiveEvent($event)"></app-manager-section>
       </div>
       <!--#endregion Managers-->
 
     <!--#region Staff-->
       <div *ngIf="menuOption === getAdminMenu().STAFF">
-        <app-staff-section></app-staff-section>
+        <app-staff-section (eventEmitter)="receiveEvent($event)"></app-staff-section>
       </div>
       <!--#endregion Restaurants-->
 
     <!--#region Delivery User-->
       <div *ngIf="menuOption === getAdminMenu().DELIVERY_USERS">
-        <app-delivery-user-section></app-delivery-user-section>
+        <app-delivery-user-section (eventEmitter)="receiveEvent($event)"></app-delivery-user-section>
       </div>
       <!--#endregion Restaurants-->
 
@@ -192,3 +192,17 @@
   <div class="pt-5"></div>
 </div>
 
+<!--#region info modal-->
+<ng-template #infoModal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">{{infoModalTitle}}</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+  </div>
+  <div class="modal-body text-center">
+    <p class="mt-3" style="font-size: 20px">{{infoModalMessage}}</p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark" (click)="modal.close('Close click')">Close</button>
+  </div>
+</ng-template>
+<!--#endregion info modal-->

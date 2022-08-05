@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, EventEmitter, OnInit, Output, ViewChild} from '@angular/core';
 import {DeliveryUserService} from "../../../service/delivery-user.service";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 
@@ -9,10 +9,7 @@ import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 })
 export class DeliveryUserSectionComponent implements OnInit {
 
-  @ViewChild('infoModal') infoModal: any;
-
-  infoModalTitle: string = '';
-  infoModalMessage: string = '';
+  @Output() eventEmitter = new EventEmitter<any>();
 
   deliveryUserList: any;
 
@@ -90,9 +87,14 @@ export class DeliveryUserSectionComponent implements OnInit {
 
     this.deliveryUserService.insertDeliveryUser(deliveryUser).subscribe(data => {
       if(data.status === 201) {
-        this.openInfoModal('New Delivery User', 'Delivery User inserted successfully!');
         deliveryUser.id = data.body.id;
         this.deliveryUserList.push(deliveryUser);
+
+        this.eventEmitter.emit({
+          'source': 'delivery-user-section',
+          'title': 'New Delivery User',
+          'message': 'Delivery User inserted successfully!'
+        });
       }
     });
   }
@@ -114,8 +116,13 @@ export class DeliveryUserSectionComponent implements OnInit {
 
     this.deliveryUserService.updateDeliveryUser(deliveryUser).subscribe(data => {
       if(data.status === 200) {
-        this.openInfoModal('Delivery User Update', 'Delivery User updated successfully!');
         this.deliveryUserList[this.deliveryUserList.findIndex((i: { id: any; }) => i.id === deliveryUser.id)] = deliveryUser;
+
+        this.eventEmitter.emit({
+          'source': 'delivery-user-section',
+          'title': 'Delivery User Update',
+          'message': 'Delivery User updated successfully!'
+        });
       }
     });
   }
@@ -123,16 +130,15 @@ export class DeliveryUserSectionComponent implements OnInit {
   deleteDeliveryUser(deliveryUser: any): void {
     this.deliveryUserService.deleteDeliveryUser(deliveryUser.id).subscribe(data => {
       if(data.status === 200) {
-        this.openInfoModal('Delivery User Removed', 'Delivery User removed successfully!');
         this.deliveryUserList.splice(this.deliveryUserList.findIndex((i: { id: any; }) => i.id === deliveryUser.id), 1);
+
+        this.eventEmitter.emit({
+          'source': 'delivery-user-section',
+          'title': 'Delivery User Removed',
+          'message': 'Delivery User removed successfully!'
+        });
       }
     });
-  }
-
-  openInfoModal(title: string, message: string): void {
-    this.infoModalTitle = title;
-    this.infoModalMessage = message;
-    this.modalService.open(this.infoModal, {centered: true, size: 'md'});
   }
 
 }

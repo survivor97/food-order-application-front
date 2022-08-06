@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import {LoginService} from "./login.service";
 import {Router} from "@angular/router";
 import {HttpClient} from "@angular/common/http";
+import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +16,7 @@ export class AuthenticationService {
               private http: HttpClient,
               private router: Router) { }
 
-  login(username: string, password: string): void {
+  login(username: string, password: string, failCallback?: any): void {
     this.loginService.login(username, password).subscribe(response => {
       let tokensJson = JSON.parse(response.body);
 
@@ -26,6 +27,10 @@ export class AuthenticationService {
       localStorage.setItem('refresh_token', JSON.stringify({"token": this.refreshToken }));
 
       this.router.navigate(['']);
+    }, error => {
+      if(typeof failCallback === 'function') {
+        failCallback();
+      }
     });
   }
 

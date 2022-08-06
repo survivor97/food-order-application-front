@@ -151,22 +151,6 @@ export class ManagerComponent implements OnInit {
     });
   }
 
-  isLoggedIn(): boolean {
-    return this.authenticationService.getIsLoggedIn();
-  }
-
-  logout(): void {
-    this.authenticationService.logout();
-  }
-
-  getAvatarPath(): string {
-    return Properties.avatar_path;
-  }
-
-  getUsername(): string {
-    return this.authenticationService.getUsernameOfAccessToken();
-  }
-
   getManagerMenu(): typeof ManagerMenu {
     return ManagerMenu;
   }

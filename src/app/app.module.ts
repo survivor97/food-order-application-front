@@ -35,6 +35,7 @@ import {UserService} from "./service/user.service";
 import {WaitingComponent} from './waiting/waiting.component';
 import {Utilities} from "./utilities";
 import {StompService} from "./service/websocket/stomp.service";
+import { AccountDropdownComponent } from './content/sections/account-dropdown/account-dropdown.component';
 
 @NgModule({
   declarations: [
@@ -56,7 +57,8 @@ import {StompService} from "./service/websocket/stomp.service";
     ManagerSectionComponent,
     DeliveryUserSectionComponent,
     WaitingComponent,
-    Utilities
+    Utilities,
+    AccountDropdownComponent
   ],
   imports: [
     BrowserModule,

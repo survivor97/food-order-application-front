@@ -46,18 +46,7 @@
         </li>
       </ul>
       <div class="pt-5 pb-5"></div>
-      <hr *ngIf="isLoggedIn()">
-      <div class="dropdown" ngbDropdown *ngIf="isLoggedIn()">
-        <a href="#" class="d-flex align-items-center link-dark text-decoration-none dropdown-toggle" id="dropdownUser2" data-bs-toggle="dropdown" aria-expanded="false" ngbDropdownToggle>
-          <img [src]="getAvatarPath()" alt="" width="32" height="32" class="rounded-circle me-2">
-          <strong>{{getUsername()}}</strong>
-        </a>
-        <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownUser2" ngbDropdownMenu>
-          <li><a class="dropdown-item" routerLink="/profile" ngbDropdownItem>Profile</a></li>
-          <li><hr class="dropdown-divider"></li>
-          <li><a class="dropdown-item" href="#" (click)="logout()" ngbDropdownItem>Sign out</a></li>
-        </ul>
-      </div>
+      <app-account-dropdown></app-account-dropdown>
     </div>
     <!--endregion-->
   </div>

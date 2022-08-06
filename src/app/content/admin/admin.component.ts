@@ -109,24 +109,8 @@ export class AdminComponent implements OnInit {
     this.pageLoaded = false;
   }
 
-  isLoggedIn(): boolean {
-    return this.authenticationService.getIsLoggedIn();
-  }
-
-  logout(): void {
-    this.authenticationService.logout();
-  }
-
   getAdminMenu(): typeof AdminMenu {
     return AdminMenu;
-  }
-
-  getAvatarPath(): string {
-    return Properties.avatar_path;
-  }
-
-  getUsername(): string {
-    return this.authenticationService.getUsernameOfAccessToken();
   }
 
   changeOption(option: AdminMenu): void {

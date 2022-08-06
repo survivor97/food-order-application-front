@@ -79,14 +79,6 @@ export class HomeComponent implements OnInit {
     return this.authenticationService.getIsLoggedIn();
   }
 
-  logout(): void {
-    this.authenticationService.logout();
-  }
-
-  getAvatarPath(): string {
-    return Properties.avatar_path;
-  }
-
   increasePage(): void {
     if(this.currentFoodPage < this.nrOfFoodPages - 1) {
       this.currentFoodPage++;
@@ -105,7 +97,6 @@ export class HomeComponent implements OnInit {
 
   updateFoodPage(): void {
     this.foodService.getFoodListOfCategoryAndRestaurantId(FoodMenu[this.menuOption], this.selectedRestaurant.id, this.currentFoodPage).subscribe(data => {
-      console.warn(this.selectedRestaurant.id);
       this.foodList = data.content;
       this.nrOfFoodPages = data.totalPages;
       this.foodPages = [];
@@ -136,10 +127,6 @@ export class HomeComponent implements OnInit {
     this.currentFoodPage = 0;
     this.updateFoodPage();
     window.scrollTo(0, 0);
-  }
-
-  getUsername(): string {
-    return this.authenticationService.getUsernameOfAccessToken();
   }
 
   increaseQuantity(food: any) {

@@ -50,22 +50,6 @@ export class CartComponent implements OnInit {
     );
   }
 
-  isLoggedIn(): boolean {
-    return this.authenticationService.getIsLoggedIn();
-  }
-
-  getAvatarPath(): string {
-    return Properties.avatar_path;
-  }
-
-  getUsername(): string {
-    return this.authenticationService.getUsernameOfAccessToken();
-  }
-
-  logout(): void {
-    this.authenticationService.logout();
-  }
-
   removeItem(cartItem: any) {
     this.cartItems.delete(cartItem.id);
   }

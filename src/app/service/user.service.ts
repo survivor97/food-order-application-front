@@ -10,6 +10,17 @@ export class UserService {
   constructor(private http: HttpClient) {
   }
 
+  registerUser(user: any): Observable<any> {
+    const url = 'http://localhost:8080/user/new';
+    return this.http.post(
+        url,
+        JSON.stringify(user),
+        {
+          headers: {'Content-Type':'application/json; charset=utf-8'},
+          observe: 'response'
+        });
+  }
+
   getUserPage(page: number): Observable<any> {
     const url = 'http://localhost:8080/user/get-all' + '?page=' + page;
     return this.http.get<any>(url);

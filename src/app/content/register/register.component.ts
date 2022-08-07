@@ -45,12 +45,14 @@ export class RegisterComponent implements OnInit {
       this.infoModalTitle = 'Incomplete Fields';
       this.infoModalMessage = 'Please complete all fields!'
       this.openModal(this.infoModal);
+      return;
     }
 
     else if(this.password !== this.passwordConfirm) {
       this.infoModalTitle = 'Password';
       this.infoModalMessage = 'Passwords don\'t match!'
       this.openModal(this.infoModal);
+      return;
     }
 
     //All ok

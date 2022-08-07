@@ -1,7 +1,8 @@
 <div class="row">
-  <div class="col-xl-2">
+
+  <div class="col-lg-4 col-xl-2">
     <!--#region Sidebar-->
-    <div class="d-flex flex-column flex-shrink-0 p-3 bg-light" style="width: 240px;">
+    <div class="d-flex flex-column flex-shrink-0 p-3 bg-light" style="min-width: 200px; max-width: 240px;">
       <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none">
         <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>
         <span class="fs-4">Menu</span>
@@ -50,112 +51,110 @@
     </div>
     <!--endregion-->
   </div>
-  <div class="col-xl-10">
 
+  <div class="col-lg-8 col-xl-10">
     <div *ngIf="pageLoaded === false">
       <app-waiting></app-waiting>
     </div>
 
     <div *ngIf="pageLoaded === true">
-    <!--#region Restaurant Selection-->
-    <div class="container">
+      <!--#region Restaurant Selection-->
+      <div>
+        <div class="row">
+          <div class="col-12">
+            <div class="dropdown">
+              <button class="btn btn-primary btn-color no-shadow" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                {{selectedRestaurant.name}}
+              </button>
 
-      <div class="row">
-        <div class="col-12">
-
-          <div class="dropdown">
-            <button class="btn btn-primary btn-color no-shadow" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-              {{selectedRestaurant.name}}
-            </button>
-
-            <button class="btn btn-primary btn-color no-shadow dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            </button>
-            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-              <a class="dropdown-item hand-cursor" *ngFor="let restaurant of restaurantList"
-                 (click)="selectRestaurant(restaurant)">{{restaurant.name}}</a>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="collapse" id="collapseExample">
-        <div class="card card-body">
-          <span style="font-weight: bold">{{selectedRestaurant.name}}</span>
-          <span>{{selectedRestaurant.description}}</span>
-          <span class="mt-2" style="font-weight: bold">Address</span>
-          <span>{{selectedRestaurant.address.streetAddress}}</span>
-          <span>{{selectedRestaurant.address.city}}</span>
-          <span>{{selectedRestaurant.address.zipCode}}</span>
-        </div>
-      </div>
-    </div>
-    <!--#endregion Restaurant Selection-->
-
-    <!--#region Menu-->
-    <div class="container">
-      <div class="row">
-        <div class="col-md-4 p-3 card-group" *ngFor="let food of foodList">
-          <div class="card">
-
-            <!-- #region Food image -->
-            <div *ngIf="food.foodImage == null" class="p-4">
-              <img class="card-img-top" src="../../../assets/user_icon.png" alt="Card image cap">
-            </div>
-
-            <div *ngIf="food.foodImage != null" class="p-4">
-              <img class="card-img-top" [src]="getImageUrl(food)" alt="Card image cap">
-            </div>
-
-            <!-- #endregion Food image -->
-
-            <div class="card-body" style="padding-top: 0">
-              <div style="height:4rem">
-                <h5 class="card-title">{{food.name}}</h5>
-              </div>
-              <div style="height: 2rem">
-                <p class="card-text">{{food.description}}</p>
-              </div>
-              <div class="pt-4 pb-3">
-                <h5>Price: {{food.price}} lei</h5>
-              </div>
-              <div class="row">
-                <div class="col-2 text-center col-centering">
-                  <button type="button" class="btn btn-primary rounded-button btn-color" (click)="decreaseQuantity(food)">-</button>
-                </div>
-                <div class="col-2 text-center col-centering">
-                  <p class="pt-1">{{food.quantity}}</p>
-                </div>
-                <div class="col-2 text-center col-centering">
-                  <button type="button" class="btn btn-primary rounded-button btn-color" (click)="increaseQuantity(food)">+</button>
-                </div>
-                <div class="col-6 text-center col-centering" style="padding-right: 0.5rem">
-                  <button *ngIf="isLoggedIn()" type="button" class="btn btn-primary add-to-cart-btn float-end btn-color" (click)="openAddedToCartModal(addedToCartModal, food, food.quantity); addToCart(food);">Add</button>
-                  <button *ngIf="!isLoggedIn()" type="button" class="btn btn-primary add-to-cart-btn float-end btn-color" (click)="goToLoginPage()">Add</button>
-
-                  <!--In favourites button-->
-                  <button type="button" *ngIf="isLoggedIn() && hasFoodToFavourites(food)" (click)="removeFoodFromFavourites(food)" class="btn btn-primary add-to-cart-btn float-end btn-added-to-favourites-color" style="width: 2rem; margin-right: 0.25rem;">
-                    <img src="../../../assets/favourites_icon.png" class="img-favourites" alt="" width="20" height="20">
-                  </button>
-
-                  <!--Not in favourites button-->
-                  <button type="button" *ngIf="isLoggedIn() && !hasFoodToFavourites(food)" (click)="addFoodToFavourites(food)" class="btn btn-primary add-to-cart-btn float-end btn-favourites-color" style="width: 2rem; margin-right: 0.25rem;">
-                    <img src="../../../assets/favourites_icon.png" class="img-favourites" alt="" width="20" height="20">
-                  </button>
-
-                  <!-- Not logged in -> login page-->
-                  <button type="button" *ngIf="!isLoggedIn()" (click)="goToLoginPage()" class="btn btn-primary add-to-cart-btn float-end btn-favourites-color" style="width: 2rem; margin-right: 0.25rem;">
-                    <img src="../../../assets/favourites_icon.png" class="img-favourites" alt="" width="20" height="20">
-                  </button>
-                </div>
+              <button class="btn btn-primary btn-color no-shadow dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              </button>
+              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a class="dropdown-item hand-cursor dropdown-custom-color" *ngFor="let restaurant of restaurantList"
+                   (click)="selectRestaurant(restaurant)">{{restaurant.name}}</a>
               </div>
             </div>
           </div>
         </div>
+
+        <div class="collapse" id="collapseExample">
+          <div class="card card-body">
+            <span style="font-weight: bold">{{selectedRestaurant.name}}</span>
+            <span>{{selectedRestaurant.description}}</span>
+            <span class="mt-2" style="font-weight: bold">Address</span>
+            <span>{{selectedRestaurant.address.streetAddress}}</span>
+            <span>{{selectedRestaurant.address.city}}</span>
+            <span>{{selectedRestaurant.address.zipCode}}</span>
+          </div>
+        </div>
       </div>
-    </div>
-    <!--#endregion-->
-    <!--#region Pagination-->
-    <nav aria-label="page-navigation">
+      <!--#endregion Restaurant Selection-->
+
+      <!--#region Menu-->
+      <div class="container mt-5">
+        <div class="row">
+          <div class="col-md-4 p-3 card-group" *ngFor="let food of foodList">
+            <div class="card">
+
+              <!-- #region Food image -->
+              <div *ngIf="food.foodImage == null" class="p-4">
+                <img class="card-img-top" [src]="getImagePath(food)" alt="Card image cap">
+              </div>
+
+              <div *ngIf="food.foodImage != null" class="p-4">
+                <img class="card-img-top" [src]="getImageUrl(food)" alt="Card image cap">
+              </div>
+
+              <!-- #endregion Food image -->
+
+              <div class="card-body" style="padding-top: 0">
+                <div style="height:4rem">
+                  <h5 class="card-title">{{food.name}}</h5>
+                </div>
+                <div style="height: 2rem">
+                  <p class="card-text">{{food.description}}</p>
+                </div>
+                <div class="pt-4 pb-3">
+                  <h5>Price: {{food.price}} lei</h5>
+                </div>
+                <div class="row">
+                  <div class="col-2 text-center col-centering">
+                    <button type="button" class="btn btn-primary rounded-button btn-color" (click)="decreaseQuantity(food)">-</button>
+                  </div>
+                  <div class="col-2 text-center col-centering">
+                    <p class="pt-1">{{food.quantity}}</p>
+                  </div>
+                  <div class="col-2 text-center col-centering">
+                    <button type="button" class="btn btn-primary rounded-button btn-color" (click)="increaseQuantity(food)">+</button>
+                  </div>
+                  <div class="col-6 text-center col-centering" style="padding-right: 0.5rem">
+                    <button *ngIf="isLoggedIn()" type="button" class="btn btn-primary add-to-cart-btn float-end btn-color" (click)="openAddedToCartModal(addedToCartModal, food, food.quantity); addToCart(food);">Add</button>
+                    <button *ngIf="!isLoggedIn()" type="button" class="btn btn-primary add-to-cart-btn float-end btn-color" (click)="goToLoginPage()">Add</button>
+
+                    <!--In favourites button-->
+                    <button type="button" *ngIf="isLoggedIn() && hasFoodToFavourites(food)" (click)="removeFoodFromFavourites(food)" class="btn btn-primary add-to-cart-btn float-end btn-added-to-favourites-color" style="width: 2rem; margin-right: 0.25rem;">
+                      <img src="../../../assets/favourites_icon.png" class="img-favourites" alt="" width="20" height="20">
+                    </button>
+
+                    <!--Not in favourites button-->
+                    <button type="button" *ngIf="isLoggedIn() && !hasFoodToFavourites(food)" (click)="addFoodToFavourites(food)" class="btn btn-primary add-to-cart-btn float-end btn-favourites-color" style="width: 2rem; margin-right: 0.25rem;">
+                      <img src="../../../assets/favourites_icon.png" class="img-favourites" alt="" width="20" height="20">
+                    </button>
+
+                    <!-- Not logged in -> login page-->
+                    <button type="button" *ngIf="!isLoggedIn()" (click)="goToLoginPage()" class="btn btn-primary add-to-cart-btn float-end btn-favourites-color" style="width: 2rem; margin-right: 0.25rem;">
+                      <img src="../../../assets/favourites_icon.png" class="img-favourites" alt="" width="20" height="20">
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!--#endregion-->
+      <!--#region Pagination-->
+      <nav aria-label="page-navigation">
         <ul class="pagination justify-content-end p-5">
 
           <li class="page-item" [ngClass]="{'disabled': currentFoodPage === 0}">
@@ -171,9 +170,10 @@
           </li>
         </ul>
       </nav>
-    <!--#endregion-->
+      <!--#endregion-->
     </div>
   </div>
+
 </div>
 
 <!--#region Added to cart modal-->

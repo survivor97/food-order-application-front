@@ -5,8 +5,8 @@
       <div class="col-2"></div>
       <div class="col-8">
         <form class="form-signin">
-          <div class="text-center">
-            <img class="mb-4 mt-4" src="../../../assets/ticket_png.png" alt="" width="90" height="90">
+          <div class="text-center pt-2">
+            <img class="mb-4 mt-4" src="../../../assets/food_icon.png" alt="" width="200" height="200">
           </div>
           <div class="pl-4 pt-4 mb-4">
             <h3 class="font-weight-normal">Sign In</h3>
@@ -17,7 +17,8 @@
           <input type="password" id="inputPassword" class="form-control" placeholder="password" required name="password" [(ngModel)]="password">
           <div style="height: 2rem"></div>
           <div class="text-center">
-            <button class="btn btn-lg btn-primary btn-block" type="submit" (click)="login()">Sign in</button>
+            <button class="btn btn-lg btn-primary btn-block mt-4" style="width: 120px" type="submit" (click)="login()">Sign in</button><br>
+            <button class="btn btn-lg btn-primary btn-block mt-2" style="width: 120px" type="submit" routerLink="/register">Register</button>
           </div>
         </form>
       </div>

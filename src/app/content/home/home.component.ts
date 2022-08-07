@@ -169,6 +169,7 @@ export class HomeComponent implements OnInit {
 
     this.selectedRestaurant = restaurant;
     this.updateFoodPage();
+    this.setPage(0);
   }
 
   addFoodToFavourites(food: any): void {
@@ -200,6 +201,28 @@ export class HomeComponent implements OnInit {
 
   getImageUrl(food: any): string {
     return this.imageService.getImageUrl(food.foodImage.resourceName);
+  }
+
+  getImagePath(food: any): string {
+    if(food.foodCategory.name === 'PIZZA') {
+      return Properties.default_pizza_image_path;
+    }
+    else if(food.foodCategory.name === 'BURGER') {
+      return Properties.default_burger_image_path;
+    }
+    else if(food.foodCategory.name === 'DESSERT') {
+      return Properties.default_dessert_image_path;
+    }
+    else if(food.foodCategory.name === 'DRINK') {
+      return Properties.default_drink_image_path;
+    }
+    else if(food.foodCategory.name === 'GRILL') {
+      return Properties.default_grill_image_path;
+    }
+    else if(food.foodCategory.name === 'FAST_FOOD') {
+      return Properties.default_fast_food_image_path;
+    }
+    return Properties.default_unknown_image_path;
   }
 
 }

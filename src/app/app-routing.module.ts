@@ -39,11 +39,13 @@ const routes: Routes = [
   },
   {
     path: 'manager',
-    component: ManagerComponent
+    component: ManagerComponent,
+    canActivate: [AuthGuardService]
   },
   {
     path: 'delivery',
-    component: DeliveryComponent
+    component: DeliveryComponent,
+    canActivate: [AuthGuardService]
   },
   {
     path: 'profile',
@@ -52,11 +54,13 @@ const routes: Routes = [
   },
   {
     path: 'staff',
-    component: StaffComponent
+    component: StaffComponent,
+    canActivate: [AuthGuardService]
   },
   {
     path: 'cart',
-    component: CartComponent
+    component: CartComponent,
+    canActivate: [AuthGuardService]
   }
 ];
 

@@ -2,6 +2,24 @@ import { Injectable } from '@angular/core';
 import {ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree} from "@angular/router";
 import {Observable} from "rxjs";
 import {AuthenticationService} from "./authentication.service";
+import {isString} from "@ng-bootstrap/ng-bootstrap/util/util";
+
+/*
+User:
+Home, Profile, Cart
+
+Manager:
+Manage, Profile
+
+Staff:
+Incoming Orders, Profile
+
+Delivery User:
+Delivery, Profile
+
+Admin:
+Administration, Profile
+ */
 
 @Injectable({
   providedIn: 'root'
@@ -12,9 +30,6 @@ export class AuthGuardService implements CanActivate {
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
 
-
-    console.warn("Auth Guard: Is Logged In: " + this.authenticationService.getIsLoggedIn());
-
     //LOGGED IN USERS
     if(this.authenticationService.getIsLoggedIn()) {
       //DISABLE LOG IN
@@ -24,61 +39,74 @@ export class AuthGuardService implements CanActivate {
 
       //ADMIN
       if (this.authenticationService.getRolesOfAccessToken().includes("ROLE_ADMIN")) {
-        //Default Route
-        if (route.routeConfig?.path === '') {
-          this.router.navigate(['admin']);
-        }
+        this.defaultRoute(route, 'admin');
 
-        //Allowed Access - administration
-        if (route.routeConfig?.path === 'admin') {
-          return true;
-        }
+        const paths: string[] = ['admin', 'profile'];
+        return this.allow(route, paths);
       }
 
       //USER
       if (this.authenticationService.getRolesOfAccessToken().includes("ROLE_USER")) {
-        //Default Route
-        if (route.routeConfig?.path === '') {
-          this.router.navigate(['home']);
-        }
+        this.defaultRoute(route, 'home');
 
-        //Allowed Access - home
-        if (route.routeConfig?.path === 'home') {
-          return true;
-        }
+        const paths: string[] = ['home', 'profile', 'cart'];
+        return this.allow(route, paths);
+      }
+
+      //MANAGER
+      if (this.authenticationService.getRolesOfAccessToken().includes("ROLE_MANAGER")) {
+        this.defaultRoute(route, 'manager');
+
+        const paths: string[] = ['manager', 'profile'];
+        return this.allow(route, paths);
+      }
+
+      //STAFF
+      if (this.authenticationService.getRolesOfAccessToken().includes("ROLE_STAFF")) {
+        this.defaultRoute(route, 'staff');
+
+        const paths: string[] = ['staff', 'profile'];
+        return this.allow(route, paths);
+      }
+
+      //DELIVERY USER
+      if (this.authenticationService.getRolesOfAccessToken().includes("ROLE_DELIVERY_USER")) {
+        this.defaultRoute(route, 'delivery');
+
+        const paths: string[] = ['delivery', 'profile'];
+        return this.allow(route, paths);
       }
 
       //ALL LOGGED IN ACCOUNTS
-      if (route.routeConfig?.path === 'profile') {
-        return true;
-      }
+      // ---
+      //
 
       return false;
     }
 
     //Unlogged users
     else {
-      //Default Route
-      if (route.routeConfig?.path === '') {
-        this.router.navigate(['home']);
-      }
+      this.defaultRoute(route, 'home');
 
-      //Allowed access - home
-      if (route.routeConfig?.path === 'home') {
+      const paths: string[] = ['home', 'login', 'register'];
+      return this.allow(route, paths);
+    }
+  }
+
+  //Allowed access - home
+  allow(route: ActivatedRouteSnapshot, paths: string[]): boolean {
+    for(let path of paths) {
+      if(route.routeConfig?.path === path) {
         return true;
       }
+    }
 
-      //Allowed access - login
-      if (route.routeConfig?.path === 'login') {
-        return true;
-      }
+    return false;
+  }
 
-      //Allowed access - register
-      if (route.routeConfig?.path === 'register') {
-        return true;
-      }
-
-      return false;
+  defaultRoute(route: ActivatedRouteSnapshot, path: string) {
+    if (route.routeConfig?.path === '') {
+      this.router.navigate(['/'+path]);
     }
   }
 }

@@ -17,4 +17,8 @@ export class HeaderComponent implements OnInit {
     return this.authenticationService.getIsLoggedIn();
   }
 
+  hasRole(role: string) {
+    return this.authenticationService.getRolesOfAccessToken().includes(role);
+  }
+
 }

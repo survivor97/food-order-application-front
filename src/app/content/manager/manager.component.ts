@@ -66,6 +66,7 @@ export class ManagerComponent implements OnInit {
 
   uploadStatus: string = '';
   uploadedImageResponseObject: any;
+  foodPrediction: string = '';
   // endregion
 
   menuOption: ManagerMenu = ManagerMenu.RESTAURANTS;
@@ -304,6 +305,7 @@ export class ManagerComponent implements OnInit {
         if (data.status === 200) {
           this.uploadStatus = 'OK';
           this.uploadedImageResponseObject = data.body.image;
+          this.recognizeFood();
         }
         else {
           this.uploadStatus = 'ERROR';
@@ -321,6 +323,7 @@ export class ManagerComponent implements OnInit {
     this.uploadStatus = '';
     this.uploadedImageResponseObject = undefined;
     this.foodImage = null;
+    this.foodPrediction = '';
   }
 
   resetModalFields() {
@@ -335,6 +338,13 @@ export class ManagerComponent implements OnInit {
     return foodImage.resourceName;
   }
   // endregion
+
+  recognizeFood(): void {
+    console.warn('RECOGNIZING FOOD...');
+    this.imageService.recognizeFood(this.uploadedImageResponseObject.resourceName).subscribe(data => {
+      this.foodPrediction = data.body.prediction;
+    })
+  }
 
   openInfoModal(title: string, message: string): void {
     this.infoModalTitle = title;

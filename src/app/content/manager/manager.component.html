@@ -171,11 +171,6 @@
         <input type="text" id="inputWeight" [(ngModel)]="foodWeight" class="form-control" placeholder="Weight"
                oninput="this.value=this.value.replace(/[^\d]/,'')">
 
-        <label for="selectFoodCategory" class="pt-2 pb-1">Food Category</label>
-        <select class="form-select" id="selectFoodCategory" (change)="updateModalFoodCategoryOption($event.target)" aria-label="Select Food Category">
-          <option *ngFor="let enum of getFoodMenu().keys()" [selected]="modalSelectedFoodCategoryOption === enum">{{enum}}</option>
-        </select>
-
         <!--#region Upload Image-->
         <label for="imageUpload" class="pt-4 pb-2">Food Image</label>
         <div id="imageUpload" class="form-group">
@@ -213,6 +208,30 @@
             </div>
             <div class="col-3"></div>
           </div>
+
+          <div class="alert alert-info mt-5 row">
+            <div class="col-12">
+              <table>
+                <tbody>
+                  <tr>
+                    <td style="white-space: nowrap; width: 20%;">
+                      Recognized food:
+                    </td>
+                    <td>
+                      <span style="padding-left: 1rem">
+                        <b>{{foodPrediction}}</b>
+                      </span>
+                      <span *ngIf="foodPrediction.length === 0">
+                        <img src="../../../assets/loading_spin.gif" height="30" width="30" alt="">
+                      </span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+
+
+            </div>
+          </div>
         </div>
         <!-- #endregion IF STATUS OK -->
 
@@ -220,7 +239,13 @@
           The file is too big!
         </div>
 
-        <!--#endregion-->
+        <!--#endregion Upload Image-->
+
+        <div *ngIf="foodImage != null && uploadedImageResponseObject == null" class="pt-5"></div>
+        <label for="selectFoodCategory" class="pt-2 pb-1">Food Category</label>
+        <select class="form-select" id="selectFoodCategory" (change)="updateModalFoodCategoryOption($event.target)" aria-label="Select Food Category">
+          <option *ngFor="let enum of getFoodMenu().keys()" [selected]="modalSelectedFoodCategoryOption === enum">{{enum}}</option>
+        </select>
 
         <table class="table table-striped align-middle mt-4">
           <thead>

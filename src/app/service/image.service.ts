@@ -32,4 +32,16 @@ export class ImageService {
       { observe: 'response' }
     );
   }
+
+  recognizeFood(imageUUID: string): Observable<any> {
+    const imagePath = 'http://localhost:8080/image/get?name=' + imageUUID;
+    const url = 'http://localhost:5000/recognize-food';
+
+    return this.http.post(url,
+        {
+          "path": imagePath
+        },
+        { observe: 'response' }
+    );
+  }
 }

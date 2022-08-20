@@ -220,6 +220,7 @@
                     <td>
                       <span style="padding-left: 1rem">
                         <b>{{foodPrediction}}</b>
+                        <b *ngIf="predictedCategory !== 'unknown'"> - {{predictedCategory}}</b>
                       </span>
                       <span *ngIf="foodPrediction.length === 0">
                         <img src="../../../assets/loading_spin.gif" height="30" width="30" alt="">

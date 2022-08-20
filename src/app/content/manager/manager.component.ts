@@ -1,6 +1,5 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {AuthenticationService} from "../../service/authentication.service";
-import {Properties} from "../../properties";
 import {FoodService} from "../../service/food.service";
 import {RestaurantService} from "../../service/restaurant.service";
 import {FoodMenu} from "../home/home.component";
@@ -67,6 +66,7 @@ export class ManagerComponent implements OnInit {
   uploadStatus: string = '';
   uploadedImageResponseObject: any;
   foodPrediction: string = '';
+  predictedCategory: string = 'unknown';
   // endregion
 
   menuOption: ManagerMenu = ManagerMenu.RESTAURANTS;
@@ -341,8 +341,15 @@ export class ManagerComponent implements OnInit {
 
   recognizeFood(): void {
     console.warn('RECOGNIZING FOOD...');
+    this.foodPrediction = '';
+    this.predictedCategory = 'unknown';
     this.imageService.recognizeFood(this.uploadedImageResponseObject.resourceName).subscribe(data => {
       this.foodPrediction = data.body.prediction;
+      this.predictedCategory = this.foodService.mapRecognizedFoodCategory(this.foodPrediction);
+      if(this.predictedCategory !== 'unknown') {
+        console.warn(this.predictedCategory)
+        this.modalSelectedFoodCategoryOption = this.predictedCategory;
+      }
     })
   }
 

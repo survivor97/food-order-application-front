@@ -69,6 +69,16 @@ export class RegisterComponent implements OnInit {
       if(data.status === 201) {
         this.authenticationService.login(user.username, user.password);
       }
+    },error => {
+      if(error.status === 409) {
+        this.infoModalTitle = 'Username not available';
+        this.infoModalMessage = 'Please choose another username!';
+      }
+      else {
+        this.infoModalTitle = 'Invalid Data';
+        this.infoModalMessage = 'Some fields are not completed correctly!';
+      }
+      this.openModal(this.infoModal);
     });
 
   }

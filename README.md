@@ -1,27 +1,91 @@
-# FoodOrderApplicationFront
 
+# Food Ordering and Delivery - Frontend ReadMe
+
+This is the frontend of the Food Ordering and Delivery Application <br>
+Backend link: https://github.com/survivor97/food-order-application-back <br>
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 14.0.5.
 
-## Development server
+## Screens
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+<h3>Guest:</h3>
+<center>
+<kbd>
+<img src="/img/1.png">
+</kbd>
+<br><br>
+<kbd>
+<img src="/img/2.png"> 
+</kbd>
+<br><br>
+<kbd>
+<img src="/img/3.png">
+</kbd> 
+</center>
 
-## Code scaffolding
+---
+<h3>User (Customer):</h3>
+<center>
+<kbd>
+<img src="/img/4.png">
+</kbd>
+<br><br>
+<kbd>
+<img src="/img/5.png">
+</kbd>
+<br><br>
+<kbd>
+<img src="/img/12.png">
+</kbd>
+<br><br>
+<kbd>
+<img src="/img/13.png">
+</kbd>
+</center>
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+---
+<h3>Staff:</h3>
+<center>
+<kbd>
+<img src="/img/6.png">
+</kbd>
+</center>
 
-## Build
+---
+<h3>Delivery User:</h3>
+<center>
+<kbd>
+<img src="/img/7.png">
+</kbd>
+<br><br>
+<kbd>
+<img src="/img/14.png">
+</kbd>
+</center>
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+---
+<h3>Manager:</h3>
+<center>
+<kbd>
+<img src="/img/8.png">
+</kbd>
+<br><br>
+<kbd>
+<img src="/img/10.png">
+</kbd>
+<br><br>
+<kbd>
+<img src="/img/11.png">
+</kbd>
+<br><br>
+<kbd>
+<img src="/img/15.png">
+</kbd>
+</center>
 
-## Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+---
+<h3>Admin:</h3>
+<center>
+<kbd>
+<img src="/img/9.png">
+</kbd>
+</center>
